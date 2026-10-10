@@ -30,3 +30,13 @@ rospkg = "*"
 catkin_pkg = "*"
 cxx-compiler = "*"
 libstdcxx-ng = "*"
+
+# Wrappers launch locked Pixi runtimes and sanitize inherited ROS/Python paths.
+[tasks]
+build-ros1 = "bash scripts/build.sh ros1"
+build-ros2 = "bash scripts/build.sh ros2"
+build-bridge = "bash scripts/build.sh bridge"
+test-local = "bash scripts/test_local.sh"
+ros1-shell = "bash scripts/env.sh ros1"
+ros2-shell = "bash scripts/env.sh ros2"
+bridge-start = "bash -c 'source config/network.env; exec ./scripts/start_bridge.sh \"$@\"' --"

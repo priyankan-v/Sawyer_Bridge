@@ -1,0 +1,197 @@
+diff --git a/resource/interface_factories.cpp.em b/resource/interface_factories.cpp.em
+index 6481b75..eb2cd92 100644
+--- a/resource/interface_factories.cpp.em
++++ b/resource/interface_factories.cpp.em
+@@ -304,6 +304,11 @@ void ServiceFactory<
+ @[      end if]@
+ ) {
+ @[      for field in service["fields"][type.lower()]]@
++@[        if field["array"] and field["basic"]]@
++  req@(to).@(field["ros" + to]["name"]).assign(
++    req@(frm).@(field["ros" + frm]["name"]).begin(),
++    req@(frm).@(field["ros" + frm]["name"]).end());
++@[        else]@
+ @[        if field["array"]]@
+   req@(to).@(field["ros" + to]["name"]).resize(req@(frm).@(field["ros" + frm]["name"]).size());
+   auto @(field["ros1"]["name"])1_it = req1.@(field["ros1"]["name"]).begin();
+@@ -319,7 +324,10 @@ void ServiceFactory<
+   auto & @(field["ros2"]["name"])2 = req2.@(field["ros2"]["name"]);
+ @[        end if]@
+ @[        if field["basic"]]@
+-  @(field["ros2"]["name"])@(to) = @(field["ros1"]["name"])@(frm);
++  @(field["ros" + to]["name"])@(to) = @(field["ros" + frm]["name"])@(frm);
++@[        elif field.get("builtin", False)]@
++  ros1_bridge::convert_@(frm)_to_@(to)(
++    @(field["ros" + frm]["name"])@(frm), @(field["ros" + to]["name"])@(to));
+ @[        else]@
+   Factory<@(field["ros1"]["cpptype"]),@(field["ros2"]["cpptype"])>::convert_@(frm)_to_@(to)(
+ @[          if frm == "1"]@
+@@ -333,6 +341,7 @@ void ServiceFactory<
+ @[        if field["array"]]@
+   }
+ @[        end if]@
++@[        end if]@
+ @[      end for]@
+ }
+ 
+@@ -370,6 +379,7 @@ template<typename VEC_PRIMITIVE_T>
+ static void streamPrimitiveVector(ros::serialization::OStream & stream, const VEC_PRIMITIVE_T& vec)
+ {
+   const uint32_t data_len = vec.size() * sizeof(typename VEC_PRIMITIVE_T::value_type);
++  if (!data_len) {return;}
+   // copy data from std::vector/std::array into stream
+   memcpy(stream.advance(data_len), &vec.front(), data_len);
+ }
+@@ -387,10 +397,41 @@ template<typename VEC_PRIMITIVE_T>
+ static void streamPrimitiveVector(ros::serialization::IStream & stream, VEC_PRIMITIVE_T& vec)
+ {
+   const uint32_t data_len = vec.size() * sizeof(typename VEC_PRIMITIVE_T::value_type);
++  if (!data_len) {return;}
+   // copy data from stream into std::vector/std::array
+   memcpy(&vec.front(), stream.advance(data_len), data_len);
+ }
+ 
++// ROS 2 bool sequences use vector<bool> proxies, not contiguous byte storage.
++// ROS 1 encodes each boolean as one uint8_t. Preserve that wire representation.
++template<typename ALLOC_T>
++static void streamPrimitiveVector(
++  ros::serialization::OStream & stream, const std::vector<bool, ALLOC_T> & vec)
++{
++  for (bool item : vec) {
++    const uint8_t value = item ? 1 : 0;
++    stream.next(value);
++  }
++}
++
++template<typename ALLOC_T>
++static void streamPrimitiveVector(
++  ros::serialization::IStream & stream, std::vector<bool, ALLOC_T> & vec)
++{
++  for (size_t i = 0; i < vec.size(); ++i) {
++    uint8_t value;
++    stream.next(value);
++    vec[i] = value != 0;
++  }
++}
++
++template<typename ALLOC_T>
++static void streamPrimitiveVector(
++  ros::serialization::LStream & stream, const std::vector<bool, ALLOC_T> & vec)
++{
++  stream.advance(vec.size());
++}
++
+ @[for m in mapped_msgs]@
+ 
+ @[  if m.ros2_msg.package_name=="std_msgs" and m.ros2_msg.message_name=="Header"]
+diff --git a/ros1_bridge/__init__.py b/ros1_bridge/__init__.py
+index 7cc78d1..932b0fb 100644
+--- a/ros1_bridge/__init__.py
++++ b/ros1_bridge/__init__.py
+@@ -634,19 +634,39 @@ def determine_common_services(
+             if len(ros1_fields[direction]) != len(ros2_fields[direction]):
+                 match = False
+                 break
++            field_map = None
++            for rule in mapping_rules:
++                if isinstance(rule, ServiceMappingRule) and \
++                        rule.ros1_package_name == pair[0].package_name and \
++                        rule.ros2_package_name == pair[1].package_name and \
++                        rule.ros1_service_name == pair[0].message_name and \
++                        rule.ros2_service_name == pair[1].message_name:
++                    field_map = getattr(rule, direction + '_fields_1_to_2')
++                    break
+             for i, ros1_field in enumerate(ros1_fields[direction]):
+                 ros1_type = ros1_field[0]
+-                ros2_type = str(ros2_fields[direction][i].type)
+                 ros1_name = ros1_field[1]
+-                ros2_name = ros2_fields[direction][i].name
+-                if ros1_type != ros2_type or ros1_name != ros2_name:
++                mapped_name = field_map.get(ros1_name) if field_map is not None else ros1_name
++                candidates = [field for field in ros2_fields[direction] if field.name == mapped_name]
++                if len(candidates) != 1:
++                    match = False
++                    break
++                ros2_field = candidates[0]
++                ros2_type = str(ros2_field.type)
++                ros2_name = ros2_field.name
++                builtin_type = {'time': 'builtin_interfaces/Time',
++                                'duration': 'builtin_interfaces/Duration'}.get(ros1_type)
++                if ros1_type != ros2_type and builtin_type != ros2_type:
+                     # if the message types have a custom mapping their names
+                     # might not be equal, therefore check the message pairs
+-                    if (ros1_type, ros2_type) not in message_string_pairs:
++                    type_pair = (ros1_type.removesuffix('[]'), ros2_type.removesuffix('[]'))
++                    if type_pair not in message_string_pairs or \
++                            ros1_type.endswith('[]') != ros2_type.endswith('[]'):
+                         match = False
+                         break
+                 output[direction].append({
+-                    'basic': False if '/' in ros1_type else True,
++                    'basic': '/' not in ros1_type and builtin_type is None,
++                    'builtin': builtin_type is not None,
+                     'array': True if '[]' in ros1_type else False,
+                     'ros1': {
+                         'name': ros1_name,
+diff --git a/src/parameter_bridge.cpp b/src/parameter_bridge.cpp
+index a95d49a..e850880 100644
+--- a/src/parameter_bridge.cpp
++++ b/src/parameter_bridge.cpp
+@@ -275,6 +275,9 @@ int main(int argc, char * argv[])
+     topics.getType() == XmlRpc::XmlRpcValue::TypeArray)
+   {
+     for (size_t i = 0; i < static_cast<size_t>(topics.size()); ++i) {
++      if (topics[i].hasMember("enabled") && !static_cast<bool>(topics[i]["enabled"])) {
++        continue;
++      }
+       std::string topic_name = static_cast<std::string>(topics[i]["topic"]);
+       std::string type_name = static_cast<std::string>(topics[i]["type"]);
+       size_t queue_size = static_cast<int>(topics[i]["queue_size"]);
+@@ -282,11 +285,38 @@ int main(int argc, char * argv[])
+         queue_size = 100;
+       }
+       printf(
+-        "Trying to create bidirectional bridge for topic '%s' "
++        "Trying to create configured bridge for topic '%s' "
+         "with ROS 2 type '%s'\n",
+         topic_name.c_str(), type_name.c_str());
+ 
+       try {
++        // Project extension: create exactly one subscription in the requested direction.
++        // Entries without 'direction' retain upstream bidirectional behavior.
++        const std::string direction = topics[i].hasMember("direction") ?
++          static_cast<std::string>(topics[i]["direction"]) : "bidirectional";
++        if (direction != "bidirectional") {
++          std::string ros1_type;
++          if (!ros1_bridge::get_2to1_mapping(type_name, ros1_type)) {
++            throw std::runtime_error("No ROS 1 mapping for " + type_name);
++          }
++          auto qos = topics[i].hasMember("qos") ? qos_from_params(topics[i]["qos"]) :
++            rclcpp::QoS(rclcpp::KeepLast(queue_size));
++          ros1_bridge::BridgeHandles handles;
++          if (direction == "1to2") {
++            handles.bridge1to2 = ros1_bridge::create_bridge_from_1_to_2(
++              ros1_node, ros2_node, ros1_type, topic_name, queue_size,
++              type_name, topic_name, qos);
++          } else if (direction == "2to1") {
++            handles.bridge2to1 = ros1_bridge::create_bridge_from_2_to_1(
++              ros2_node, ros1_node, type_name, topic_name, qos,
++              ros1_type, topic_name, queue_size);
++          } else {
++            throw std::runtime_error("Invalid direction: " + direction);
++          }
++          all_handles.push_back(handles);
++          printf("Created %s bridge for topic '%s'\n", direction.c_str(), topic_name.c_str());
++          continue;
++        }
+         if (topics[i].hasMember("qos")) {
+           printf("Setting up QoS for '%s': ", topic_name.c_str());
+           auto qos_settings = qos_from_params(topics[i]["qos"]);
+@@ -305,6 +335,7 @@ int main(int argc, char * argv[])
+           "failed to create bidirectional bridge for topic '%s' "
+           "with ROS 2 type '%s': %s\n",
+           topic_name.c_str(), type_name.c_str(), e.what());
++        return 1;
+       }
+     }
+   } else {

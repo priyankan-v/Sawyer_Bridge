@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "clock_basis": "Same workstation CLOCK_REALTIME for source and receiver timestamps; includes serialization and scheduling",
+  "command_fields_identical": true,
+  "commands_sent": 200,
+  "commands_received": 200,
+  "command_loss": 0,
+  "services_verified": [
+    "SolvePositionFK",
+    "SolvePositionIK",
+    "IOComponentCommandSrv"
+  ],
+  "direction_checks": "No ROS 2 bridge publisher on commands and no ROS 2 bridge subscriber on joint states",
+  "ros1_joint_source_hz": 100.00282644352193,
+  "ros2_joint_receive_hz": 100.06598774237953,
+  "joint_messages_received": 221,
+  "joint_sequence_gaps": 0,
+  "joint_interarrival_ms": {
+    "samples": 220,
+    "mean": 9.993405577272727,
+    "p50": 9.999227999999999,
+    "p95": 10.533336,
+    "max": 16.11635
+  },
+  "joint_interarrival_jitter_stddev_ms": 0.9731892808548175,
+  "joint_local_timestamp_latency_ms": {
+    "samples": 221,
+    "mean": 0.5849211357466063,
+    "p50": 0.448845,
+    "p95": 1.411874,
+    "max": 3.633597
+  },
+  "command_forwarding_latency_ms": {
+    "samples": 200,
+    "mean": 0.458447365,
+    "p50": 0.4400585,
+    "p95": 0.742635,
+    "max": 1.38836
+  },
+  "command_ack_roundtrip_ms": {
+    "samples": 200,
+    "mean": 0.89982335,
+    "p50": 0.8454740000000001,
+    "p95": 1.388303,
+    "max": 3.43461
+  }
+}
+
+
+
+test_live_limit_intersection_and_malformed_arrays (test_safety.SafetyTests.test_live_limit_intersection_and_malformed_arrays) ... ok
+test_partial_joint_states_do_not_refresh_other_joints (test_safety.SafetyTests.test_partial_joint_states_do_not_refresh_other_joints) ... ok
+test_quintic_endpoints_and_extrema (test_safety.SafetyTests.test_quintic_endpoints_and_extrema) ... ok
+test_readiness_fails_closed (test_safety.SafetyTests.test_readiness_fails_closed) ... ok
+test_stale_and_collision_feedback_abort (test_safety.SafetyTests.test_stale_and_collision_feedback_abort) ... ok
+test_unsafe_inputs_rejected (test_safety.SafetyTests.test_unsafe_inputs_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.134s
+
+OK
+
+{
+  "start": {
+    "right_j3": 0.0,
+    "right_j0": 0.0,
+    "right_j5": 0.0,
+    "right_j6": 0.0,
+    "right_j2": 0.0,
+    "right_j1": 0.0,
+    "right_j4": 0.0
+  },
+  "target": {
+    "right_j3": 0.0,
+    "right_j0": 0.01,
+    "right_j5": 0.0,
+    "right_j6": 0.0,
+    "right_j2": 0.0,
+    "right_j1": 0.0,
+    "right_j4": 0.0
+  },
+  "duration": 2.0,
+  "mode": "POSITION_MODE",
+  "execute": false,
+  "midpoint_position_velocity_acceleration": [
+    {
+      "right_j0": 0.005,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.009375,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    }
+  ]
+}
+
+
+PASS: dry-run application produced no physical-command publisher.

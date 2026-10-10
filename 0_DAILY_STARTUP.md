@@ -1,3 +1,9 @@
+The reproducible Sawyer custom-interface startup is now documented in [README.md](README.md).
+For daily use, start the bridge with `pixi run bridge-start` in one terminal,
+then enter `pixi run ros2-shell` in another and run ordinary `ros2` commands.
+These tasks load the project network settings and appropriate environments.
+The procedure below is retained for the original joint-state-only bridge installation.
+
 After connecting Sawyer's Ethernet cable, the following is the basic startup procedure.
 
 ## Terminal 1

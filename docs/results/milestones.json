@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-09",
+  "ros1_interfaces": "PASS: 51 source interfaces and generated wrappers",
+  "ros2_interfaces": "PASS: 51 compiled interface types",
+  "bridge": "PASS: 46 Sawyer messages, 3 services and standard JointState",
+  "selective_bridging": "PASS: direction and disabled-entry graph checks",
+  "isolated_commands": "PASS: 200/200 exact-field messages",
+  "unit_tests": "PASS: 11; includes simulated arm/head execution",
+  "native_serialization": "PASS: empty and boolean array wire serialization",
+  "physical_readonly": "PASS: state, endpoint, joints, collisions, limits, head, gripper, FK and IK",
+  "physical_motion": "NOT PERFORMED: explicit operator approval required; measured right_j6 outside limits",
+  "old_bridge": "Preserved and verified alive after cleanup",
+  "config": "config/network.env created from verified lab addresses; no system network changes",
+  "single_joint_application": "IMPLEMENTED: relative/absolute targets and quintic reference for right_j0-right_j6 and head_pan; physical motion untested",
+  "isolated_head_execution": "PASS: relative and absolute trajectories through ros1_bridge to private ROS 1 fixture; 400 head commands; no arm-command publisher"
+}

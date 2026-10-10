@@ -1,0 +1,47 @@
+{
+  "source": "sawyer_robot/sawyer_description/urdf/sawyer_base.urdf.xacro",
+  "variant": "physical (gazebo=false)",
+  "acceleration": "Not present in URDF; controller JointLimits.accel required for execution",
+  "joints": {
+    "right_j0": {
+      "lower": -3.0503,
+      "upper": 3.0503,
+      "velocity": 1.74
+    },
+    "right_j1": {
+      "lower": -3.8095,
+      "upper": 2.2736,
+      "velocity": 1.328
+    },
+    "right_j2": {
+      "lower": -3.0426,
+      "upper": 3.0426,
+      "velocity": 1.957
+    },
+    "right_j3": {
+      "lower": -3.0439,
+      "upper": 3.0439,
+      "velocity": 1.957
+    },
+    "right_j4": {
+      "lower": -2.9761,
+      "upper": 2.9761,
+      "velocity": 3.485
+    },
+    "right_j5": {
+      "lower": -2.9761,
+      "upper": 2.9761,
+      "velocity": 3.485
+    },
+    "right_j6": {
+      "lower": -4.7124,
+      "upper": 4.7124,
+      "velocity": 4.545
+    },
+    "head_pan": {
+      "lower": -5.0952,
+      "upper": 0.9064,
+      "velocity": 1.8
+    }
+  }
+}

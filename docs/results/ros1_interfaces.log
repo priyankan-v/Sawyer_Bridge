@@ -1,0 +1,1 @@
+PASS: 51 ROS 1 source interfaces and generated action messages load and serialize; original sources unchanged.

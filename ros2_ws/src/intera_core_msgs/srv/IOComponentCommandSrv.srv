@@ -1,0 +1,8 @@
+## IO Component Command service call
+intera_core_msgs/IOComponentCommand command
+float32 timeout# max seconds to handle the request, default used if 0.0
+---
+builtin_interfaces/Time time# time the request was handled, serves as a sequence number
+string op# operation performed
+intera_core_msgs/IOStatus status# status response
+string response# (OPTIONAL) command-specific response JSON data (e.g. resulting config)

@@ -1,0 +1,102 @@
+- ros1_package_name: intera_core_msgs
+  ros1_message_name: AnalogIOState
+  ros2_package_name: intera_core_msgs
+  ros2_message_name: AnalogIOState
+  fields_1_to_2:
+    timestamp: timestamp
+    value: value
+    isInputOnly: is_input_only
+- ros1_package_name: intera_core_msgs
+  ros1_message_name: DigitalIOState
+  ros2_package_name: intera_core_msgs
+  ros2_message_name: DigitalIOState
+  fields_1_to_2:
+    state: state
+    isInputOnly: is_input_only
+- ros1_package_name: intera_core_msgs
+  ros1_message_name: HeadState
+  ros2_package_name: intera_core_msgs
+  ros2_message_name: HeadState
+  fields_1_to_2:
+    pan: pan
+    isTurning: is_turning
+    isBlocked: is_blocked
+    panMode: pan_mode
+- ros1_package_name: intera_core_msgs
+  ros1_message_name: InteractionControlCommand
+  ros2_package_name: intera_core_msgs
+  ros2_message_name: InteractionControlCommand
+  fields_1_to_2:
+    header: header
+    interaction_control_active: interaction_control_active
+    K_impedance: k_impedance
+    max_impedance: max_impedance
+    D_impedance: d_impedance
+    K_nullspace: k_nullspace
+    force_command: force_command
+    interaction_frame: interaction_frame
+    endpoint_name: endpoint_name
+    in_endpoint_frame: in_endpoint_frame
+    disable_damping_in_force_control: disable_damping_in_force_control
+    disable_reference_resetting: disable_reference_resetting
+    interaction_control_mode: interaction_control_mode
+    rotations_for_constrained_zeroG: rotations_for_constrained_zero_g
+- ros1_package_name: intera_core_msgs
+  ros1_message_name: InteractionControlState
+  ros2_package_name: intera_core_msgs
+  ros2_message_name: InteractionControlState
+  fields_1_to_2:
+    header: header
+    interaction_control_active: interaction_control_active
+    K_impedance: k_impedance
+    D_impedance: d_impedance
+    endpoint_force_command: endpoint_force_command
+    endpoint_name: endpoint_name
+    in_endpoint_frame: in_endpoint_frame
+    disable_damping_in_force_control: disable_damping_in_force_control
+    disable_reference_resetting: disable_reference_resetting
+    rotations_for_constrained_zeroG: rotations_for_constrained_zero_g
+- ros1_package_name: intera_core_msgs
+  ros1_message_name: RobotAssemblyState
+  ros2_package_name: intera_core_msgs
+  ros2_message_name: RobotAssemblyState
+  fields_1_to_2:
+    homed: homed
+    ready: ready
+    enabled: enabled
+    stopped: stopped
+    error: error
+    lowVoltage: low_voltage
+    estop_button: estop_button
+    estop_source: estop_source
+- ros1_package_name: intera_core_msgs
+  ros1_message_name: SEAJointState
+  ros2_package_name: intera_core_msgs
+  ros2_message_name: SEAJointState
+  fields_1_to_2:
+    header: header
+    name: name
+    commanded_position: commanded_position
+    commanded_velocity: commanded_velocity
+    commanded_acceleration: commanded_acceleration
+    commanded_effort: commanded_effort
+    actual_position: actual_position
+    actual_velocity: actual_velocity
+    actual_effort: actual_effort
+    gravity_model_effort: gravity_model_effort
+    gravity_only: gravity_only
+    interaction_torque: interaction_torque
+    hysteresis_model_effort: hysteresis_model_effort
+    crosstalk_model_effort: crosstalk_model_effort
+    hystState: hyst_state
+- ros1_package_name: intera_core_msgs
+  ros1_service_name: SolvePositionFK
+  ros2_package_name: intera_core_msgs
+  ros2_service_name: SolvePositionFK
+  request_fields_1_to_2:
+    configuration: configuration
+    tip_names: tip_names
+  response_fields_1_to_2:
+    pose_stamp: pose_stamp
+    isValid: is_valid
+    inCollision: in_collision

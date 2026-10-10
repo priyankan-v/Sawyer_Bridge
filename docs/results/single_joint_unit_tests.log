@@ -1,0 +1,16 @@
+test_argument_selection_and_approval (test_move_joint.MoveJointTests.test_argument_selection_and_approval) ... ok
+test_arm_and_head_execute_quintic_in_simulation (test_move_joint.MoveJointTests.test_arm_and_head_execute_quintic_in_simulation) ... ok
+test_head_faults_abort_and_dry_run_has_no_publisher (test_move_joint.MoveJointTests.test_head_faults_abort_and_dry_run_has_no_publisher) ... ok
+test_head_limit_respects_speed_ratio_and_live_acceleration (test_move_joint.MoveJointTests.test_head_limit_respects_speed_ratio_and_live_acceleration) ... ok
+test_scalar_quintic_bounds_and_negative_distance (test_move_joint.MoveJointTests.test_scalar_quintic_bounds_and_negative_distance) ... ok
+test_live_limit_intersection_and_malformed_arrays (test_safety.SafetyTests.test_live_limit_intersection_and_malformed_arrays) ... ok
+test_partial_joint_states_do_not_refresh_other_joints (test_safety.SafetyTests.test_partial_joint_states_do_not_refresh_other_joints) ... ok
+test_quintic_endpoints_and_extrema (test_safety.SafetyTests.test_quintic_endpoints_and_extrema) ... ok
+test_readiness_fails_closed (test_safety.SafetyTests.test_readiness_fails_closed) ... ok
+test_stale_and_collision_feedback_abort (test_safety.SafetyTests.test_stale_and_collision_feedback_abort) ... ok
+test_unsafe_inputs_rejected (test_safety.SafetyTests.test_unsafe_inputs_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.048s
+
+OK

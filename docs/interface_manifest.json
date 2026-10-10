@@ -1,0 +1,339 @@
+[
+  {
+    "source": "intera_common/intera_core_msgs/msg/AnalogIOState.msg",
+    "sha256": "9fccc002e7325e27724b89b82a915d2ac0dc8a7f98d09e1547a440fecfdb6b6b",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/AnalogIOState.msg",
+    "renamed": {
+      "isInputOnly": "is_input_only"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/AnalogIOStates.msg",
+    "sha256": "10d5b5f24fd0e1ba849958260b51aef9026c9142ac7de521419ded32fe9fe74d",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/AnalogIOStates.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/AnalogOutputCommand.msg",
+    "sha256": "0eb227ac248d11fbd034d256e0281c0bb4158e95df10cd37f8fbcb1ce7c3b5fd",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/AnalogOutputCommand.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/CameraControl.msg",
+    "sha256": "d86fe9ce6fa4f1dcbc3886c8bf776e1f7b4163e3ccb1b89e4a0dfbd65b602ef5",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/CameraControl.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/CameraSettings.msg",
+    "sha256": "a63aa65b6ea9cbdc6fc5a57d9eb44abab71f5f5c5267aa51e0cfd50fa4e1c704",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/CameraSettings.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/CollisionAvoidanceState.msg",
+    "sha256": "956a32aeca78c9c305e84a084ccaa0b076e10e116b89e272c6e12d77a15f9145",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/CollisionAvoidanceState.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/CollisionDetectionState.msg",
+    "sha256": "8c67ffd85956533608013017f065223296da3da4134e11f21b28268ea5e9d2dd",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/CollisionDetectionState.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/DigitalIOState.msg",
+    "sha256": "cd2598a3dba10b593e9b6c11b0d70ceee5ee53c7cb0a1c36e6378e73faae56ce",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/DigitalIOState.msg",
+    "renamed": {
+      "isInputOnly": "is_input_only"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/DigitalIOStates.msg",
+    "sha256": "9dfe3c59a34d5fbe100242b4ecac2d362f772ddd79e00b71089dd5d2db15f489",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/DigitalIOStates.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/DigitalOutputCommand.msg",
+    "sha256": "40778d721bd40140e23810db51cc645021f94ec6c9ca2e1db5b87eae24075487",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/DigitalOutputCommand.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/EndpointNamesArray.msg",
+    "sha256": "7eadad07fce8ca4a1c9ad94141c4c501d2d2ed449c7808b8e06bf3432666d74a",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/EndpointNamesArray.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/EndpointState.msg",
+    "sha256": "1598b5416d427cc8506dc4c3cf1c49501fa7bd0173e4197d99233ed1bce60dbf",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/EndpointState.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/EndpointStates.msg",
+    "sha256": "012f9e6f59c3a5db627be70f2c5f4103eee505e7aeffa58e3ffccf9e3f057fb8",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/EndpointStates.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/HeadPanCommand.msg",
+    "sha256": "174c11025002929c179a62c538c0e28a816a95f98b9f85ef179e528749c5059f",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/HeadPanCommand.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/HeadState.msg",
+    "sha256": "ef80741d0b0c4eaa0e109ba10fc38d6c25daea6bdb8223a54eab56f1528fef8a",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/HeadState.msg",
+    "renamed": {
+      "isTurning": "is_turning",
+      "isBlocked": "is_blocked",
+      "panMode": "pan_mode"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/HomingCommand.msg",
+    "sha256": "aed6cabde70b0acfb27ee474b243437428f164d817a05f82479230faae3d656b",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/HomingCommand.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/HomingState.msg",
+    "sha256": "c7d6e90f849cda7a003f520976dbed07a1fa180aa5ceae2fd765872e6a3e134e",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/HomingState.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IOComponentCommand.msg",
+    "sha256": "cd01f49390d26bb7c5672656bdd5fc7cec0286781f1fed5867017ff8c546d262",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IOComponentCommand.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IOComponentConfiguration.msg",
+    "sha256": "02cd0b50574e78f843f9a8021786e483099703fe49dfba4898fb478a68da5ed6",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IOComponentConfiguration.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IOComponentStatus.msg",
+    "sha256": "24f860467e9f0fad32c4a8e54c9079d7433d3903bad4c5209328e549c348e6ce",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IOComponentStatus.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IODataStatus.msg",
+    "sha256": "de1af8011c4ffd8411b1222280796adaaf7b4813e7dd569441f99c3c861c447b",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IODataStatus.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IODeviceConfiguration.msg",
+    "sha256": "05551d8fafc6c80339c3dd7d70bb2569deff198d2c8d02647f981bbacbbbd174",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IODeviceConfiguration.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IODeviceStatus.msg",
+    "sha256": "3b9c8d169cd661d930fbc4e8ae62df276088a56ff067155929edfaa7492853aa",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IODeviceStatus.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IONodeConfiguration.msg",
+    "sha256": "d1ea82d7ace18fc69f517a4f9441a4fa01fdb0e19771eebb981f9bc49d24ba75",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IONodeConfiguration.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IONodeStatus.msg",
+    "sha256": "e0e57f1113314525ac96f426ecd8e668d14b0f9daa18450704a6cec70f126f17",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IONodeStatus.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/IOStatus.msg",
+    "sha256": "c651ffb848db23cc86c49cba95933df2963f8adb1ad9a7f244bbf9d0476a9ebc",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/IOStatus.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/InteractionControlCommand.msg",
+    "sha256": "694e0c54af695200e94b6dbc9832eee7e3786f56c89152003e2730f1b08d18b1",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/InteractionControlCommand.msg",
+    "renamed": {
+      "K_impedance": "k_impedance",
+      "D_impedance": "d_impedance",
+      "K_nullspace": "k_nullspace",
+      "rotations_for_constrained_zeroG": "rotations_for_constrained_zero_g"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/InteractionControlState.msg",
+    "sha256": "713f5b8fbe90213d3c2414af4b4e9e9c9d391925f653b4e2dc6d1d571a117baa",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/InteractionControlState.msg",
+    "renamed": {
+      "K_impedance": "k_impedance",
+      "D_impedance": "d_impedance",
+      "rotations_for_constrained_zeroG": "rotations_for_constrained_zero_g"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/JointCommand.msg",
+    "sha256": "f3d0fb92542c1b6085462e542e0210782d6da4548c9e886e16b7ba1c3db55df5",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/JointCommand.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/JointLimits.msg",
+    "sha256": "b20846d16ff8e4f5995832c8a00f5d07bd75e9313bfce6d04a35ca25c1bd19de",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/JointLimits.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/NavigatorState.msg",
+    "sha256": "47e9a6243b0ce6741ec92ec3790c21517963f719116636d9b03399117de84d35",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/NavigatorState.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/NavigatorStates.msg",
+    "sha256": "51b3232a55e1ae8f0f7c781a1ac663d1e25ba48961a1d78fc21ef32a15a0dcaa",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/NavigatorStates.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/RobotAssemblyState.msg",
+    "sha256": "af44677311f09df9c59c344740e93f13875dda530b0cddbfabecd02e51df2f24",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/RobotAssemblyState.msg",
+    "renamed": {
+      "lowVoltage": "low_voltage"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/SEAJointState.msg",
+    "sha256": "9109e39d8d09828f3e47a89b97a51847d8b39299cb6a4a3b6fef65e4be2aea80",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/SEAJointState.msg",
+    "renamed": {
+      "hystState": "hyst_state"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/msg/URDFConfiguration.msg",
+    "sha256": "11b3eeef7c1d9a9a9b74782002bb4dd706ee14a593756f0db5a8420cd0789963",
+    "ros2": "ros2_ws/src/intera_core_msgs/msg/URDFConfiguration.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/srv/IOComponentCommandSrv.srv",
+    "sha256": "a9e56a377e187e62c12381314521d2fbf649de10cbf321dc32ad4534d5d15be5",
+    "ros2": "ros2_ws/src/intera_core_msgs/srv/IOComponentCommandSrv.srv",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/srv/SolvePositionFK.srv",
+    "sha256": "e2e8934eeb652b3abe0bcc00dfc913ee1f0a8955ddc725b994474a19d2ad6fdd",
+    "ros2": "ros2_ws/src/intera_core_msgs/srv/SolvePositionFK.srv",
+    "renamed": {
+      "isValid": "is_valid",
+      "inCollision": "in_collision"
+    }
+  },
+  {
+    "source": "intera_common/intera_core_msgs/srv/SolvePositionIK.srv",
+    "sha256": "3942b8c0f7054b2195465294c327ca62cf0ec961e34f42dfc8e16d32c43e4cc5",
+    "ros2": "ros2_ws/src/intera_core_msgs/srv/SolvePositionIK.srv",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_core_msgs/action/CalibrationCommand.action",
+    "sha256": "6ef7e17faeb43d2ca9a2ad32b6b517419d777ad51675bf18bf93403f6fd8cb24",
+    "ros2": "ros2_ws/src/intera_core_msgs/action/CalibrationCommand.action",
+    "renamed": {
+      "statusId": "status_id",
+      "currentState": "current_state",
+      "numberOfPoses": "number_of_poses",
+      "currentPoseNumber": "current_pose_number"
+    }
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/EndpointTrackingError.msg",
+    "sha256": "5b5832c58d2ced426f91ea25f6bc8be2a5d13a7a4c7c0de3119cc2ad6945008b",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/EndpointTrackingError.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/InterpolatedPath.msg",
+    "sha256": "861432435ac55d723566f049bff3b4bccea961dd8b8bdb4c387d7ca275f257ea",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/InterpolatedPath.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/JointTrackingError.msg",
+    "sha256": "674cc75a49142591989d2a194e551bea1cdae564e99b9ea569b76056193c8669",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/JointTrackingError.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/MotionStatus.msg",
+    "sha256": "e1c0f86390b57d00adf58e19adcd5355f0236b27490761266fb9bfe41d00eb69",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/MotionStatus.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/TrackingOptions.msg",
+    "sha256": "6bf53c6adabcb3ac20b1a3c749de28d35be4d1ec433b21cd0f262db038721951",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/TrackingOptions.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/Trajectory.msg",
+    "sha256": "fffd2aa4724825eb1845df6506cd2c5ce201934cbb719dd646883f5e1a743fe9",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/Trajectory.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/TrajectoryAnalysis.msg",
+    "sha256": "10dd1af50611a1c7e7c8fad785f54b111f0066cee7cfe30461a2ac122895690b",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/TrajectoryAnalysis.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/TrajectoryOptions.msg",
+    "sha256": "41ab2c21ddced419a2534f1eeaa6b38c0434dbcaa7e7e4c4242f3262f9fe166e",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/TrajectoryOptions.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/Waypoint.msg",
+    "sha256": "9b40d91ffd672792732b99018df57c06bcec8d92b3d2c32246994acb7fc6a8c4",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/Waypoint.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/WaypointOptions.msg",
+    "sha256": "7e3b59a3cfa0af05f703a2173f08ed97ed73b476bd37431225587ee59b5a0982",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/WaypointOptions.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/msg/WaypointSimple.msg",
+    "sha256": "79f9a0452da2f6667e0850b83e197e769487a712fca96513764472cf4b810291",
+    "ros2": "ros2_ws/src/intera_motion_msgs/msg/WaypointSimple.msg",
+    "renamed": {}
+  },
+  {
+    "source": "intera_common/intera_motion_msgs/action/MotionCommand.action",
+    "sha256": "016be86c432c50e5e0861a1c85111be351f51dd28e88812fff94a5d4f97f5e89",
+    "ros2": "ros2_ws/src/intera_motion_msgs/action/MotionCommand.action",
+    "renamed": {
+      "errorId": "error_id"
+    }
+  }
+]

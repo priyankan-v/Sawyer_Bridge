@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.16)
+project(sawyer_converter_validation)
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(intera_core_msgs REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(ROSCPP REQUIRED IMPORTED_TARGET roscpp)
+add_library(check_conversion OBJECT check_conversion.cpp)
+target_include_directories(check_conversion PRIVATE "$ENV{SAWYER_ROOT}/ros1_ws/devel/include"
+  "$ENV{SAWYER_ROOT}/bridge_ws/install_sawyer/ros1_bridge/include")
+ament_target_dependencies(check_conversion rclcpp intera_core_msgs)
+target_link_libraries(check_conversion PkgConfig::ROSCPP)
