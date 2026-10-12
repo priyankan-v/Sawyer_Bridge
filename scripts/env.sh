@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 mode=${1:?Usage: env.sh ros1|ros2|bridge|system-ros2 command [args...]}
 shift
-# Local prefixes keep separate branch builds away from the working Pixi install.
+# Local Conda prefixes keep environment and build paths isolated.
 NOETIC_PREFIX=${SAWYER_NOETIC_PREFIX:-$ROOT/.conda/envs/noetic}
 HUMBLE_PREFIX=${SAWYER_HUMBLE_PREFIX:-$ROOT/.conda/envs/humble}
 if [[ ${SAWYER_ENV_INTERNAL:-} != "$mode" ]]; then

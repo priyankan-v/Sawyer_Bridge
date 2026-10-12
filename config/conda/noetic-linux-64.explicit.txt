@@ -1,5 +1,5 @@
 # platform: linux-64
-# Exact dependency closure of the working Pixi package records; desktop extras excluded.
+# Exact tested dependency closure; desktop extras excluded.
 @EXPLICIT
 https://prefix.dev/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda#a9f577daf3de00bca7c3c76c0ecbd1de
 https://prefix.dev/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_3.conda#3845f3d75991bae0fb90884662f4327c

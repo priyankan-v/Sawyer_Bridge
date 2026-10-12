@@ -14,7 +14,7 @@ def start(context):
     config = LaunchConfiguration('config').perform(context)
     command = [str(root / 'scripts/env.sh'), 'ros1', 'python',
                str(root / 'scripts/configure_bridge.py'), config]
-    for name in ('commands', 'head_commands'):
+    for name in ('commands', 'head_commands', 'cameras'):
         value = LaunchConfiguration(name).perform(context).lower()
         if value not in ('true', 'false'):
             raise ValueError(f'{name} must be true or false')
@@ -47,5 +47,7 @@ def generate_launch_description():
         DeclareLaunchArgument('config', default_value=str(root / 'config/sawyer_bridge.yaml')),
         DeclareLaunchArgument('commands', default_value='false'),
         DeclareLaunchArgument('head_commands', default_value='false'),
+        DeclareLaunchArgument('cameras', default_value='false',
+                              description='Forward existing head/hand images without controlling cameras'),
         OpaqueFunction(function=start),
     ])

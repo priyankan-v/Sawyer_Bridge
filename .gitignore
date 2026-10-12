@@ -1,29 +1,27 @@
-bridge_ws/build
-bridge_ws/log
-bridge_ws/install
-bridge_ws/build_sawyer/
-bridge_ws/install_sawyer/
-bridge_ws/log_sawyer/
-ros1_ws/build/
-ros1_ws/devel/
-ros1_ws/install/
-ros2_ws/build/
-ros2_ws/install/
-ros2_ws/log/
+# Generated workspace outputs
+/bridge_ws/build*/
+/bridge_ws/install*/
+/bridge_ws/log*/
+/ros1_ws/build*/
+/ros1_ws/devel*/
+/ros1_ws/install*/
+/ros2_ws/build*/
+/ros2_ws/install*/
+/ros2_ws/log*/
 .runtime/
 __pycache__/
 *.pyc
 *.egg-info/
 config/network.env
 
-.pixi/
 .conda/
-# Keep the original nested Pixi bridge checkout available on this PC.
-/bridge_ws/src/ros1_bridge/
-**/build_conda/
-**/devel_conda/
-**/install_conda/
-**/log_conda/
+# Local environments/checkouts shared with other branches
+.pixi/
+/bridge_ws/src/
+# Test runners regenerate these; retain only Conda evidence and safety proof.
+/docs/results/*
+!/docs/results/conda/
+!/docs/results/local_transport.json
 .pytest_cache/
 .mypy_cache/
 *.log

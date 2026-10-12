@@ -1,5 +1,0 @@
-pan: -2.9829959869384766
-is_turning: false
-is_blocked: false
-pan_mode: 0
----

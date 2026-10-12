@@ -12,6 +12,9 @@ topics:
   - {topic: /robot/head/head_state, type: intera_core_msgs/msg/HeadState, queue_size: 1, direction: 1to2, enabled: true}
   - {topic: /robot/head/command_head_pan, type: intera_core_msgs/msg/HeadPanCommand, queue_size: 1, direction: 2to1, enabled: false, qos: {history: keep_last, depth: 1, reliability: reliable, durability: volatile, lifespan: {secs: 0, nsecs: 200000000}}}
   - {topic: /robot/set_super_enable, type: std_msgs/msg/Bool, queue_size: 1, direction: 2to1, enabled: false}
+  # Camera forwarding is opt-in. This does not start or reconfigure either camera.
+  - {topic: /io/internal_camera/head_camera/image_rect_color, type: sensor_msgs/msg/Image, queue_size: 1, direction: 1to2, enabled: false, qos: {history: keep_last, depth: 1, reliability: best_effort}}
+  - {topic: /io/internal_camera/right_hand_camera/image_rect, type: sensor_msgs/msg/Image, queue_size: 1, direction: 1to2, enabled: false, qos: {history: keep_last, depth: 1, reliability: best_effort}}
 services_1_to_2: []
 # Upstream convention: services_2_to_1 exposes an existing ROS 1 server to ROS 2.
 services_2_to_1: []

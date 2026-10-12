@@ -1,0 +1,237 @@
+{
+  "date": "2026-10-12",
+  "branch": "conda",
+  "status": "PASS",
+  "unit_checks": {
+    "ros2": 53,
+    "noetic_camera_io": 8
+  },
+  "desktop_checks": [
+    "Two-pane empty startup",
+    "Head/hand image decoding",
+    "Stale image clearing",
+    "Clean shutdown",
+    "Head-only and hand-only hidden windows"
+  ],
+  "simulated_checks": [
+    "Two image conversions with exact pixel checks",
+    "Default read-only viewer",
+    "Single camera selection",
+    "Switch-only",
+    "Stop-on-exit",
+    "Stop-all",
+    "Read-only information",
+    "Explicit concurrent start",
+    "Two concurrent read-only head/hand viewer nodes; no extra IO commands"
+  ],
+  "physical_ros1_concurrency": {
+    "before": {
+      "head": false,
+      "hand": true
+    },
+    "motion_commands_sent": false,
+    "scope": "Bounded camera IO test; no resolution, FPS, exposure or robot motion changes",
+    "sample": {
+      "cameras": {
+        "head": {
+          "camera": "head_camera",
+          "driver": "ienso_ethernet",
+          "configured_fps": 10,
+          "configured_width": 1280,
+          "configured_height": 800,
+          "topic": "/io/internal_camera/head_camera/image_rect_color",
+          "frames": 41,
+          "width": 1280,
+          "height": 800,
+          "encoding": "bgra8",
+          "step": 5120,
+          "streaming": true,
+          "measured_fps": 7.225924345877976
+        },
+        "hand": {
+          "camera": "right_hand_camera",
+          "driver": "cognex",
+          "configured_fps": 10,
+          "configured_width": 752,
+          "configured_height": 480,
+          "topic": "/io/internal_camera/right_hand_camera/image_rect",
+          "frames": 29,
+          "width": 752,
+          "height": 480,
+          "encoding": "mono8",
+          "step": 752,
+          "streaming": true,
+          "measured_fps": 4.760799512340717
+        }
+      },
+      "sample_seconds": 6.0,
+      "maximum_fps": "Not exposed by controller configuration",
+      "maximum_resolution": "Not exposed by controller configuration"
+    },
+    "concurrent_frames": true,
+    "restored": {
+      "head": false,
+      "hand": true
+    }
+  },
+  "physical_ros2": {
+    "head": {
+      "status": "PASS",
+      "streams": {
+        "head": {
+          "topic": "/io/internal_camera/head_camera/image_rect_color",
+          "status": "live",
+          "frames": 27,
+          "receive_hz": 5.496671031886328,
+          "age_seconds": 0.0755155980004929,
+          "encoding": "bgra8",
+          "width": 1280,
+          "height": 800,
+          "error": null,
+          "decode_errors": 0
+        }
+      },
+      "camera_control": "selected-via-ros1"
+    },
+    "hand": {
+      "status": "PASS",
+      "streams": {
+        "hand": {
+          "topic": "/io/internal_camera/right_hand_camera/image_rect",
+          "status": "live",
+          "frames": 24,
+          "receive_hz": 4.7626671386958215,
+          "age_seconds": 0.03415928699905635,
+          "encoding": "mono8",
+          "width": 752,
+          "height": 480,
+          "error": null,
+          "decode_errors": 0
+        }
+      },
+      "camera_control": "selected-via-ros1"
+    },
+    "both": {
+      "status": "PASS",
+      "streams": {
+        "head": {
+          "topic": "/io/internal_camera/head_camera/image_rect_color",
+          "status": "live",
+          "frames": 30,
+          "receive_hz": 5.961995339244797,
+          "age_seconds": 0.887429737002094,
+          "encoding": "bgra8",
+          "width": 1280,
+          "height": 800,
+          "error": null,
+          "decode_errors": 0
+        },
+        "hand": {
+          "topic": "/io/internal_camera/right_hand_camera/image_rect",
+          "status": "live",
+          "frames": 29,
+          "receive_hz": 4.7705144858444735,
+          "age_seconds": 0.024987769000290427,
+          "encoding": "mono8",
+          "width": 752,
+          "height": 480,
+          "error": null,
+          "decode_errors": 0
+        }
+      },
+      "camera_control": "both-started-via-ros1"
+    }
+  },
+  "physical_stop_verified": true,
+  "initial_stream_state": {
+    "head": false,
+    "hand": true
+  },
+  "restored_stream_state": {
+    "head": false,
+    "hand": true
+  },
+  "physical_test_isolation": {
+    "dds_domain": 90,
+    "bridge": "Temporary two-image-only 1to2 bridge; unique parameters removed on cleanup"
+  },
+  "motion_commands_sent": false,
+  "fps_resolution_exposure_changed": false,
+  "maximum_hardware_fps": "Not verified; controller reports fps=10 for both as configured settings, not maximums",
+  "maximum_sensor_resolution": "Not verified; only configured and observed resolutions identified",
+  "commands": {
+    "head": "ros2 run sawyer_ros2_control camera_viewer --camera head",
+    "hand": "ros2 run sawyer_ros2_control camera_viewer --camera hand",
+    "both": "ros2 run sawyer_ros2_control camera_viewer --start-both",
+    "stop": "ros2 run sawyer_ros2_control camera_viewer --stop-stream all",
+    "info": "ros2 run sawyer_ros2_control camera_viewer --stream-info"
+  },
+  "limitations": [
+    "Short concurrent-stream tests only; no prolonged workload test",
+    "Independent frame timestamps; no hardware synchronization guarantee",
+    "Other SDK camera applications can change stream selection"
+  ],
+  "simulated_two_nodes": {
+    "head": {
+      "status": "PASS",
+      "streams": {
+        "head": {
+          "topic": "/io/internal_camera/head_camera/image_rect_color",
+          "status": "live",
+          "frames": 20,
+          "receive_hz": 10.000535528676757,
+          "age_seconds": 0.09896088499954203,
+          "encoding": "rgb8",
+          "width": 2,
+          "height": 2,
+          "error": null,
+          "decode_errors": 0
+        }
+      },
+      "camera_control": "read-only"
+    },
+    "hand": {
+      "status": "PASS",
+      "streams": {
+        "hand": {
+          "topic": "/io/internal_camera/right_hand_camera/image_rect",
+          "status": "live",
+          "frames": 20,
+          "receive_hz": 10.000015847397789,
+          "age_seconds": 0.09893087599994033,
+          "encoding": "mono8",
+          "width": 2,
+          "height": 2,
+          "error": null,
+          "decode_errors": 0
+        }
+      },
+      "camera_control": "read-only"
+    }
+  },
+  "desktop_layout": {
+    "status": "PASS",
+    "default": "rows",
+    "optional": "columns",
+    "checks": [
+      "Head row 0, hand row 1",
+      "Head column 0, hand column 1",
+      "Footer below panes with correct column span",
+      "Pixels render and stale status remains visible"
+    ]
+  },
+  "desktop_resize": {
+    "status": "PASS",
+    "checks": [
+      "Rows: 420x600, 900x760, 320x420",
+      "Columns: 500x420, 1100x700, 400x320",
+      "Preview fits actual canvas",
+      "Aspect ratio preserved",
+      "Image centered",
+      "Resizes without a new frame",
+      "Stale status remains visible",
+      "Close and reopen on GUI thread"
+    ],
+    "robot_commands_sent": false
+  }
+}

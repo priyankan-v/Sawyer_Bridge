@@ -12,6 +12,7 @@ def main():
     parser.add_argument('config', type=Path)
     parser.add_argument('--commands', action='store_true')
     parser.add_argument('--head-commands', action='store_true')
+    parser.add_argument('--cameras', action='store_true')
     args = parser.parse_args()
     with args.config.open() as stream:
         config = yaml.safe_load(stream)
@@ -23,6 +24,11 @@ def main():
             entry['enabled'] = True
         if args.head_commands and entry['topic'] in (
             '/robot/head/head_state', '/robot/head/command_head_pan'
+        ):
+            entry['enabled'] = True
+        if args.cameras and entry['topic'] in (
+            '/io/internal_camera/head_camera/image_rect_color',
+            '/io/internal_camera/right_hand_camera/image_rect'
         ):
             entry['enabled'] = True
     rospy.init_node('configure_sawyer_bridge', anonymous=True)
