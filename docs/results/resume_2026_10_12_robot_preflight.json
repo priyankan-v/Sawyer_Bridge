@@ -1,0 +1,12 @@
+{
+  "wall_time": 1791818577.4502192,
+  "master": "http://169.254.121.3:11311",
+  "joint": "head_pan",
+  "command_topic": "/robot/head/command_head_pan",
+  "command_type": "intera_core_msgs/HeadPanCommand",
+  "ready": false,
+  "verified_command_subscribers": [],
+  "errors": [
+    "ROS master unavailable at http://169.254.121.3:11311: [Errno 113] No route to host"
+  ]
+}

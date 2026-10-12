@@ -1,9 +1,9 @@
-[?25h... logging to /home/pi/sawyer_rs/.runtime/ros/log/d3bf605e-c455-11f1-9b3f-1098198ec9d9/roslaunch-MAE-HM-ATRC324-L1-1208759.log
+[?25h... logging to /home/pi/sawyer_rs/.runtime/ros/log/23e01948-c66d-11f1-9534-1098198ec9d9/roslaunch-MAE-HM-ATRC324-L1-1204129.log
 Checking log directory for disk usage. This may take a while.
 Press Ctrl-C to interrupt
 Done checking log file disk usage. Usage is <1GB.
 ]2;roscore
-[1mstarted roslaunch server http://127.0.0.1:36647/[0m
+[1mstarted roslaunch server http://127.0.0.1:41749/[0m
 ros_comm version 1.17.4
 
 
@@ -17,11 +17,11 @@ PARAMETERS
 NODES
 
 auto-starting new master
-[1mprocess[master]: started with pid [1208877][0m
+[1mprocess[master]: started with pid [1204252][0m
 [1mROS_MASTER_URI=http://127.0.0.1:11421/[0m
 ]2;roscore http://127.0.0.1:11421/
-[1msetting /run_id to d3bf605e-c455-11f1-9b3f-1098198ec9d9[0m
-[1mprocess[rosout-1]: started with pid [1209010][0m
+[1msetting /run_id to 23e01948-c66d-11f1-9534-1098198ec9d9[0m
+[1mprocess[rosout-1]: started with pid [1204323][0m
 started core service [/rosout]
 [rosout-1] killing on exit
 [master] killing on exit

@@ -1,12 +1,12 @@
-[INFO] [1791600835.352538973] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/JointLimits to ROS 2 intera_core_msgs/msg/JointLimits (showing msg only once per type)
-[INFO] [1791600835.360318103] [ros_bridge]: Passing message from ROS 1 sensor_msgs/JointState to ROS 2 sensor_msgs/msg/JointState (showing msg only once per type)
-[INFO] [1791600835.370325873] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/RobotAssemblyState to ROS 2 intera_core_msgs/msg/RobotAssemblyState (showing msg only once per type)
-[INFO] [1791600835.370735434] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/EndpointState to ROS 2 intera_core_msgs/msg/EndpointState (showing msg only once per type)
-[INFO] [1791600835.371092195] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/CollisionDetectionState to ROS 2 intera_core_msgs/msg/CollisionDetectionState (showing msg only once per type)
-[INFO] [1791600835.371391862] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/HeadState to ROS 2 intera_core_msgs/msg/HeadState (showing msg only once per type)
-[INFO] [1791600835.461387328] [ros_bridge]: Passing message from ROS 2 intera_core_msgs/msg/JointCommand to ROS 1 intera_core_msgs/JointCommand (showing msg only once per type)
-[INFO] [1791600835.462461540] [ros_bridge]: Passing message from ROS 1 std_msgs/String to ROS 2 std_msgs/msg/String (showing msg only once per type)
-[INFO] [1791600839.798348343] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [1791830750.537096791] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/JointLimits to ROS 2 intera_core_msgs/msg/JointLimits (showing msg only once per type)
+[INFO] [1791830750.542333821] [ros_bridge]: Passing message from ROS 1 sensor_msgs/JointState to ROS 2 sensor_msgs/msg/JointState (showing msg only once per type)
+[INFO] [1791830750.552400058] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/RobotAssemblyState to ROS 2 intera_core_msgs/msg/RobotAssemblyState (showing msg only once per type)
+[INFO] [1791830750.552852526] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/EndpointState to ROS 2 intera_core_msgs/msg/EndpointState (showing msg only once per type)
+[INFO] [1791830750.553265258] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/CollisionDetectionState to ROS 2 intera_core_msgs/msg/CollisionDetectionState (showing msg only once per type)
+[INFO] [1791830750.553579547] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/HeadState to ROS 2 intera_core_msgs/msg/HeadState (showing msg only once per type)
+[INFO] [1791830750.643713843] [ros_bridge]: Passing message from ROS 2 intera_core_msgs/msg/JointCommand to ROS 1 intera_core_msgs/JointCommand (showing msg only once per type)
+[INFO] [1791830750.644879413] [ros_bridge]: Passing message from ROS 1 std_msgs/String to ROS 2 std_msgs/msg/String (showing msg only once per type)
+[INFO] [1791830755.274706774] [rclcpp]: signal_handler(SIGINT/SIGTERM)
 [?25hTrying to create configured bridge for topic '/robot/joint_states' with ROS 2 type 'sensor_msgs/msg/JointState'
 Qos(history: keep_last(5), reliability: best_effort, )Created 1to2 bridge for topic '/robot/joint_states'
 Trying to create configured bridge for topic '/robot/state' with ROS 2 type 'intera_core_msgs/msg/RobotAssemblyState'

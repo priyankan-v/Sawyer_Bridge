@@ -1,0 +1,14 @@
+{
+  "master": "http://169.254.121.3:11311",
+  "joint": "head_pan",
+  "command_topic": "/robot/head/command_head_pan",
+  "verified_command_subscribers": [],
+  "state": null,
+  "collision": null,
+  "positions": null,
+  "ready": false,
+  "position_limit_errors": null,
+  "errors": [
+    "ROS master unavailable at http://169.254.121.3:11311: [Errno 113] No route to host"
+  ]
+}

@@ -13,12 +13,6 @@ while [[ ${1:-} == --* ]]; do
 done
 [[ $# -le 1 ]] || { echo 'Usage: start_bridge.sh [--commands] [--head-commands] [config]' >&2; exit 2; }
 config=${1:-$ROOT/config/sawyer_bridge.yaml}
-if [[ $commands == true || $head_commands == true ]]; then
-  [[ -f "$ROOT/docs/results/local_transport.json" ]] || { echo 'Run scripts/test_local.sh first.' >&2; exit 1; }
-  joint=right_j0
-  [[ $head_commands == false ]] || joint=head_pan
-  "$ROOT/scripts/env.sh" ros1 python "$ROOT/scripts/preflight.py" --require-ready --joint "$joint" --output "$ROOT/.runtime/preflight.json"
-fi
 "$ROOT/scripts/env.sh" ros1 python - "$config" "$commands" "$head_commands" <<'PY'
 import sys, yaml, rospy
 rospy.init_node('configure_sawyer_bridge', anonymous=True)

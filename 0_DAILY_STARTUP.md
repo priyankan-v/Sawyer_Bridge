@@ -1,4 +1,5 @@
 The reproducible Sawyer custom-interface startup is now documented in [README.md](README.md).
+The environments and message paths are explained in [How our setup works](docs/HOW_THE_SETUP_WORKS.md).
 For daily use, start the bridge with `pixi run bridge-start` in one terminal,
 then enter `pixi run ros2-shell` in another and run ordinary `ros2` commands.
 These tasks load the project network settings and appropriate environments.

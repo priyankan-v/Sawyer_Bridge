@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "scope": "Isolated ROS 1 fixture; no physical hardware",
+  "requested_time_seconds": 0.05,
+  "no_commands_published": true,
+  "message": "Error: Time 0.05 s is too short for right_j2; minimum quintic time is 1.074570 s. Use --time 1.075 or longer. No commands sent."
+}

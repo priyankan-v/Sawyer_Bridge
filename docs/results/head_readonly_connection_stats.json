@@ -1,0 +1,1564 @@
+{
+  "scope": "Read-only counters, head parameters and logs; no actuator commands",
+  "nodes": {
+    "/realtime_loop": [
+      [
+        [
+          "/rosout",
+          [
+            [
+              0,
+              5391718,
+              5391718,
+              1246,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/in_sim_mode",
+          [
+            [
+              48,
+              226605,
+              226605,
+              45321,
+              0
+            ]
+          ]
+        ],
+        [
+          "/diagnostics",
+          [
+            [
+              9,
+              11109461,
+              11109461,
+              25323,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/camera_strobe",
+          []
+        ],
+        [
+          "/robot/joint_limits",
+          [
+            [
+              102,
+              444,
+              444,
+              1,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/state",
+          [
+            [
+              6,
+              5439756,
+              5439756,
+              453313,
+              0
+            ],
+            [
+              95,
+              3007440,
+              3007440,
+              250620,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/digital_io/head_blue_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_back/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_back_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_circle/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_circle_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_ok/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_sawyer/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_sawyer_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_square/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_square_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_triangle/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_button_triangle_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_green_light/state",
+          []
+        ],
+        [
+          "/robot/navigators/head_navigator/state",
+          []
+        ],
+        [
+          "/robot/digital_io/head_red_light/state",
+          []
+        ],
+        [
+          "/robot/analog_io/head_wheel/state",
+          []
+        ],
+        [
+          "/robot/analog_io/head_wheel/value_uint32",
+          []
+        ],
+        [
+          "/robot/head/head_state",
+          [
+            [
+              103,
+              2756820,
+              2756820,
+              250620,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/accelerometer/right_accelerometer/state",
+          []
+        ],
+        [
+          "/robot/analog_io/right_analog_input/state",
+          []
+        ],
+        [
+          "/robot/analog_io/right_analog_input/value_uint32",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_back/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_back_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_circle/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_circle_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_ok/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_sawyer/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_sawyer_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_square/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_square_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_triangle/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_button_triangle_light/state",
+          []
+        ],
+        [
+          "/robot/limb/right/endpoint_state",
+          [
+            [
+              3,
+              78423149,
+              78423149,
+              453313,
+              0
+            ],
+            [
+              58,
+              78299627,
+              78299627,
+              452599,
+              0
+            ],
+            [
+              100,
+              43357260,
+              43357260,
+              250620,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/commanded_endpoint_state",
+          [
+            [
+              5,
+              78423149,
+              78423149,
+              453313,
+              0
+            ],
+            [
+              57,
+              78299627,
+              78299627,
+              452599,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/twist_speed_constraint",
+          []
+        ],
+        [
+          "/robot/limb/right/tip_states",
+          []
+        ],
+        [
+          "/robot/digital_io/right_hand_blue_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_hand_camera_power/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_hand_green_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_hand_red_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_inner_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_lower_button/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_lower_cuff/state",
+          []
+        ],
+        [
+          "/robot/navigators/right_navigator/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_outer_light/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_shoulder_button/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_upper_button/state",
+          []
+        ],
+        [
+          "/robot/analog_io/right_vacuum_sensor_analog/state",
+          []
+        ],
+        [
+          "/robot/analog_io/right_vacuum_sensor_analog/value_uint32",
+          []
+        ],
+        [
+          "/robot/digital_io/right_valve_1a/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_valve_1b/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_valve_2a/state",
+          []
+        ],
+        [
+          "/robot/digital_io/right_valve_2b/state",
+          []
+        ],
+        [
+          "/robot/analog_io/right_wheel/state",
+          []
+        ],
+        [
+          "/robot/analog_io/right_wheel/value_uint32",
+          []
+        ],
+        [
+          "/robot/limb/right/limb_state",
+          []
+        ],
+        [
+          "/robot/limb/right/stiffness",
+          []
+        ],
+        [
+          "/robot/limb/right/stiffness_constraint",
+          []
+        ],
+        [
+          "/robot/digital_io/torso_camera_power/state",
+          []
+        ],
+        [
+          "/robot/digital_io/torso_digital_input0/state",
+          []
+        ],
+        [
+          "/robot/analog_io/torso_fan/state",
+          []
+        ],
+        [
+          "/robot/analog_io/torso_fan/value_uint32",
+          []
+        ],
+        [
+          "/robot/digital_io/torso_foot_pedal/state",
+          []
+        ],
+        [
+          "/robot/analog_io/torso_lighting/state",
+          []
+        ],
+        [
+          "/robot/analog_io/torso_lighting/value_uint32",
+          []
+        ],
+        [
+          "/robot/digital_io/torso_process_sense0/state",
+          []
+        ],
+        [
+          "/robot/digital_io/torso_process_sense1/state",
+          []
+        ],
+        [
+          "/robot/digital_io/torso_safety_stop/state",
+          []
+        ],
+        [
+          "/robot/limb_names",
+          []
+        ],
+        [
+          "/robot/end_effector_names",
+          []
+        ],
+        [
+          "/robot/homing_states",
+          []
+        ],
+        [
+          "/robot/homing_names",
+          []
+        ],
+        [
+          "/robot/joint_states",
+          [
+            [
+              2,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              4,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              7,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              12,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              13,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              50,
+              163108800,
+              163108800,
+              453080,
+              0
+            ],
+            [
+              98,
+              90223200,
+              90223200,
+              250620,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/joint_names",
+          []
+        ],
+        [
+          "/robot/ref_joint_states",
+          [
+            [
+              1,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              8,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              14,
+              163192680,
+              163192680,
+              453313,
+              0
+            ],
+            [
+              55,
+              163108800,
+              163108800,
+              453080,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/ref_joint_names",
+          []
+        ],
+        [
+          "/robot/navigators_states",
+          []
+        ],
+        [
+          "/robot/navigators_names",
+          []
+        ],
+        [
+          "/robot/accelerometer_states",
+          []
+        ],
+        [
+          "/robot/accelerometer_names",
+          []
+        ],
+        [
+          "/robot/digital_io_states",
+          []
+        ],
+        [
+          "/robot/digital_io_names",
+          []
+        ],
+        [
+          "/robot/analog_io_states",
+          []
+        ],
+        [
+          "/robot/analog_io_names",
+          []
+        ],
+        [
+          "/errors",
+          []
+        ],
+        [
+          "/io/robot/cuff/config",
+          []
+        ],
+        [
+          "/io/robot/cuff/state",
+          []
+        ],
+        [
+          "/io/robot/navigator/config",
+          []
+        ],
+        [
+          "/io/robot/navigator/state",
+          []
+        ],
+        [
+          "/io/robot/pneumatic/config",
+          [
+            [
+              24,
+              22218,
+              22218,
+              2,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/pneumatic/state",
+          [
+            [
+              22,
+              2541808,
+              2541808,
+              3626,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/right_end_of_arm/config",
+          [
+            [
+              25,
+              16798,
+              16798,
+              2,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/right_end_of_arm/state",
+          [
+            [
+              23,
+              513971786,
+              513971786,
+              715049,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/robot/config",
+          [
+            [
+              26,
+              22836,
+              22836,
+              2,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/robot/state",
+          [
+            [
+              27,
+              1137,
+              1137,
+              2,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/safety/config",
+          []
+        ],
+        [
+          "/io/robot/safety/state",
+          []
+        ],
+        [
+          "/io/robot/state",
+          []
+        ],
+        [
+          "/io/robot/config",
+          []
+        ],
+        [
+          "/robot/limb/right/gravity_compensation_torques",
+          [
+            [
+              30,
+              360835440,
+              360835440,
+              429566,
+              0
+            ],
+            [
+              31,
+              360835440,
+              360835440,
+              429566,
+              0
+            ],
+            [
+              33,
+              360835440,
+              360835440,
+              429566,
+              0
+            ],
+            [
+              53,
+              360835440,
+              360835440,
+              429566,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/collision_avoidance_state",
+          [
+            [
+              34,
+              4427700,
+              4427700,
+              177108,
+              0
+            ],
+            [
+              40,
+              4427700,
+              4427700,
+              177108,
+              0
+            ],
+            [
+              54,
+              4427700,
+              4427700,
+              177108,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/joint_tracking_error",
+          [
+            [
+              49,
+              293312160,
+              293312160,
+              814756,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/velocity_controller_state",
+          [
+            [
+              39,
+              543148560,
+              543148560,
+              4526238,
+              0
+            ],
+            [
+              44,
+              543148560,
+              543148560,
+              4526238,
+              0
+            ],
+            [
+              45,
+              543148560,
+              543148560,
+              4526238,
+              0
+            ],
+            [
+              51,
+              543148560,
+              543148560,
+              4526238,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/collision_detection_state",
+          [
+            [
+              94,
+              2024232,
+              2024232,
+              96392,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/torque_data",
+          [
+            [
+              41,
+              1303554816,
+              1303554816,
+              4526232,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/arm_state_estimate",
+          []
+        ],
+        [
+          "/robot/limb/right/attached_mass",
+          []
+        ],
+        [
+          "/robot/limb/right/pose_metric_info",
+          []
+        ],
+        [
+          "/robot/limb/right/interaction_controller/state",
+          [
+            [
+              42,
+              90194362,
+              90194362,
+              453238,
+              0
+            ],
+            [
+              46,
+              90194362,
+              90194362,
+              453238,
+              0
+            ],
+            [
+              52,
+              90162323,
+              90162323,
+              453077,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/suppress_squish_safety",
+          [
+            [
+              29,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              43,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ]
+      ],
+      [
+        [
+          "/robot/set_sim_mode",
+          []
+        ],
+        [
+          "/io/internal_camera/right_hand_camera/set_strobe/state",
+          [
+            [
+              56,
+              1,
+              1,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/intera/endpoint_ids",
+          []
+        ],
+        [
+          "/robot/urdf",
+          [
+            [
+              47,
+              139546438,
+              22661,
+              2,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/joint_state_publish_rate",
+          []
+        ],
+        [
+          "/robot/set_super_enable",
+          [
+            [
+              17,
+              12,
+              12,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/set_super_reset",
+          [
+            [
+              18,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/set_super_stop",
+          []
+        ],
+        [
+          "/robot/set_homing_mode",
+          []
+        ],
+        [
+          "/robot/set_motor_voltage_low",
+          []
+        ],
+        [
+          "/engine/task_state",
+          []
+        ],
+        [
+          "/robot/digital_io/command",
+          []
+        ],
+        [
+          "/robot/analog_io/command",
+          []
+        ],
+        [
+          "/io/robot/cuff/command",
+          []
+        ],
+        [
+          "/io/robot/navigator/command",
+          []
+        ],
+        [
+          "/io/robot/pneumatic/command",
+          [
+            [
+              20,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/right_end_of_arm/command",
+          [
+            [
+              21,
+              1017,
+              8,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/robot/command",
+          [
+            [
+              19,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/io/robot/safety/command",
+          []
+        ],
+        [
+          "/io/robot/command",
+          []
+        ],
+        [
+          "/robot/limb/right/suppress_gravity_compensation",
+          []
+        ],
+        [
+          "/robot/limb/right/use_default_spring_model",
+          []
+        ],
+        [
+          "/robot/limb/right/weight_integral_terms",
+          []
+        ],
+        [
+          "/robot/limb/right/set_feed_forward_weights",
+          [
+            [
+              59,
+              148,
+              1,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/set_damping_correction_weights",
+          []
+        ],
+        [
+          "/robot/limb/right/command_stiffness_limit",
+          []
+        ],
+        [
+          "/robot/limb/right/command_stiffness",
+          []
+        ],
+        [
+          "/robot/limb/right/suppress_cuff_interaction",
+          []
+        ],
+        [
+          "/robot/limb/right/command_twist_speed_limit",
+          []
+        ],
+        [
+          "/robot/limb/right/command_twist_speed_limit_scale",
+          []
+        ],
+        [
+          "/robot/limb/right/command_nullspace_setpoint_and_twist_stamped",
+          []
+        ],
+        [
+          "/robot/limb/right/command_twist_stamped",
+          []
+        ],
+        [
+          "/robot/limb/right/command_velocity_tozero",
+          []
+        ],
+        [
+          "/robot/limb/right/command_joint_position",
+          [
+            [
+              60,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/set_dominance",
+          []
+        ],
+        [
+          "/robot/limb/right/suppress_collision_avoidance",
+          [
+            [
+              32,
+              0,
+              1,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/suppress_contact_safety",
+          [
+            [
+              36,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/suppress_squish_safety",
+          [
+            [
+              28,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/suppress_hand_overwrench_safety",
+          [
+            [
+              38,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/collision/right/collision_detection",
+          [
+            [
+              37,
+              38525272,
+              2266184,
+              511,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/set_speed_ratio",
+          [
+            [
+              101,
+              32,
+              4,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/joint_command_timeout",
+          [
+            [
+              96,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/joint_command",
+          [
+            [
+              97,
+              713700,
+              11895,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/interaction_control_command",
+          [
+            [
+              61,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/head/command_head_pan",
+          [
+            [
+              99,
+              43146,
+              4794,
+              0,
+              0
+            ]
+          ]
+        ]
+      ]
+    ],
+    "/sawyer_selective_bridge": [
+      [
+        [
+          "/rosout",
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/joint_command",
+          [
+            [
+              2,
+              761280,
+              761280,
+              11895,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/joint_command_timeout",
+          [
+            [
+              1,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/set_speed_ratio",
+          [
+            [
+              6,
+              48,
+              48,
+              4,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/head/command_head_pan",
+          [
+            [
+              4,
+              62322,
+              62322,
+              4794,
+              0
+            ]
+          ]
+        ]
+      ],
+      [
+        [
+          "/robot/joint_states",
+          [
+            [
+              8,
+              89220720,
+              250620,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/state",
+          [
+            [
+              5,
+              2004960,
+              250620,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/endpoint_state",
+          [
+            [
+              9,
+              42354780,
+              250620,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/limb/right/collision_detection_state",
+          [
+            [
+              3,
+              1638664,
+              96392,
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/joint_limits",
+          [
+            [
+              14,
+              440,
+              1,
+              1,
+              0
+            ]
+          ]
+        ],
+        [
+          "/robot/head/head_state",
+          [
+            [
+              15,
+              1754340,
+              250620,
+              0,
+              0
+            ]
+          ]
+        ]
+      ]
+    ]
+  },
+  "parameters": {
+    "/robot_config/joint_config/joint_acceleration_limit/head_pan": 10.0,
+    "/robot_config/joint_config/velocity_deadband/head_pan": 0.04,
+    "/robot_config/jcb_joint_config/head_pan/head_camera/intrinsics": [
+      1280.0,
+      800.0,
+      403.8329774301591,
+      402.8654036312385,
+      0.0,
+      661.143630870463,
+      381.64671147534864,
+      0.6511798497738602,
+      -0.016962292534729303,
+      -0.00023513831820979727,
+      -0.000935187655658696,
+      -0.0007976281969714476,
+      0.6168418431159277,
+      0.05381269704345669,
+      -0.007618652397514601
+    ],
+    "/robot_config/jcb_joint_config/head_pan/head_camera/camera_id": "port:FE:5E:B1:BE:49:93",
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_LowerInputLimit/default": -5097,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_LowerInputLimit/payload": -5097,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_LowerOutputLimit/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_LowerOutputLimit/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_InputLimit/default": 1500,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_InputLimit/payload": 1500,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_FaultLimit_mNm/default": 1024000000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_FaultLimit_mNm/payload": 1024000000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_DeltaGainThresh/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_DeltaGainThresh/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingRefLowerLim_mRad/default": -2000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingRefLowerLim_mRad/payload": -2000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_TorqueConfig_TorqueConstant_NmPerAmp_Q10/default": -1286,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_TorqueConfig_TorqueConstant_NmPerAmp_Q10/payload": -1286,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_2_q10/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_2_q10/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_Mag_Selector/default": 6,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_Mag_Selector/payload": 6,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_OutOfRangeStiffness_mNm_per_mRad/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_OutOfRangeStiffness_mNm_per_mRad/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_Phase_Gain/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_Phase_Gain/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_MotorHallTicksPerOutputmRad_q28/default": -25631134,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_MotorHallTicksPerOutputmRad_q28/payload": -25631134,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOBActionLowerLim_mRad/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOBActionLowerLim_mRad/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_FF/default": 1024,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_FF/payload": 1024,
+    "/robot_config/jcb_hal_config/head_pan/CurrentLoopGainI/default": 50,
+    "/robot_config/jcb_hal_config/head_pan/CurrentLoopGainI/payload": 50,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_BEMFScaling_EnterPoseMode_q30/default": 1073741824,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_BEMFScaling_EnterPoseMode_q30/payload": 1073741824,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_CurrentPredGain_q30/default": 422302659,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_CurrentPredGain_q30/payload": 422302659,
+    "/robot_config/jcb_hal_config/head_pan/CurrentLoopGainP/default": 225,
+    "/robot_config/jcb_hal_config/head_pan/CurrentLoopGainP/payload": 225,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltNumCoeff_2/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltNumCoeff_2/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltNumCoeff_1/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltNumCoeff_1/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_1/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_1/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_3/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_3/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_2/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_2/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_4/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSchedule_4/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/MotorPeakCurrent/default": 4000,
+    "/robot_config/jcb_hal_config/head_pan/MotorPeakCurrent/payload": 4000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HasBrake/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HasBrake/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_HuntingForgettingFactor_Q30/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_HuntingForgettingFactor_Q30/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_LowerOutputLimit/default": -17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_LowerOutputLimit/payload": -17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltDenCoeff_3/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltDenCoeff_3/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorSaturationUpper_ZeroG/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorSaturationUpper_ZeroG/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_LowerOutputLimit/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_LowerOutputLimit/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorInductance/default": 107374182,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorInductance/payload": 107374182,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_TorqueConfig_CurrentBasedFlag/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_TorqueConfig_CurrentBasedFlag/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_InputLimit_mNm/default": 17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_InputLimit_mNm/payload": 17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltDenCoeff_2/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltDenCoeff_2/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_InitialHomingDirection/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_InitialHomingDirection/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/MotorPeakCurrentTime/default": 1000,
+    "/robot_config/jcb_hal_config/head_pan/MotorPeakCurrentTime/payload": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_UpperOutputLimit/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TRComp_UpperOutputLimit/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorPoles/default": 6,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorPoles/payload": 6,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorSgnFF_ZeroG/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorSgnFF_ZeroG/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_1_q10/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_1_q10/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TREst_ProcessNoiseCovar/default": 200,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_TREst_ProcessNoiseCovar/payload": 200,
+    "/robot_config/jcb_hal_config/head_pan/JointMultiturnEnable/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/JointMultiturnEnable/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_SnsConsChecker_MotorHallTicksPerOutputmRad_q28/default": -25631134,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_SnsConsChecker_MotorHallTicksPerOutputmRad_q28/payload": -25631134,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainD_Prefilter/default": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainD_Prefilter/payload": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainD_Halls/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainD_Halls/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/MotorNumberOfPoles/default": 6,
+    "/robot_config/jcb_hal_config/head_pan/MotorNumberOfPoles/payload": 6,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_3_q10/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_3_q10/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainP_ZeroG/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainP_ZeroG/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_KFF/default": 1024,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_KFF/payload": 1024,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainN/default": 321699,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainN/payload": 321699,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainI/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainI/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainD/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainD/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_Joint2RobotAssyDirection/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_Joint2RobotAssyDirection/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/DisableFaultFlagMonitor/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/DisableFaultFlagMonitor/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/GlobalErrorOverrideMask/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/GlobalErrorOverrideMask/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainP/default": 100000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainP/payload": 100000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_MotorDirection/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_MotorDirection/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_UpperOutputLimit/default": 17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_UpperOutputLimit/payload": 17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_ErrorDeadBand/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_ErrorDeadBand/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_UpperOutputLimit/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_UpperOutputLimit/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_LowerOutputLimit/default": -17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_LowerOutputLimit/payload": -17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainDHalls/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_GainDHalls/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_ErrorDeadband_mNm/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_ErrorDeadband_mNm/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/JointAssy2RobotInverted/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/JointAssy2RobotInverted/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/CurrentLoopGainFF/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/CurrentLoopGainFF/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorPeakCurrent_Homed/default": 1200,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorPeakCurrent_Homed/payload": 1200,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HeadDisable_CurrentLimit/default": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HeadDisable_CurrentLimit/payload": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_isHead/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_isHead/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_BEMF_FF_ZeroG/default": -12304175,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_BEMF_FF_ZeroG/payload": -12304175,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingDirFlipThreshold_mRad/default": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingDirFlipThreshold_mRad/payload": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWM_Torque_Control_Flag/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWM_Torque_Control_Flag/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorSaturationLower_ZeroG/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorSaturationLower_ZeroG/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/MotorDirection/default": -1,
+    "/robot_config/jcb_hal_config/head_pan/MotorDirection/payload": -1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorResistance/default": 603979776,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorResistance/payload": 603979776,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainP/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainP/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_Enable/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_Enable/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOBActionUpperLim_mRad/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOBActionUpperLim_mRad/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_RefTorqueSlewRate_msec_q10/default": 20480,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_RefTorqueSlewRate_msec_q10/payload": 20480,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_TotalGearRatio_q20/default": 34952533,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_TotalGearRatio_q20/payload": 34952533,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_UpperOutputLimit/default": 17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_UpperOutputLimit/payload": 17899,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainN_ZeroG/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainN_ZeroG/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/MotorThermistorTable/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/MotorThermistorTable/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainD/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainD/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_4_q10/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_VelSchedule_4_q10/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainI/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainI/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorPeakCurrent_Unhomed/default": 1200,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorPeakCurrent_Unhomed/payload": 1200,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainN/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainN/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingSpeed_mRadPerSec/default": 500,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingSpeed_mRadPerSec/payload": 500,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_BEMF_FF/default": -12304175,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_BEMF_FF/payload": -12304175,
+    "/robot_config/jcb_hal_config/head_pan/MotorContinousCurrent/default": 1000,
+    "/robot_config/jcb_hal_config/head_pan/MotorContinousCurrent/payload": 1000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainD_Prefilter/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainD_Prefilter/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_KFF_ZeroG/default": 1024,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_KFF_ZeroG/payload": 1024,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltNumCoeff_3/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_FiltNumCoeff_3/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorDeadband_mNm/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_ErrorDeadband_mNm/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainD/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainD/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainN/default": 1024000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainN/payload": 1024000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainI/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainI/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSlewRate/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_DOB_GainSlewRate/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainP/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointTorqueController_GainP/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/JointAssy2RobotOffset_mRads_q10/default": -2216149,
+    "/robot_config/jcb_hal_config/head_pan/JointAssy2RobotOffset_mRads_q10/payload": -2216149,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorConstant/default": -39513699,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_MotorConstant/payload": -39513699,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainD_ZeroG/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainD_ZeroG/payload": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_UpperInputLimit/default": 908,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_JointPositionController_UpperInputLimit/payload": 908,
+    "/robot_config/jcb_hal_config/head_pan/JointMeasurementSource/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/JointMeasurementSource/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_EnableCurrentLimiting/default": 1,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_EnableCurrentLimiting/payload": 1,
+    "/robot_config/jcb_hal_config/head_pan/JointErrorOverrideMask/default": 1288,
+    "/robot_config/jcb_hal_config/head_pan/JointErrorOverrideMask/payload": 1288,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingRefUpperLim_mRad/default": 2000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PositionController_HomingRefUpperLim_mRad/payload": 2000,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainI_ZeroG/default": 0,
+    "/robot_config/jcb_hal_config/head_pan/Sawyer_PWMTorqueController_GainI_ZeroG/payload": 0,
+    "/robot_config/board_config/head_pan/payloadType": "sea",
+    "/robot_config/board_config/head_pan/mac": "b6:44:7a:a1:44:5b",
+    "/robot_config/board_config/head_pan/jointIndex": 0,
+    "/robot_config/board_config/head_pan/nodeId": 0,
+    "/robot_config/jcb_urdf_config/head_pan/joint/head_pan/origin/rpy": "-0.00274181334672 -0.000432763520146 0.0633881455118",
+    "/robot_config/jcb_urdf_config/head_pan/joint/head_pan/origin/xyz": "-0.000670614934846 0.00101878578935 0.2965",
+    "/robot_config/jcb_urdf_config/head_pan/joint/head_camera/origin/rpy": "-2.11988885154 0.0120864961294 -1.57079632679",
+    "/robot_config/jcb_urdf_config/head_pan/joint/head_camera/origin/xyz": "0.0265988643808 -0.00282296934651 0.216378231161",
+    "/named_poses/head/joint_names": [
+      "head_pan"
+    ],
+    "/named_poses/head/poses/neutral": [
+      0.0
+    ],
+    "/named_poses/head/poses/shipping": [
+      -3.14
+    ],
+    "/manifest/robot_assemblies/head/b6:44:7a:a1:44:5b": "02A010L0M1065"
+  },
+  "head_logs": []
+}

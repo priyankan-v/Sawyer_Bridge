@@ -1,0 +1,23 @@
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.05,
+  "target_rad": 0.0,
+  "measured_rad": 1.181965726682055e-09,
+  "final_error_rad": 1.181965726682055e-09,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.05,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.007683036999879,
+  "minimum_time_seconds": 0.7598356856515927,
+  "settle_seconds": 0.007683036999878823,
+  "maximum_tracking_error_rad": 0.0007681601784370815,
+  "rms_tracking_error_rad": 0.00033590227587331585,
+  "test_status": "PASS",
+  "scope": "Simulated ROS 1 arm on localhost master 11421 and DDS domain 87; no physical hardware",
+  "command_fields_verified": true,
+  "only_selected_joint_commanded": true,
+  "arm_commands_observed": 199
+}

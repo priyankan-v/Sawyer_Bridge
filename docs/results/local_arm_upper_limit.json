@@ -1,0 +1,21 @@
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": -1.0,
+  "target_rad": 1.0,
+  "measured_rad": 0.9999999999923386,
+  "final_error_rad": 7.66142704833328e-12,
+  "samples": 792,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 8.0,
+  "elapsed_seconds": 8.009727238000778,
+  "minimum_time_seconds": 7.5,
+  "settle_seconds": 0.009727238000778016,
+  "maximum_tracking_error_rad": 0.00948770583379055,
+  "rms_tracking_error_rad": 0.0033120740747079823,
+  "test_status": "PASS",
+  "scope": "Limit endpoints on isolated ROS 1 fixture; no physical hardware",
+  "end_option": "+end",
+  "only_selected_joint_commanded": true,
+  "all_commands_within_limits": true
+}

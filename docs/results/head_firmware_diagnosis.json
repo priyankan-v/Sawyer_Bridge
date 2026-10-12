@@ -1,0 +1,62 @@
+{
+  "scope": "Read-only firmware, homing and diagnostics; no commands or setting changes",
+  "head": {
+    "pan": -2.9829959869384766,
+    "isTurning": false,
+    "isBlocked": false,
+    "panMode": 0
+  },
+  "homing": {
+    "name": [
+      "head_pan",
+      "right_j0",
+      "right_j1",
+      "right_j2",
+      "right_j3",
+      "right_j4",
+      "right_j5",
+      "right_j6",
+      "torso_t0"
+    ],
+    "state": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "assembly": {
+    "homed": true,
+    "ready": true,
+    "enabled": true,
+    "stopped": false,
+    "error": false,
+    "lowVoltage": false,
+    "estop_button": 0,
+    "estop_source": 0
+  },
+  "diagnostics": [
+    {
+      "name": "Collision detection",
+      "message": "Collision detected on jointright_j1",
+      "level": 1,
+      "hardware_id": "",
+      "values": {
+        "joint index": "1",
+        "joint name": "right_j1",
+        "impact torque": "-3.87078",
+        "scaled impact threshold": "0",
+        "velocity command": "0",
+        "acceleration command": "0"
+      }
+    }
+  ],
+  "metadata": {
+    "/manifest/robot_software/version/INTERA_VERSION_STAMP": "5.3.1.192-.0-3d373b7"
+  }
+}

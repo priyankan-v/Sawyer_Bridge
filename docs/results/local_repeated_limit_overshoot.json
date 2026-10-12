@@ -1,0 +1,18 @@
+{
+  "joint": "right_j2",
+  "status": "already_at_target",
+  "start_rad": -1.0016419921875,
+  "target_rad": -1.0,
+  "measured_rad": -1.0016419921875,
+  "final_error_rad": 0.001641992187499941,
+  "samples": 0,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": -1.0,
+  "limit_overshoot_rad": 0.001641992187499941,
+  "trajectory_seconds": 5.0,
+  "elapsed_seconds": 0.0,
+  "minimum_time_seconds": 0.13769565217975138,
+  "settle_seconds": 0.0,
+  "maximum_tracking_error_rad": 0.001641992187499941,
+  "rms_tracking_error_rad": 0.0
+}

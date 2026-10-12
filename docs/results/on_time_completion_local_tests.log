@@ -1,0 +1,407 @@
+PASS: missing ROS master fails preflight before node registration.
+{
+  "status": "PASS",
+  "clock_basis": "Same workstation CLOCK_REALTIME for source and receiver timestamps; includes serialization and scheduling",
+  "command_fields_identical": true,
+  "commands_sent": 200,
+  "commands_received": 200,
+  "command_loss": 0,
+  "services_verified": [
+    "SolvePositionFK",
+    "SolvePositionIK",
+    "IOComponentCommandSrv"
+  ],
+  "direction_checks": "No ROS 2 bridge publisher on commands and no ROS 2 bridge subscriber on joint states",
+  "ros1_joint_source_hz": 100.00375128357314,
+  "ros2_joint_receive_hz": 100.04601463992294,
+  "joint_messages_received": 211,
+  "joint_sequence_gaps": 0,
+  "joint_interarrival_ms": {
+    "samples": 210,
+    "mean": 9.995400652380953,
+    "p50": 9.9887665,
+    "p95": 10.296094,
+    "max": 10.808435
+  },
+  "joint_interarrival_jitter_stddev_ms": 0.2068691432116957,
+  "joint_local_timestamp_latency_ms": {
+    "samples": 211,
+    "mean": 0.49151096682464457,
+    "p50": 0.472426,
+    "p95": 0.74379,
+    "max": 1.420845
+  },
+  "command_forwarding_latency_ms": {
+    "samples": 200,
+    "mean": 0.428089625,
+    "p50": 0.3975205,
+    "p95": 0.677253,
+    "max": 1.12632
+  },
+  "command_ack_roundtrip_ms": {
+    "samples": 200,
+    "mean": 0.788404535,
+    "p50": 0.7824565,
+    "p95": 1.126784,
+    "max": 2.029748
+  }
+}
+
+
+
+test_arm_and_head_execute_without_approval_flags (test_move_joint.MoveJointTests.test_arm_and_head_execute_without_approval_flags) ... ok
+test_default_deadline_and_strict_tolerance_still_report_missed_targets (test_move_joint.MoveJointTests.test_default_deadline_and_strict_tolerance_still_report_missed_targets) ... ok
+test_direct_execution_and_argument_validation (test_move_joint.MoveJointTests.test_direct_execution_and_argument_validation) ... ok
+test_dry_run_and_invalid_target_do_not_publish (test_move_joint.MoveJointTests.test_dry_run_and_invalid_target_do_not_publish) ... ok
+test_feedback_joint_names_and_out_of_order_samples (test_move_joint.MoveJointTests.test_feedback_joint_names_and_out_of_order_samples) ... ok
+test_float32_head_target_and_new_live_limit (test_move_joint.MoveJointTests.test_float32_head_target_and_new_live_limit) ... ok
+test_goal_timeout_is_a_failure_and_stale_feedback_cannot_succeed (test_move_joint.MoveJointTests.test_goal_timeout_is_a_failure_and_stale_feedback_cannot_succeed) ... ok
+test_live_and_urdf_position_limits (test_move_joint.MoveJointTests.test_live_and_urdf_position_limits) ... ok
+test_minimum_time_uses_exact_quintic_extrema (test_move_joint.MoveJointTests.test_minimum_time_uses_exact_quintic_extrema) ... ok
+test_minimum_time_without_acceleration_data (test_move_joint.MoveJointTests.test_minimum_time_without_acceleration_data) ... ok
+test_operator_residual_finishes_on_time_and_repeating_zero_sends_nothing (test_move_joint.MoveJointTests.test_operator_residual_finishes_on_time_and_repeating_zero_sends_nothing) ... ok
+test_quintic_shape_and_zero_endpoint_derivatives (test_move_joint.MoveJointTests.test_quintic_shape_and_zero_endpoint_derivatives) ... ok
+test_slow_controller_reaches_absolute_zero_once (test_move_joint.MoveJointTests.test_slow_controller_reaches_absolute_zero_once) ... ok
+test_too_short_absolute_and_relative_plans_send_nothing (test_move_joint.MoveJointTests.test_too_short_absolute_and_relative_plans_send_nothing) ... ok
+test_unmoving_passive_head_reports_controller_mode (test_move_joint.MoveJointTests.test_unmoving_passive_head_reports_controller_mode) ... ok
+test_live_limit_intersection_and_malformed_arrays (test_safety.SafetyTests.test_live_limit_intersection_and_malformed_arrays) ... ok
+test_partial_joint_states_do_not_refresh_other_joints (test_safety.SafetyTests.test_partial_joint_states_do_not_refresh_other_joints) ... ok
+test_quintic_endpoints_and_extrema (test_safety.SafetyTests.test_quintic_endpoints_and_extrema) ... ok
+test_readiness_fails_closed (test_safety.SafetyTests.test_readiness_fails_closed) ... ok
+test_stale_and_collision_feedback_abort (test_safety.SafetyTests.test_stale_and_collision_feedback_abort) ... ok
+test_unsafe_inputs_rejected (test_safety.SafetyTests.test_unsafe_inputs_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.123s
+
+OK
+
+{
+  "start": {
+    "right_j0": 0.0,
+    "right_j1": 0.0,
+    "right_j5": 0.0,
+    "right_j2": 0.0,
+    "right_j4": 0.0,
+    "right_j6": 0.0,
+    "right_j3": 0.0
+  },
+  "target": {
+    "right_j0": 0.01,
+    "right_j1": 0.0,
+    "right_j5": 0.0,
+    "right_j2": 0.0,
+    "right_j4": 0.0,
+    "right_j6": 0.0,
+    "right_j3": 0.0
+  },
+  "duration": 2.0,
+  "mode": "POSITION_MODE",
+  "execute": false,
+  "midpoint_position_velocity_acceleration": [
+    {
+      "right_j0": 0.005,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.009375,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    }
+  ]
+}
+
+
+right_j2: 0.000000 -> 0.010000 rad in 2 s
+Minimum quintic time: 0.339809 s
+Dry run: no commands sent.
+
+
+head_pan: 0.000000 -> 0.010000 rad in 2 s
+Minimum quintic time: 0.339809 s
+Dry run: no commands sent.
+
+
+PASS: dry-run application produced no physical-command publisher.
+head_pan: 0.000000 -> 0.010000 rad in 2 s
+Minimum quintic time: 0.339809 s
+head_pan: 1.0/2 s, measured 0.004941 rad, target error 0.005059 rad
+head_pan: 2.0/2 s, measured 0.010000 rad, target error 0.000000 rad
+{
+  "joint": "head_pan",
+  "status": "reached",
+  "start_rad": 0.0,
+  "target_rad": 0.01,
+  "measured_rad": 0.009999998845160007,
+  "final_error_rad": 1.1548399927313602e-09,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.006178820000059,
+  "minimum_time_seconds": 0.3398088451717647,
+  "settle_seconds": 0.006178820000059204,
+  "maximum_tracking_error_rad": 0.00013708488669238877,
+  "rms_tracking_error_rad": 6.425090050350545e-05,
+  "head_state": {
+    "pan": 0.009999998845160007,
+    "pan_mode": 1,
+    "is_turning": false,
+    "is_blocked": false,
+    "age_seconds": 0.007393373000013526,
+    "fresh": true
+  }
+}
+
+
+head_pan: 0.010000 -> 0.000000 rad in 2 s
+Minimum quintic time: 0.339809 s
+head_pan: 1.0/2 s, measured 0.005067 rad, target error 0.005067 rad
+head_pan: 2.0/2 s, measured 0.000000 rad, target error 0.000000 rad
+{
+  "joint": "head_pan",
+  "status": "reached",
+  "start_rad": 0.009999999776482582,
+  "target_rad": 0.0,
+  "measured_rad": 1.7822952003143655e-09,
+  "final_error_rad": 1.7822952003143655e-09,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.0049316129989165,
+  "minimum_time_seconds": 0.3398088451717647,
+  "settle_seconds": 0.004931612998916535,
+  "maximum_tracking_error_rad": 0.0001655159412122277,
+  "rms_tracking_error_rad": 6.417525110913824e-05,
+  "head_state": {
+    "pan": 4.4541394572661375e-08,
+    "pan_mode": 1,
+    "is_turning": false,
+    "is_blocked": false,
+    "age_seconds": 0.017967256000702037,
+    "fresh": true
+  }
+}
+
+
+PASS: isolated head relative and absolute quintic execution; no arm commands.
+right_j2: 0.000000 -> 0.050000 rad in 2 s
+Minimum quintic time: 0.759836 s
+right_j2: 1.0/2 s, measured 0.024711 rad, target error 0.025289 rad
+right_j2: 2.0/2 s, measured 0.050000 rad, target error 0.000000 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.0,
+  "target_rad": 0.05,
+  "measured_rad": 0.049999997901627374,
+  "final_error_rad": 2.098372628434042e-09,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.006966259999899,
+  "minimum_time_seconds": 0.7598356856515927,
+  "settle_seconds": 0.006966259999899194,
+  "maximum_tracking_error_rad": 0.0007752161613264769,
+  "rms_tracking_error_rad": 0.0003352343167889165
+}
+
+
+right_j2: 0.050000 -> 0.000000 rad in 2 s
+Minimum quintic time: 0.759836 s
+right_j2: 1.0/2 s, measured 0.025328 rad, target error 0.025328 rad
+right_j2: 2.0/2 s, measured 0.000000 rad, target error 0.000000 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.05,
+  "target_rad": 0.0,
+  "measured_rad": 4.720884926034952e-09,
+  "final_error_rad": 4.720884926034952e-09,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.0060270499998296,
+  "minimum_time_seconds": 0.7598356856515927,
+  "settle_seconds": 0.0060270499998296145,
+  "maximum_tracking_error_rad": 0.0008047275816492269,
+  "rms_tracking_error_rad": 0.00032775975863414444
+}
+
+
+PASS: direct arm relative and absolute execution; only the selected joint is commanded.
+PASS: minimum-time rejection sends no commands.
+right_j2: 0.000000 -> 0.100000 rad in 1.1 s
+Minimum quintic time: 1.074570 s
+right_j2: 1.0/1.1 s, measured 0.099221 rad, target error 0.000779 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.0,
+  "target_rad": 0.1,
+  "measured_rad": 0.09999989817445272,
+  "final_error_rad": 1.0182554728566107e-07,
+  "samples": 110,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 1.1,
+  "elapsed_seconds": 1.1050625730003958,
+  "minimum_time_seconds": 1.074569931823542,
+  "settle_seconds": 0.005062573000395698,
+  "maximum_tracking_error_rad": 0.003098527392716932,
+  "rms_tracking_error_rad": 0.001246091573874913
+}
+
+
+right_j2: 0.100000 -> 0.000000 rad in 1.1 s
+Minimum quintic time: 1.074570 s
+right_j2: 1.0/1.1 s, measured 0.000787 rad, target error 0.000787 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.1,
+  "target_rad": 0.0,
+  "measured_rad": 1.08353929564875e-07,
+  "final_error_rad": 1.08353929564875e-07,
+  "samples": 110,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 1.1,
+  "elapsed_seconds": 1.1048568340011116,
+  "minimum_time_seconds": 1.074569931823542,
+  "settle_seconds": 0.004856834001111476,
+  "maximum_tracking_error_rad": 0.0031828283917226807,
+  "rms_tracking_error_rad": 0.001233187938961324
+}
+
+
+right_j2 is already at 0.000000 rad; no commands sent.
+{
+  "joint": "right_j2",
+  "status": "already_at_target",
+  "start_rad": 0.0,
+  "target_rad": 0.0,
+  "measured_rad": 0.0,
+  "final_error_rad": 0.0,
+  "samples": 0,
+  "tolerance_rad": 0.008726646,
+  "trajectory_seconds": 5.0,
+  "elapsed_seconds": 0.0,
+  "minimum_time_seconds": 0.0,
+  "settle_seconds": 0.0,
+  "maximum_tracking_error_rad": 0.0,
+  "rms_tracking_error_rad": 0.0
+}
+
+
+PASS: measured arrival at absolute zero and repeated zero produces no commands.
+PASS: out-of-limit target is rejected without publishing commands.
+publishing and latching message for 3.0 seconds
+
+
+{
+  "master": "http://127.0.0.1:11421",
+  "joint": null,
+  "command_topic": "/robot/limb/right/joint_command",
+  "verified_command_subscribers": [
+    {
+      "name": "/isolated_ros1_fixture",
+      "uri": "http://127.0.0.1:33763/"
+    }
+  ],
+  "state": {
+    "homed": true,
+    "ready": true,
+    "enabled": true,
+    "stopped": false,
+    "error": false,
+    "lowVoltage": false,
+    "estop_button": 0,
+    "estop_source": 0
+  },
+  "collision": false,
+  "positions": {
+    "right_j0": 0.0,
+    "right_j1": 0.0,
+    "right_j2": 0.0,
+    "right_j3": 0.0,
+    "right_j4": 0.0,
+    "right_j5": 0.0,
+    "right_j6": 0.0
+  },
+  "ready": true,
+  "position_limit_errors": [],
+  "errors": []
+}
+{
+  "start": {
+    "right_j5": 0.0,
+    "right_j6": 0.0,
+    "right_j0": 0.0,
+    "right_j1": 0.0,
+    "right_j4": 0.0,
+    "right_j3": 0.0,
+    "right_j2": 0.0
+  },
+  "target": {
+    "right_j5": 0.0,
+    "right_j6": 0.0,
+    "right_j0": 0.0,
+    "right_j1": 0.0,
+    "right_j4": 0.0,
+    "right_j3": 0.0,
+    "right_j2": 0.01
+  },
+  "duration": 2.0,
+  "mode": "POSITION_MODE",
+  "execute": true,
+  "midpoint_position_velocity_acceleration": [
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.005,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.009375,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    }
+  ]
+}
+Aborted: Robot readiness or collision check failed
+[ros2run]: Process exited with failure 1
+
+
+PASS: separate guarded full-arm application still aborts on collision.

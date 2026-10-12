@@ -2,19 +2,23 @@
 
 Sawyer's controller remains ROS 1. This project uses the existing Pixi Noetic
 and Humble installations, original Sawyer message sources, and `ros1_bridge` to
-expose selected telemetry and guarded joint-position commands to ROS 2.
+expose selected telemetry and joint-position commands to ROS 2.
+
+For an explanation of where each component runs and how commands and feedback
+travel between environments, read [How our setup works](docs/HOW_THE_SETUP_WORKS.md).
+
 No Docker, custom transport gateway, ROS reinstallation, or onboard change is
 required. The previously working bridge installation and joint-state-only
 configuration remain available.
 
 ```text
-Sawyer ROS 1 controller
-    ↕ ROS 1 Ethernet
-Pixi Noetic + original Intera interfaces in ros1_ws
-    ↕ ros1_bridge (Pixi Humble runtime; selected directions)
-Pixi Humble + ROS 2 Intera interfaces in ros2_ws
+Sawyer's original ROS 1 controller and master
+    ↕ ROS 1 Ethernet (direct connection to the bridge)
+C++ ros1_bridge (Pixi Humble + Noetic libraries + both interface workspaces)
     ↕ ROS 2 DDS
-sawyer_ros2_control (monitoring and guarded POSITION_MODE commands)
+Python sawyer_ros2_control / move_joint.py (Pixi Humble)
+
+Optional ROS 1 diagnostic tools run separately in Pixi Noetic.
 ```
 
 ## Environment and dependencies
@@ -219,111 +223,244 @@ gripper-command publisher. Do not run it concurrently with another
 `/sawyer_selective_bridge` instance; stop your selected bridge first. The original
 legacy bridge can remain running. This test cleans up its temporary bridge.
 
-## Operator-approved position and trajectory control
+## Move one joint (arm or head)
 
-For a single arm joint or the head, use `scripts/move_joint.py`, described in
-[docs/SINGLE_JOINT_CONTROL.md](docs/SINGLE_JOINT_CONTROL.md). It accepts a signed
-relative distance or an absolute joint-state angle and a trajectory time. In a
-`pixi run ros2-shell` terminal, preview an arm or head move:
+Running `scripts/move_joint.py` starts the movement immediately. Select a joint,
+a relative distance or absolute position, and a trajectory time. Angles are
+**radians** and time is **seconds**.
+
+### Terminal 1: start the bridge
 
 ```bash
-python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5
+cd ~/sawyer_rs
+pixi run bridge-start --commands --head-commands
+```
+
+Leave it running. If the selected bridge is already running, stop it with
+Ctrl+C before restarting with these command paths. For arm-only control use
+`--commands`; for head-only control use `--head-commands`.
+
+### Terminal 2: enter ROS 2 once
+
+```bash
+cd ~/sawyer_rs
+pixi run ros2-shell
+```
+
+Inside this shell, read current joint positions if needed:
+
+```bash
+ros2 topic echo /robot/joint_states --once --qos-reliability best_effort
+```
+
+### Move by a relative distance
+
+Choose `right_j0`, `right_j1`, `right_j2`, `right_j3`, `right_j4`, `right_j5`,
+`right_j6`, or `head_pan`:
+
+```bash
+JOINT=right_j0
+DISTANCE=0.01
+DURATION=5
+python scripts/move_joint.py --joint "$JOINT" --distance "$DISTANCE" --time "$DURATION"
+```
+
+This commands `right_j0` by +0.01 rad over a five-second reference. Negative
+distance moves in the opposite joint-coordinate direction. Each run calculates
+its target from the current position, so repeating it adds another displacement.
+
+For the head:
+
+```bash
 python scripts/move_joint.py --joint head_pan --distance -0.01 --time 5
 ```
 
-Both commands are publication-free previews. Connect the required command paths
-after a successful readiness check with `pixi run bridge-start --commands` for
-the arm or `pixi run bridge-start --head-commands` for the head. Physical execution
-requires `--execute --operator-approved`. Head state is part of the default
-read-only bridge configuration. Both arm and head moves retain the all-arm
-readiness/limit checks; an out-of-limit arm configuration also blocks head motion.
+### Move to an absolute position
 
-Physical commands were **not executed** during development. A first movement
-requires explicit operator approval and a verified safe workspace. The app
-never enables Sawyer automatically. Normal robot safety mechanisms remain active.
-
-Before allowing motion, inspect current readiness and limits:
+Replace `0.10` with your desired joint-state angle:
 
 ```bash
-source config/network.env
-./scripts/sawyer.sh --require-ready
+python scripts/move_joint.py --joint right_j0 --position 0.10 --time 5
 ```
 
-At the initial inspection `right_j6` was measured slightly below the controller's
-lower limit. The application correctly refuses motion when the starting
-configuration is outside verified limits. Resolve and recheck that condition
-using normal operator procedures; no limit widening is implemented.
+Use `--position` or `--distance`, exactly one at a time. `--duration` is an alias
+for `--time`.
 
-After local tests pass and the operator has confirmed readiness, replace the
-read-only selected bridge in Terminal 1 with:
+Both angle arguments accept `pi` and arithmetic expressions in radians:
 
 ```bash
-source config/network.env
-./scripts/start_bridge.sh --commands
+python scripts/move_joint.py --joint right_j0 --position "pi/2" --time 5
+python scripts/move_joint.py --joint right_j0 --position -pi/2 --time 5
+python scripts/move_joint.py --joint right_j0 --distance "pi/12" --time 5
 ```
 
-This connects only the approved-direction JointCommand, timeout and speed-ratio
-topics in addition to telemetry. Starting the bridge sends no joint commands.
-It requires the isolated test result and a live successful robot preflight.
+Both `--position -pi/2` and `--position=-pi/2` work. Quote expressions containing
+spaces, for example `--position "-(pi / 2)"`. Numbers, `pi`, parentheses and `+ - * /` are
+supported; functions and Python code are not accepted. Joint limits and minimum
+trajectory time are checked after converting the expression to radians.
 
-Terminal 2 — read current values and plan a small change without publication:
+To move to the selected joint's limits:
 
 ```bash
-source config/network.env
-./scripts/control.sh read
-# Replace TARGET with a verified absolute joint angle near the current value:
-./scripts/control.sh one --joint right_j0 --position TARGET --duration 5
+# Lower joint-position limit.
+python scripts/move_joint.py --position -end --time 5 --joint right_j5
+
+# Upper joint-position limit.
+python scripts/move_joint.py --position +end --time 5 --joint right_j5
 ```
 
-Only after explicit operator approval, execute that reviewed target:
+`-end` selects the lower limit and `+end` the upper limit from the intersection
+of current controller and URDF limits. The resolved radians and limit range are
+printed before execution. These options apply to `--position`; `--distance`
+remains a relative angle. Five seconds must still meet the calculated minimum
+time; if it does not, the script prints the required duration before commands
+are sent. Add `--dry-run` to preview the limit target and minimum time.
+
+Small measured overshoot at a limit is handled separately from command limits.
+Feedback up to **0.008726646 rad (0.5°)** outside a boundary is accepted; larger
+excursions still stop the application. The raw measured angle is retained in
+reports. For example, `right_j6 = -4.714042` with lower limit `-4.7124` counts
+as already at `-end`, and a command to `+end` can move back through the allowed
+range. Its quintic reference starts at the boundary; every published setpoint
+and requested target remains strictly within limits. Reports include
+`reference_start_rad` and `limit_overshoot_rad`.
+
+For absolute zero:
 
 ```bash
-./scripts/control.sh one --joint right_j0 --position TARGET --duration 5 \
-  --execute --operator-approved --report docs/results/first_motion.json
+python scripts/move_joint.py --joint right_j0 --position 0.0 --time 5
 ```
 
-For a full configuration, create a target file from actual current telemetry
-and change only the intended values before reviewing the dry run:
+The absolute target remains **0.0 rad**; the quintic reference moves from the
+measured starting angle to that target. The script prints progress once per
+second and finishes at the requested trajectory time, with no extra settling
+wait by default. Fresh measured feedback within **0.008726646 rad (0.5°)** counts
+as arrival, matching the original Intera SDK's arm tolerance. A residual such as
+0.004249 rad therefore succeeds and is still reported accurately. Repeating an
+absolute command already within tolerance sends no commands. A larger residual
+still returns `status: not_reached` at the deadline.
+
+Optional `--tolerance` changes the arrival tolerance, and `--settle-timeout`
+explicitly allows extra settling time. For example, to request a stricter 0.002
+rad tolerance and allow up to two extra seconds:
 
 ```bash
-./scripts/control.sh read > .runtime/target.json
-./scripts/control.sh configuration --target .runtime/target.json --duration 5
-./scripts/control.sh quintic --target .runtime/target.json --duration 5
-# Approved execution of the reviewed trajectory:
-./scripts/control.sh quintic --target .runtime/target.json --duration 5 \
-  --execute --operator-approved --report docs/results/trajectory.json
+python scripts/move_joint.py --joint right_j1 --position 0.0 --time 5 --tolerance 0.002 --settle-timeout 2
 ```
 
-All motion operations use a quintic trajectory with zero initial/final velocity
-and acceleration, streamed as **POSITION_MODE** at 100 Hz. `one` holds all other
-arm joints at their starting positions; full configurations require exactly
-`right_j0`–`right_j6`. Initial displacement is capped at **0.02 rad per joint**,
-setpoint speed at **0.1 rad/s**, acceleration at **0.2 rad/s²**, and position-mode
-speed ratio at **0.05**. Duration must satisfy analytic derivative extrema;
-increase duration when planning is rejected. Bounds are the intersection of
-physical URDF limits, live controller limits and application caps. Live
-acceleration limits are required, because the URDF does not provide them.
+### Minimum trajectory time
 
-The trajectory is `q=q0+(q1-q0)(10u³−15u⁴+6u⁵)`, with derivatives computed
-analytically. Velocity and acceleration are validated and available in dry-run
-output; physical POSITION_MODE messages carry positions only. This avoids the
-SDK's TRAJECTORY_MODE behavior that bypasses collision-avoidance modifications.
+For either an absolute target or a relative distance, the script calculates the
+minimum feasible time for its quintic curve using the selected joint's live
+velocity/acceleration limits. Velocity is also bounded by the URDF value.
 
-Each command run performs a fresh ROS 1 preflight and verifies its master
-address, subscriber connectivity, prior isolated test, fresh ROS 2 telemetry,
-stationary starting arm, homing/enable/readiness, e-stop/error state, collision
-state, joint bounds and command bridge discovery. It aborts on stale feedback,
-changed limits, excessive tracking error, controller velocity-limit violation,
-missed scheduling deadlines or failure to settle. A ROS 1 subscription on the
-actual command topic is verified read-only; no test command is sent there.
+```text
+distance = abs(target - measured_start)
+T_velocity = 1.875 * distance / velocity_limit
+T_acceleration = sqrt((10 / sqrt(3)) * distance / acceleration_limit)
+T_minimum = max(T_velocity, T_acceleration)
+```
 
-Press **Ctrl+C** in the command terminal to cease publication. On completion or
-interruption the app attempts one measured-position hold only when current
-safety data remains valid. With stale/colliding/invalid feedback it sends no
-further commands. POSITION_MODE and the SDK timeout are not an emergency-stop
-guarantee: a previously issued position setpoint may remain active. Use the
-robot's normal stop controls for an emergency. The conservative speed ratio
-persists on the controller, matching SDK behavior. It is not raised automatically.
+The entered `--time` must be **at least the calculated minimum**. A shorter time
+prints the minimum and a suggested `--time`, then exits without sending commands.
+It does not automatically change your requested duration. If live acceleration
+data is unavailable, it uses the velocity bound and explicitly labels the result
+as velocity-only.
+
+To calculate and inspect a plan without movement:
+
+```bash
+python scripts/move_joint.py --joint right_j1 --position 0.0 --time 5 --dry-run
+```
+
+The same check applies to `--distance`. Accepted plans print
+`Minimum quintic time: ... s`; saved reports include `minimum_time_seconds`.
+
+### Optional preview and result file
+
+Add `--dry-run` only when you want a preview without movement:
+
+```bash
+python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5 --dry-run
+```
+
+To save the measured result while executing:
+
+```bash
+python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5 \
+  --report docs/results/joint_motion.json
+```
+
+### What the script does
+
+The single Python script reads the selected joint position and its live limits,
+intersects the position range with the Sawyer URDF range, and checks the starting
+position, target and each published setpoint. Out-of-limit positions are rejected.
+It generates a quintic position reference at 100 Hz with zero starting/ending
+velocity and acceleration. Arm commands use `JointCommand.POSITION_MODE` and
+contain only the selected joint, following the original SDK's partial joint
+command behavior. Head commands use `HeadPanCommand.SET_ACTIVE_MODE` with speed
+ratio 1.0. Arm execution also sets the SDK position-control speed ratio to **1.0**
+before the reference starts, instead of inheriting an earlier slow ratio such as
+0.05. This setting persists on the controller. Physical movement remains subject
+to the robot's normal velocity limits and controller behavior.
+
+The application checks the selected joint's position range and whether the
+requested duration satisfies the quintic velocity/acceleration bounds. It has no
+extra displacement, readiness, collision or tracking gates,
+and it makes no ROS 1 preflight or Bash subprocess calls. Other joints do not
+block the selected joint's limit check. Sawyer's onboard safety mechanisms remain
+active; the robot must be enabled through its normal operator interface. Measured
+arrival is checked at the reference deadline using fresh selected-joint feedback,
+or during optional extra settling. Duplicate or older timestamped feedback is ignored.
+
+Press **Ctrl+C** to stop publishing. The controller may retain the last position
+target; use the robot's normal stop controls for an emergency. The optional
+`--dry-run` is the only preview flag needed. For all arguments:
+
+```bash
+python scripts/move_joint.py --help
+```
+
+For head commands, the result also includes `head_state` with `pan_mode`,
+`is_turning`, `is_blocked` and feedback age. A failed move with fresh
+`pan_mode: 0` means ACTIVE_MODE was not confirmed by the controller. To inspect
+head mode while the command application is running, use another ROS 2 shell:
+
+```bash
+ros2 topic echo /robot/head/head_state --once
+```
+
+The [Intera Head API](https://rethinkrobotics.github.io/intera_sdk_docs/5.1.0/intera_interface/html/intera_interface.head.Head-class.html)
+defines mode 0 as passive and mode 1 as active position control. Successful
+message forwarding alone does not establish that the controller activated its
+head motor.
+
+If the head stays passive, inspect what reaches ROS 1 in another terminal:
+
+```bash
+cd ~/sawyer_rs
+pixi run ros1-shell
+rostopic echo /robot/head/command_head_pan
+```
+
+To capture one command and one head-state message while the command publisher
+keeps running, use ROS 1's `-n 1` option:
+
+```bash
+rostopic echo -n 1 /robot/head/command_head_pan
+rostopic echo -n 1 /robot/head/head_state
+```
+
+This command only observes messages. During an operator-run head command,
+expect changing `target`, `speed_ratio: 1.0` and `pan_mode: 1`. No output means
+the command path needs checking. Correct incoming fields with fresh passive
+head feedback require controller-side diagnosis; increasing trajectory time
+alone does not resolve mode acceptance.
+
+The older full-arm `command` application remains separate and retains its guarded
+execution workflow. Details of the simplified single-joint script are in
+[docs/SINGLE_JOINT_CONTROL.md](docs/SINGLE_JOINT_CONTROL.md).
 
 ## Supported interfaces and validation results
 
@@ -337,12 +474,18 @@ working functionality. Current evidence is stored under `docs/results`:
 | Directional bridge and Sawyer converters | Built and tested: all 46 ordinary Sawyer messages and 3 services, plus standard JointState; `bridge_pairs.txt` |
 | Isolated ROS 2 → ROS 1 JointCommand | Tested: 200/200 messages, identical fields, zero observed loss; `local_transport.json` |
 | Actual Sawyer telemetry, head/gripper monitoring, FK/IK | Hardware read-only tested: 100.02 Hz ROS 2 arm states; valid FK and IK responses; `hardware_readonly.json` |
-| Joint-control safety and planning | Eleven unit tests, simulated arm/head execution, native C++ serializer checks and localhost dry run; no hardware motion |
-| Physical small joint move and trajectory tracking | Pending explicit operator approval and valid starting configuration |
+| Joint-control tests | Nineteen unit tests covering head-mode diagnostics, minimum-time feasibility, direct single-joint motion, measured arrival and the separate guarded full-arm application |
+| Arm quintic command reference | Direct relative/absolute execution through ros1_bridge; only the selected joint is commanded; position-limit rejection tested locally |
+| Physical position movement | Operator reported movement with a large remaining error in the previous script; fixed arrival behavior awaits hardware validation |
 | Head quintic command reference | Implemented; relative/absolute execution tested against an isolated ROS 1 fixture through ros1_bridge; physical motion pending |
 | Enable/disable, gripper actuation | Types/configuration available; hardware actuation not tested or automated |
 | Cartesian motion application | Not implemented |
 | Intera and FollowJointTrajectory ROS 1 actions | Action protocol unsupported by this ros1_bridge; ROS 1 SDK server required for FollowJointTrajectory |
+
+Latest validation (2026-10-12): local tests passed. The read-only physical
+preflight could not reach `169.254.121.3:11311` (`No route to host`), so live
+readiness and physical motion remain unverified. Earlier hardware observations
+above refer to the 2026-10-09 session. See [the progress checkpoint](docs/PROGRESS.md).
 
 Local performance measures separate publish/receive frequency, sequence gaps,
 inter-arrival jitter, and actual timestamped forwarding/ack timing. The local
@@ -379,12 +522,13 @@ values apply to this local test, not physical robot command latency. See
   sensor-data QoS for custom subscribers to best-effort telemetry.
 * ROS 1 discovery works but subscriptions fail: verify controller-to-workstation
   connectivity to the advertised `ROS_IP`; unset conflicting `ROS_HOSTNAME`.
-* Motion refused: inspect the printed reason. Fix readiness, stale data, measured
-  limits or reviewed duration before retrying. Do not bypass checks or widen limits.
+* Single-joint motion error: check the selected joint's position bounds, current
+  feedback and enabled command bridge. The separate full-arm application also
+  checks readiness, feedback freshness and derivative limits.
 * FK/IK service appears but fails: inspect server availability and returned
   `is_valid`/`in_collision`/`result_type`. A converter or service advertisement
   alone does not prove a usable solution.
 * Actions: native ROS 2 action definitions do not convert ROS 1 actionlib's
-  protocol. Use the guarded position trajectory example for initial control.
+  protocol. Use the position-reference application for joint-space control.
 
 Upstream bridge reference: [ros2/ros1_bridge](https://github.com/ros2/ros1_bridge).

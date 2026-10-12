@@ -1,0 +1,31 @@
+{
+  "scope": "Read-only ROS graph and message capture; no publishers or settings changed",
+  "head_commands": [],
+  "head_states": [
+    {
+      "pan": -2.9829959869384766,
+      "panMode": 0,
+      "isTurning": false,
+      "isBlocked": false
+    }
+  ],
+  "warnings": [],
+  "command_publishers": [
+    [
+      "/sawyer_selective_bridge"
+    ]
+  ],
+  "command_subscribers": [
+    [
+      "/realtime_loop"
+    ]
+  ],
+  "assembly": {
+    "enabled": true,
+    "ready": true,
+    "homed": true,
+    "stopped": false,
+    "error": false,
+    "lowVoltage": false
+  }
+}

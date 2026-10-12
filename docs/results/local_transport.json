@@ -11,37 +11,37 @@
     "IOComponentCommandSrv"
   ],
   "direction_checks": "No ROS 2 bridge publisher on commands and no ROS 2 bridge subscriber on joint states",
-  "ros1_joint_source_hz": 100.00026646004015,
-  "ros2_joint_receive_hz": 100.02213499418919,
-  "joint_messages_received": 210,
+  "ros1_joint_source_hz": 99.99906224688912,
+  "ros2_joint_receive_hz": 100.00588191737775,
+  "joint_messages_received": 211,
   "joint_sequence_gaps": 0,
   "joint_interarrival_ms": {
-    "samples": 209,
-    "mean": 9.997786990430622,
-    "p50": 9.998382,
-    "p95": 10.236095,
-    "max": 10.918266
-  },
-  "joint_interarrival_jitter_stddev_ms": 0.17634728903455593,
-  "joint_local_timestamp_latency_ms": {
     "samples": 210,
-    "mean": 0.3864283,
-    "p50": 0.3618695,
-    "p95": 0.658775,
-    "max": 1.472284
+    "mean": 9.999411842857143,
+    "p50": 9.9943325,
+    "p95": 10.171833,
+    "max": 10.923439
+  },
+  "joint_interarrival_jitter_stddev_ms": 0.13218274827215568,
+  "joint_local_timestamp_latency_ms": {
+    "samples": 211,
+    "mean": 0.3643902037914692,
+    "p50": 0.333025,
+    "p95": 0.629228,
+    "max": 1.362126
   },
   "command_forwarding_latency_ms": {
     "samples": 200,
-    "mean": 0.43234493,
-    "p50": 0.426941,
-    "p95": 0.662517,
-    "max": 0.995633
+    "mean": 0.489179635,
+    "p50": 0.48867700000000003,
+    "p95": 0.694288,
+    "max": 1.239019
   },
   "command_ack_roundtrip_ms": {
     "samples": 200,
-    "mean": 0.862066395,
-    "p50": 0.835901,
-    "p95": 1.281473,
-    "max": 1.88551
+    "mean": 0.846188865,
+    "p50": 0.8292980000000001,
+    "p95": 1.295012,
+    "max": 2.193286
   }
 }

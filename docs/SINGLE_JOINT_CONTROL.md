@@ -1,26 +1,16 @@
-# Move one Sawyer joint with a quintic reference
+# Move one Sawyer joint
 
-`scripts/move_joint.py` selects one of `right_j0`–`right_j6` or `head_pan`, reads
-its current joint-state position, and constructs a quintic reference. Specify
-exactly one of `--distance` (signed relative displacement) and `--position`
-(absolute joint-state angle). All angles are **radians**, and `--time` is seconds.
-`--duration` is an alias for `--time`.
+`scripts/move_joint.py` is the complete Python script. It executes immediately
+when you run it. The ROS 2 package entry point uses the same source file.
 
-The script defaults to a publication-free preview. Physical execution requires
-both `--execute` and `--operator-approved`, a successful isolated transport test,
-fresh ROS 1 subscriber/readiness verification and fresh ROS 2 feedback. It does
-not enable Sawyer or change safety mechanisms.
-
-## Preview
-
-Terminal 1 — stop an existing selected bridge before replacing it:
+Start one bridge in Terminal 1:
 
 ```bash
 cd ~/sawyer_rs
-pixi run bridge-start
+pixi run bridge-start --commands --head-commands
 ```
 
-Terminal 2 — enter the ROS 2 shell once:
+In Terminal 2, enter the ROS 2 environment once:
 
 ```bash
 cd ~/sawyer_rs
@@ -30,128 +20,117 @@ pixi run ros2-shell
 Then run ordinary Python commands:
 
 ```bash
-# Move right_j0 by +0.01 rad over a five-second reference:
+# Relative arm movement: +0.01 radians over 5 seconds.
 python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5
 
-# Move head_pan by -0.01 rad over a five-second reference:
+# Relative head movement.
 python scripts/move_joint.py --joint head_pan --distance -0.01 --time 5
 
-# Absolute target: choose a value near the current reported joint-state position.
-python scripts/move_joint.py --joint head_pan --position -2.45 --time 5
+# Absolute target: replace 0.10 with the desired joint-state angle.
+python scripts/move_joint.py --joint right_j0 --position 0.10 --time 5
+
+# Optional preview, without sending a command.
+python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5 --dry-run
 ```
 
-The plan prints the measured starting angle, target angle, displacement,
-duration, peak reference velocity/acceleration and `execute: false`.
-An absolute target example is illustrative; the script rejects targets outside
-the displacement cap or verified limits. Use a fresh preview immediately before
-execution because a relative target is calculated from the then-current position.
+Valid names are `right_j0`–`right_j6` and `head_pan`. Angles/distances are radians;
+time is seconds. Specify exactly one of `--distance` and `--position`.
+Both accept expressions such as `pi`, `pi/2`, `2*pi/3` and `(pi-0.1)/2`.
+Negative expressions work with spaces or equals signs: `--position -pi/2`,
+`--position=-pi/2` or `--distance -pi/12`. Quote expressions that contain spaces.
+The parser supports numbers, `pi`, parentheses and basic
+`+ - * /` arithmetic only. The resulting radians still undergo the same joint
+limit and minimum-time checks.
 
-The same application is available as:
+For the selected joint's lower or upper position limit:
 
 ```bash
-ros2 run sawyer_ros2_control move_joint --joint right_j1 --distance 0.01 --time 5
+python scripts/move_joint.py --position -end --time 5 --joint right_j5
+python scripts/move_joint.py --position +end --time 5 --joint right_j5
 ```
 
-## Operator-approved execution
-
-The first physical movement remains pending operator approval. At the earlier
-inspection, measured `right_j6` was slightly outside its lower limit. If that
-condition persists, both arm and head execution are blocked by the retained
-all-arm safety checks. Resolve readiness through normal operator procedures;
-the script does not widen limits or provide a bypass.
-
-After reviewing the workspace, current feedback and target, replace Terminal 1's
-read-only bridge with the required command path:
+The endpoints use current controller/URDF limit intersections, rather than fixed
+angles. The script prints the selected range and numeric target. These markers
+are supported only for `--position`; minimum trajectory time is still enforced.
+For float32 head commands, the nearest representable value inside the limit is
+used if rounding the exact endpoint would cross it. `--dry-run` previews without
+publishing commands.
+`--duration` is an alias for `--time`. Optional `--report FILE.json` saves measured
+position and tracking results. The package entry point also works:
 
 ```bash
-# Arm commands only:
-pixi run bridge-start --commands
-
-# Or head commands only:
-pixi run bridge-start --head-commands
-
-# Or both paths, if both are needed:
-pixi run bridge-start --commands --head-commands
+ros2 run sawyer_ros2_control move_joint --joint right_j0 --distance 0.01 --time 5
 ```
 
-Choose one bridge instance. Starting it advertises the selected command topic
-without sending a motion message. It requires the prior isolated test and a
-successful live readiness preflight.
+The script reads current feedback and live joint-position limits. Its position
+check uses the intersection of controller and URDF bounds for the selected joint.
+Targets and published setpoints remain strictly within those limits, including
+the actual float32 value of head targets. Measured feedback may exceed a limit
+by up to 0.008726646 rad (0.5 degrees), independently of `--tolerance`. This
+allows minor tracking/calibration overshoot at an endpoint without blocking a
+return move. Larger excursions still stop the application. Measurements remain
+unmodified in reports; an out-of-range starting measurement within this allowance
+uses the boundary as its quintic reference start, keeping all commands in range.
+`reference_start_rad` and `limit_overshoot_rad` make this visible in reports.
+Missing feedback or a disconnected command
+bridge produces an error; malformed/non-finite inputs are rejected.
 
-Only after explicit approval, in Terminal 2's ROS 2 shell:
-
-```bash
-python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5 \
-  --execute --operator-approved --report docs/results/single_arm_motion.json
-
-# Or, with the head command bridge enabled:
-python scripts/move_joint.py --joint head_pan --distance -0.01 --time 5 \
-  --execute --operator-approved --report docs/results/single_head_motion.json
-```
-
-The default displacement cap is **0.02 rad**. A larger reviewed movement can set
-`--max-displacement`, while all controller/URDF bounds and derivative checks
-still apply. For example, a preview of a 0.1 rad move uses
-`--distance 0.1 --max-displacement 0.1 --time 10`. Commands run at 100 Hz by default,
-with a 0.05 speed ratio, 0.1 rad/s reference-speed cap and 0.2 rad/s²
-reference-acceleration cap. The speed cap also accounts for the speed ratio and
-the selected joint's actual velocity limit. An insufficient duration is rejected
-with a suggested minimum duration.
-
-## Trajectory and command semantics
-
-For `u=t/T` clamped to `[0,1]`:
+For either `--position` or `--distance`, the minimum feasible quintic time is:
 
 ```text
-q(t) = q0 + (q1-q0) * (10u³ - 15u⁴ + 6u⁵)
-v(t) = (q1-q0)/T * (30u² - 60u³ + 30u⁴)
-a(t) = (q1-q0)/T² * (60u - 180u² + 120u³)
+d = abs(target - measured_start)
+T_min = max(1.875*d / velocity_limit,
+            sqrt((10/sqrt(3))*d / acceleration_limit))
 ```
 
-Starting/ending reference velocity and acceleration are zero. Exact peak
-derivatives are checked over the entire trajectory, including between samples.
-Arm references use `JointCommand.POSITION_MODE`; the other six arm joints retain
-their starting setpoints. Torque, velocity and acceleration command arrays remain
-empty. Head references use `HeadPanCommand.SET_ACTIVE_MODE` on the separate
-head topic, with the target expressed as a head joint angle rather than a
-base-frame cancellation angle. The physical head bounds in the copied URDF are
-`[-5.0952, 0.9064]` rad; execution intersects them with live limits. Actual
-float32 head targets are validated before publication.
+Velocity uses the smaller of controller and URDF limits; acceleration uses the
+live controller limit when supplied. If acceleration data is absent, the result
+is explicitly velocity-only. A duration below the minimum prints the required
+time and rejects the move before commands are sent. A duration at or above it is
+accepted. `--dry-run` performs the same calculation without movement, and reports
+include `minimum_time_seconds`. The minimum is recalculated from fresh start
+feedback before execution.
 
-Head ACTIVE_MODE and the conservative speed ratio persist after the command,
-matching the original SDK's behavior. Other arm joints are monitored during head
-execution, and no arm command publisher is created for a head-only move.
+The quintic reference is:
 
-The quintic curve specifies the **command reference**. The robot's position
-controllers and safety behavior can modify actual motion, so exact physical
-duration or quintic tracking is not guaranteed. Execution checks feedback,
-tracking error, scheduling, limits, collision/readiness and settling. The final
-report records measured angle, target, tracking error and elapsed time; settling
-may add up to three seconds after the requested reference duration.
-
-Press Ctrl+C to stop publishing. A measured-position hold is attempted only
-after commands have actually started and safety feedback remains healthy.
-Stopping publication is not a hardware emergency stop; the controller can retain
-its last position target. Use the robot's normal stop controls for an emergency.
-
-## Local verification
-
-Only `sawyer_ros2_control` needs rebuilding; existing message converters already
-include HeadPanCommand and HeadState:
-
-```bash
-./scripts/env.sh ros2 bash -c 'cd "$SAWYER_ROOT/ros2_ws"; colcon build --symlink-install --packages-select sawyer_ros2_control'
-./scripts/env.sh ros2 python -m unittest discover -s tests -v
-./scripts/test_local.sh
+```text
+u = clamp(t/T, 0, 1)
+q(t) = q0 + (q1-q0) * (10u^3 - 15u^4 + 6u^5)
 ```
 
-Unit tests exercise both arm and head execution loops with simulated feedback,
-quintic extrema, relative/absolute argument selection, approval gates, unselected
-arm setpoints, head message fields and head faults. The localhost integration
-test also checks head relative/absolute commands across ros1_bridge using its
-own master on port 11421 and DDS domain 87 with localhost-only transport.
-Local simulation tests do not establish physical actuator performance.
+Starting/ending reference velocity and acceleration are zero. It publishes at
+100 Hz for the requested reference duration, with progress printed once per
+second. At the deadline, it publishes the final target and checks fresh feedback.
+The default arrival tolerance is 0.008726646 rad (0.5 degrees), matching the
+original Intera SDK's arm tolerance. A repeated absolute command already within
+that tolerance sends no commands. There is no additional settling wait by
+default: `--settle-timeout` defaults to zero. A larger remaining error still
+returns `status: not_reached`; the reported measured angle/error is never altered.
+Optional `--tolerance` selects a stricter tolerance and `--settle-timeout` allows
+extra final-target publication if desired. Feedback older than one second cannot
+confirm arrival, and duplicate/older nonzero message timestamps are ignored.
 
-The implementation follows the original `intera_sdk` head interface and the
-[Rethink Head API](https://rethinkrobotics.github.io/intera_sdk_docs/5.1.0/intera_interface/html/intera_interface.head.Head-class.html)
-and [HeadPanCommand definition](https://rethinkrobotics.github.io/intera_sdk_docs/5.1.0/intera_core_msgs/html/msg/HeadPanCommand.html).
+Arm messages contain only the
+selected joint in POSITION_MODE, following the original SDK's partial position
+commands. Head messages use SET_ACTIVE_MODE and speed ratio 1.0. Existing arm
+position-control speed settings are replaced with SDK speed ratio 1.0 before
+motion, so an earlier persistent ratio such as 0.05 cannot silently slow the run.
+This setting persists. Normal onboard velocity limits still apply.
+
+The application checks position bounds and quintic duration feasibility. There
+are no extra displacement, readiness, collision or tracking gates. It does not call ROS 1
+preflight or shell subprocesses. Sawyer retains its normal onboard safety and
+controller behavior; the robot must already be enabled. Actual tracking can
+differ from the reference. The separate full-arm application retains its older
+guarded behavior.
+
+Ctrl+C stops publishing; the controller can keep its last position target. Use
+Sawyer's normal stop controls for emergencies.
+
+Local tests run against an isolated ROS 1 master on localhost port 11421 and
+DDS domain 87. They verify direct relative/absolute arm/head commands, optional
+preview, single-joint message fields and rejection of an out-of-limit target.
+They also use rate-limited feedback to check measured arrival at absolute zero
+and that repeating zero publishes no commands. A too-short duration is rejected
+without publishing commands; a feasible duration passes. No physical actuator movement is
+performed by those tests.

@@ -1,14 +1,30 @@
 {
   "joint": "head_pan",
+  "status": "reached",
+  "start_rad": 0.0,
   "target_rad": 0.01,
-  "measured_rad": 0.009999998845160007,
-  "final_error_rad": 1.1548399927313602e-09,
+  "measured_rad": 0.009999999776482582,
+  "final_error_rad": 2.2351741811588166e-10,
   "samples": 199,
-  "elapsed_seconds": 2.0063275909997174,
-  "maximum_tracking_error_rad": 0.0001655288688377915,
-  "rms_tracking_error_rad": 6.60093747187007e-05,
-  "status": "PASS",
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.0,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.009620007000194,
+  "minimum_time_seconds": 0.3398088451717647,
+  "settle_seconds": 0.009620007000194164,
+  "maximum_tracking_error_rad": 0.00018981421262219498,
+  "rms_tracking_error_rad": 6.78027485466634e-05,
+  "head_state": {
+    "pan": 0.009999984875321388,
+    "pan_mode": 1,
+    "is_turning": false,
+    "is_blocked": false,
+    "age_seconds": 0.011194953000085661,
+    "fresh": true
+  },
+  "test_status": "PASS",
   "scope": "Simulated ROS 1 head on localhost master 11421 and DDS domain 87; no physical hardware",
   "relative_and_absolute_execution_verified": true,
-  "head_commands_observed": 400
+  "head_commands_observed": 397
 }

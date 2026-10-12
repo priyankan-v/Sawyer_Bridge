@@ -1,0 +1,16 @@
+[
+  {
+    "level": 1,
+    "name": "Collision detection",
+    "hardware_id": "",
+    "message": "Collision detected on jointright_j1",
+    "values": {
+      "joint index": "1",
+      "joint name": "right_j1",
+      "impact torque": "-3.87078",
+      "scaled impact threshold": "0",
+      "velocity command": "0",
+      "acceleration command": "0"
+    }
+  }
+]

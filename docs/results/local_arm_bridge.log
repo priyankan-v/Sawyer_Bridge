@@ -1,0 +1,38 @@
+[INFO] [1791830764.562615145] [ros_bridge]: Passing message from ROS 1 sensor_msgs/JointState to ROS 2 sensor_msgs/msg/JointState (showing msg only once per type)
+[INFO] [1791830764.563088648] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/JointLimits to ROS 2 intera_core_msgs/msg/JointLimits (showing msg only once per type)
+[INFO] [1791830764.564942578] [ros_bridge]: Passing message from ROS 2 std_msgs/msg/Float64 to ROS 1 std_msgs/Float64 (showing msg only once per type)
+[INFO] [1791830764.602382795] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/RobotAssemblyState to ROS 2 intera_core_msgs/msg/RobotAssemblyState (showing msg only once per type)
+[INFO] [1791830764.602773624] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/EndpointState to ROS 2 intera_core_msgs/msg/EndpointState (showing msg only once per type)
+[INFO] [1791830764.603088769] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/CollisionDetectionState to ROS 2 intera_core_msgs/msg/CollisionDetectionState (showing msg only once per type)
+[INFO] [1791830764.603341008] [ros_bridge]: Passing message from ROS 1 intera_core_msgs/HeadState to ROS 2 intera_core_msgs/msg/HeadState (showing msg only once per type)
+[INFO] [1791830764.773696394] [ros_bridge]: Passing message from ROS 2 intera_core_msgs/msg/JointCommand to ROS 1 intera_core_msgs/JointCommand (showing msg only once per type)
+Trying to create configured bridge for topic '/robot/joint_states' with ROS 2 type 'sensor_msgs/msg/JointState'
+Qos(history: keep_last(5), reliability: best_effort, )Created 1to2 bridge for topic '/robot/joint_states'
+Trying to create configured bridge for topic '/robot/state' with ROS 2 type 'intera_core_msgs/msg/RobotAssemblyState'
+Qos(history: keep_last(1), reliability: reliable, )Created 1to2 bridge for topic '/robot/state'
+Trying to create configured bridge for topic '/robot/limb/right/endpoint_state' with ROS 2 type 'intera_core_msgs/msg/EndpointState'
+Qos(history: keep_last(5), reliability: best_effort, )Created 1to2 bridge for topic '/robot/limb/right/endpoint_state'
+Trying to create configured bridge for topic '/robot/limb/right/collision_detection_state' with ROS 2 type 'intera_core_msgs/msg/CollisionDetectionState'
+Qos(history: keep_last(1), reliability: reliable, )Created 1to2 bridge for topic '/robot/limb/right/collision_detection_state'
+Trying to create configured bridge for topic '/robot/joint_limits' with ROS 2 type 'intera_core_msgs/msg/JointLimits'
+Qos(history: keep_last(1), reliability: reliable, durability: transient_local, )Created 1to2 bridge for topic '/robot/joint_limits'
+Trying to create configured bridge for topic '/robot/head/head_state' with ROS 2 type 'intera_core_msgs/msg/HeadState'
+Created 1to2 bridge for topic '/robot/head/head_state'
+Trying to create configured bridge for topic '/sawyer_bridge_test/joint_command' with ROS 2 type 'intera_core_msgs/msg/JointCommand'
+Created 2to1 bridge for topic '/sawyer_bridge_test/joint_command'
+Trying to create configured bridge for topic '/sawyer_bridge_test/ack' with ROS 2 type 'std_msgs/msg/String'
+Created 1to2 bridge for topic '/sawyer_bridge_test/ack'
+Trying to create configured bridge for topic '/robot/limb/right/joint_command' with ROS 2 type 'intera_core_msgs/msg/JointCommand'
+Qos(history: keep_last(1), reliability: reliable, durability: volatile, lifespan: Duration(nsecs: 200000000), )Created 2to1 bridge for topic '/robot/limb/right/joint_command'
+Trying to create configured bridge for topic '/robot/limb/right/joint_command_timeout' with ROS 2 type 'std_msgs/msg/Float64'
+Qos(history: keep_last(1), reliability: reliable, )Created 2to1 bridge for topic '/robot/limb/right/joint_command_timeout'
+Trying to create configured bridge for topic '/robot/limb/right/set_speed_ratio' with ROS 2 type 'std_msgs/msg/Float64'
+Qos(history: keep_last(1), reliability: reliable, )Created 2to1 bridge for topic '/robot/limb/right/set_speed_ratio'
+Trying to create bridge for ROS 1 service '/sawyer_bridge_test/fk' with type 'intera_core_msgs/SolvePositionFK'
+Created 2 to 1 bridge for service /sawyer_bridge_test/fk
+Trying to create bridge for ROS 1 service '/sawyer_bridge_test/ik' with type 'intera_core_msgs/SolvePositionIK'
+Created 2 to 1 bridge for service /sawyer_bridge_test/ik
+Trying to create bridge for ROS 1 service '/sawyer_bridge_test/io' with type 'intera_core_msgs/IOComponentCommandSrv'
+Created 2 to 1 bridge for service /sawyer_bridge_test/io
+[INFO] [1791830811.898091083] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[?25h

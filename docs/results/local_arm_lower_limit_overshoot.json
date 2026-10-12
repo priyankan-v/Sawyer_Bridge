@@ -1,0 +1,23 @@
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": -0.0016419921875,
+  "target_rad": -1.0,
+  "measured_rad": -1.0016419912687216,
+  "final_error_rad": 0.0016419912687215543,
+  "samples": 495,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": -0.0016419921875,
+  "limit_overshoot_rad": 0.0016419912687215543,
+  "trajectory_seconds": 5.0,
+  "elapsed_seconds": 5.0079765649988985,
+  "minimum_time_seconds": 3.7438425292968747,
+  "settle_seconds": 0.007976564998898539,
+  "maximum_tracking_error_rad": 0.0057823172383413834,
+  "rms_tracking_error_rad": 0.001606932485003388,
+  "test_status": "PASS",
+  "scope": "Measured-limit overshoot on isolated ROS 1 fixture; no physical hardware",
+  "end_option": "-end",
+  "only_selected_joint_commanded": true,
+  "all_commands_within_limits": true
+}

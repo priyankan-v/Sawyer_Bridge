@@ -47,6 +47,16 @@ def wait_for_positions(required, timeout=5):
         subscription.unregister()
 
 
+def write_result(result, output):
+    print(json.dumps({key: result.get(key) for key in ('master', 'joint', 'command_topic',
+                     'verified_command_subscribers', 'state', 'collision', 'positions',
+                     'ready', 'position_limit_errors', 'errors')}, indent=2), flush=True)
+    if output:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(result, indent=2) + '\n')
+    return 1 if result['errors'] else 0
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--require-ready', action='store_true')
@@ -54,6 +64,20 @@ def main():
     parser.add_argument('--joint', choices=[f'right_j{i}' for i in range(7)] + ['head_pan'])
     args = parser.parse_args()
     socket.setdefaulttimeout(4)
+    command_topic = '/robot/head/command_head_pan' if args.joint == 'head_pan' else '/robot/limb/right/joint_command'
+    command_type = 'intera_core_msgs/HeadPanCommand' if args.joint == 'head_pan' else 'intera_core_msgs/JointCommand'
+    master_uri = os.environ.get('ROS_MASTER_URI', 'http://127.0.0.1:11311')
+    # init_node retries registration indefinitely if the master is disconnected.
+    # Probe its read-only API before creating a node so startup fails promptly.
+    try:
+        response = xmlrpc.client.ServerProxy(master_uri).getUri('/sawyer_readonly_preflight')
+        if response[0] != 1:
+            raise RuntimeError(f'Master rejected getUri: {response[1]}')
+    except (OSError, xmlrpc.client.Error, ValueError, RuntimeError) as error:
+        return write_result(dict(wall_time=time.time(), master=master_uri, joint=args.joint,
+                                 command_topic=command_topic, command_type=command_type,
+                                 ready=False, verified_command_subscribers=[],
+                                 errors=[f'ROS master unavailable at {master_uri}: {error}']), args.output)
     rospy.init_node('sawyer_readonly_preflight', anonymous=True, disable_signals=True)
     master = rosgraph.Master(rospy.get_name())
     types = dict(master.getTopicTypes())
@@ -65,11 +89,9 @@ def main():
         '/robot/limb/right/collision_detection_state': 'intera_core_msgs/CollisionDetectionState',
         '/robot/joint_limits': 'intera_core_msgs/JointLimits',
     }
-    command_topic = '/robot/head/command_head_pan' if args.joint == 'head_pan' else '/robot/limb/right/joint_command'
-    command_type = 'intera_core_msgs/HeadPanCommand' if args.joint == 'head_pan' else 'intera_core_msgs/JointCommand'
     if args.joint == 'head_pan':
         expected['/robot/head/head_state'] = 'intera_core_msgs/HeadState'
-    result = {'wall_time': time.time(), 'master': os.environ.get('ROS_MASTER_URI'),
+    result = {'wall_time': time.time(), 'master': master_uri,
               'topic_types': types, 'publishers': pubs, 'subscribers': subs, 'services': services,
               'joint': args.joint, 'command_topic': command_topic, 'command_type': command_type}
     errors = []
@@ -115,11 +137,7 @@ def main():
         if args.require_ready and not result['ready']:
             errors.extend(limit_errors or ['Robot is not homed, enabled, ready and collision-free'])
     result['errors'] = errors
-    print(json.dumps({key: result.get(key) for key in ('master', 'joint', 'command_topic', 'verified_command_subscribers', 'state', 'collision', 'positions', 'ready', 'position_limit_errors', 'errors')}, indent=2))
-    if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(result, indent=2) + '\n')
-    return 1 if errors else 0
+    return write_result(result, args.output)
 
 
 if __name__ == '__main__':
