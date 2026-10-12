@@ -17,6 +17,17 @@ __pycache__/
 config/network.env
 
 .pixi/
+.conda/
+# Keep the original nested Pixi bridge checkout available on this PC.
+/bridge_ws/src/ros1_bridge/
+**/build_conda/
+**/devel_conda/
+**/install_conda/
+**/log_conda/
+.pytest_cache/
+.mypy_cache/
+*.log
+*.bak
 
 *.swp
 *.tmp

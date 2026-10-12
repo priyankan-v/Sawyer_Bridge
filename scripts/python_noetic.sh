@@ -4,4 +4,4 @@ set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "$0")/.." && pwd)
 export PYTHONNOUSERSITE=1
 export PYTHONPATH="$ROOT/tools/empy3:${PYTHONPATH:-}"
-exec "$ROOT/.pixi/envs/noetic/bin/python" "$@"
+exec "${SAWYER_NOETIC_PREFIX:-$ROOT/.conda/envs/noetic}/bin/python" "$@"

@@ -1,0 +1,84 @@
+{
+  "status": "PASS",
+  "scope": "read-only physical Sawyer monitoring and kinematics; no robot command publications",
+  "telemetry_verified": [
+    "gripper_state",
+    "limits",
+    "head",
+    "joints",
+    "state",
+    "endpoint",
+    "collision",
+    "gripper_config"
+  ],
+  "positions": {
+    "right_j0": 0.0226611328125,
+    "right_j1": -0.0041455078125,
+    "right_j2": 0.001806640625,
+    "right_j3": -0.0058125,
+    "right_j4": 0.5249033203125,
+    "right_j5": 2.7446357421875,
+    "right_j6": -4.7138359375
+  },
+  "velocities": {
+    "right_j0": -0.001,
+    "right_j1": -0.001,
+    "right_j2": -0.001,
+    "right_j3": -0.001,
+    "right_j4": -0.001,
+    "right_j5": -0.001,
+    "right_j6": -0.001
+  },
+  "robot_state": {
+    "homed": true,
+    "ready": true,
+    "enabled": true,
+    "stopped": false,
+    "error": false,
+    "low_voltage": false,
+    "estop_button": 0,
+    "estop_source": 0
+  },
+  "collision": false,
+  "endpoint_valid": true,
+  "head_pan": 0.843133807182312,
+  "gripper_devices": [
+    "right_gripper"
+  ],
+  "fk": {
+    "is_valid": [
+      true
+    ],
+    "in_collision": [
+      false
+    ],
+    "poses": 1
+  },
+  "ik": {
+    "result_type": [
+      1
+    ],
+    "solution_count": 1
+  },
+  "joint_messages": 1022,
+  "arm_messages": 851,
+  "ros2_arm_receive_hz": 99.99351613807896,
+  "arm_interarrival_ms": {
+    "mean": 10.000648428235294,
+    "stddev": 0.16556389082268522,
+    "max": 11.140161
+  },
+  "transport_latency": "Not reported: workstation/controller clock synchronization has not been established.",
+  "command_dry_run": {
+    "returncode": 1,
+    "output": "Aborted: right_j6: -4.7138359375 outside [-4.7124, 4.7124]\n[ros2run]: Process exited with failure 1\n"
+  },
+  "common_window_sample_comparison": {
+    "ros1_unique": 851,
+    "ros2_unique": 851,
+    "ros1_seen_missing_in_ros2": 0,
+    "ros2_seen_missing_in_ros1": 0,
+    "meaning": "Receiver-to-receiver timestamp/name correlation, not proof of controller-to-bridge loss"
+  },
+  "ros1_arm_receive_hz": 99.99889556626997
+}

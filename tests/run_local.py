@@ -9,7 +9,12 @@ import xmlrpc.client
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+(ROOT / 'docs/results').mkdir(parents=True, exist_ok=True)
+(ROOT / '.runtime').mkdir(exist_ok=True)
 os.chdir(ROOT)
+os.environ.update(ROS_MASTER_URI='http://127.0.0.1:11421', ROS_IP='127.0.0.1',
+                  ROS_DOMAIN_ID='87', ROS_LOCALHOST_ONLY='1')
+os.environ.pop('ROS_HOSTNAME', None)
 assert os.environ['ROS_MASTER_URI'] == 'http://127.0.0.1:11421'
 assert os.environ['ROS_DOMAIN_ID'] == '87' and os.environ['ROS_LOCALHOST_ONLY'] == '1'
 socket.setdefaulttimeout(2)
@@ -72,10 +77,10 @@ try:
                                 for short,typ in [('fk','SolvePositionFK'),('ik','SolvePositionIK'),('io','IOComponentCommandSrv')]]
     cfg_path = ROOT/'.runtime/local_bridge.json'
     cfg_path.write_text(json.dumps(config))
-    start('local_bridge', ['scripts/start_bridge.sh',str(cfg_path)])
+    start('local_bridge', ['scripts/env.sh','ros2','ros2','launch','sawyer_ros2_control','bridge.launch.py','config:='+str(cfg_path)])
     run(['scripts/env.sh','ros2','python','tests/ros2_transport.py','docs/results/local_transport.json'],60)
     run(['scripts/env.sh','ros2','python','-m','unittest','discover','-s','tests','-v'])
-    run(['scripts/control.sh','one','--joint','right_j0','--position','0.01','--duration','2'])
+    run(['scripts/env.sh','ros2','ros2','run','sawyer_ros2_control','command','one','--joint','right_j0','--position','0.01','--duration','2'])
     run(['scripts/env.sh','ros2','ros2','run','sawyer_ros2_control','move_joint','--joint','right_j2','--distance','.01','--time','2','--dry-run'])
     run(['scripts/env.sh','ros2','python','scripts/move_joint.py','--joint','head_pan','--position','.01','--time','2','--dry-run'])
     # No fixture or bridge ever advertises a physical JointCommand publisher.
@@ -91,7 +96,7 @@ try:
     cfg_path.write_text(json.dumps(config))
     log_path=ROOT/'.runtime/head_commands.jsonl'
     log_path.write_text('')
-    start('local_head_bridge',['scripts/start_bridge.sh',str(cfg_path)])
+    start('local_head_bridge',['scripts/env.sh','ros2','ros2','launch','sawyer_ros2_control','bridge.launch.py','config:='+str(cfg_path)])
     run(['scripts/env.sh','ros2','python','scripts/move_joint.py','--joint','head_pan','--distance','.01','--time','2',
          '--report','docs/results/local_head_motion.json'])
     # Relative displacement now starts at .01; an absolute target moves back to zero.
@@ -121,7 +126,7 @@ try:
     cfg_path.write_text(json.dumps(config))
     arm_log = ROOT/'.runtime/arm_commands.jsonl'
     arm_log.write_text('')
-    start('local_arm_bridge', ['scripts/start_bridge.sh', str(cfg_path)])
+    start('local_arm_bridge', ['scripts/env.sh','ros2','ros2','launch','sawyer_ros2_control','bridge.launch.py','config:='+str(cfg_path)])
     selected = 'right_j2'
     base = ['scripts/env.sh','ros2','python','scripts/move_joint.py','--joint',selected,'--time','2']
     for destination, value, report_name in (('--distance','.05','local_arm_relative.json'),
@@ -221,8 +226,10 @@ try:
          'std_msgs/Bool','data: true'])
     arm_log.write_text('')
     collision_start = time.monotonic()
+    run(['scripts/env.sh','ros1','python','scripts/preflight.py','--require-ready',
+         '--output','.runtime/preflight.json'])
     # The separate full-arm guarded application still supports collision monitoring.
-    result = subprocess.run(['scripts/control.sh','one','--joint',selected,'--position','.01','--duration','2',
+    result = subprocess.run(['scripts/env.sh','ros2','ros2','run','sawyer_ros2_control','command','one','--joint',selected,'--position','.01','--duration','2',
                              '--execute','--operator-approved'], timeout=45, text=True, capture_output=True)
     print(result.stdout,flush=True)
     print(result.stderr,flush=True)

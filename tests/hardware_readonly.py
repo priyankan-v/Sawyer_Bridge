@@ -1,5 +1,6 @@
 """ROS 2 monitoring and kinematics queries only. Never create a command publisher."""
 import json
+import math
 import statistics
 import sys
 import time
@@ -38,6 +39,9 @@ required=('joints','state','endpoint','collision','limits','head','gripper_confi
 assert all(k in latest for k in required), ('Missing hardware telemetry',list(latest))
 joint=latest['joints']
 names=[f'right_j{i}' for i in range(7)]
+assert len(joint.name) == len(set(joint.name))
+assert len(joint.position) == len(joint.name) == len(joint.velocity)
+assert all(math.isfinite(v) for v in list(joint.position) + list(joint.velocity))
 configuration=JointState(name=names,position=[joint.position[joint.name.index(j)] for j in names])
 
 
@@ -61,6 +65,7 @@ arm=[r for r in rows if all(j in r['names'] for j in names)]
 intervals=[(b['received_ns']-a['received_ns'])/1e6 for a,b in zip(arm,arm[1:])]
 result={'status':'PASS','scope':'read-only physical Sawyer monitoring and kinematics; no robot command publications',
         'telemetry_verified':list(latest),'positions':dict(zip(configuration.name,configuration.position)),
+        'velocities':{j:joint.velocity[joint.name.index(j)] for j in names},
         'robot_state':{f:getattr(latest['state'],f) for f in latest['state'].get_fields_and_field_types()},
         'collision':latest['collision'].collision_state,'endpoint_valid':latest['endpoint'].valid,
         'head_pan':latest['head'].pan,'gripper_devices':[d.name for d in latest['gripper_config'].devices],

@@ -1,0 +1,44 @@
+-- The C compiler identification is GNU 15.3.0
+-- The CXX compiler identification is GNU 15.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /home/pi/sawyer_rs/.conda/envs/humble/bin/x86_64-conda-linux-gnu-cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /home/pi/sawyer_rs/.conda/envs/humble/bin/x86_64-conda-linux-gnu-c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.14 (/home/pi/sawyer_rs/.conda/envs/humble/share/ament_cmake/cmake)
+-- Found Python3: /home/pi/sawyer_rs/.conda/envs/humble/bin/python3 (found version "3.12.15") found components: Interpreter
+-- Found rclcpp: 16.0.19 (/home/pi/sawyer_rs/.conda/envs/humble/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 3.1.8 (/home/pi/sawyer_rs/.conda/envs/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.8 (/home/pi/sawyer_rs/.conda/envs/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.8 (/home/pi/sawyer_rs/.conda/envs/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Checking for module 'yaml-0.1'
+--   Found yaml-0.1, version 0.2.5
+-- Found rmw_implementation_cmake: 6.1.2 (/home/pi/sawyer_rs/.conda/envs/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.10 (/home/pi/sawyer_rs/.conda/envs/humble/share/rmw_fastrtps_cpp/cmake)
+-- Found OpenSSL: /home/pi/sawyer_rs/.conda/envs/humble/lib/libcrypto.so (found version "3.6.5")
+-- Found FastRTPS: /home/pi/sawyer_rs/.conda/envs/humble/include
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE
+-- Found intera_core_msgs: 5.3.0 (/home/pi/sawyer_rs/ros2_ws/install_conda/intera_core_msgs/share/intera_core_msgs/cmake)
+-- Found PkgConfig: /home/pi/sawyer_rs/.conda/envs/humble/bin/pkg-config (found version "0.29.2")
+-- Checking for module 'roscpp'
+--   Found roscpp, version 1.17.4
+-- Configuring done (2.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/pi/sawyer_rs/.runtime/native_build_conda
+[100%] Building CXX object CMakeFiles/check_conversion.dir/check_conversion.cpp.o
+[100%] Built target check_conversion
+PASS: native C++ interfaces, empty arrays, boolean arrays and exact ROS 1 wire serialization

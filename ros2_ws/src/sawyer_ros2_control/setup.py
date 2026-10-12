@@ -1,8 +1,10 @@
 from setuptools import setup
+from glob import glob
 
 setup(name='sawyer_ros2_control', version='0.1.0', packages=['sawyer_ros2_control'],
       data_files=[('share/ament_index/resource_index/packages', ['resource/sawyer_ros2_control']),
-                  ('share/sawyer_ros2_control', ['package.xml', 'joint_limits.json'])],
+                  ('share/sawyer_ros2_control', ['package.xml', 'joint_limits.json']),
+                  ('share/sawyer_ros2_control/launch', glob('launch/*.launch.py'))],
       install_requires=['setuptools'], zip_safe=True,
       maintainer='Sawyer workstation maintainers', maintainer_email='maintainer@example.com',
       description='Guarded position-mode Sawyer control through ros1_bridge', license='Apache-2.0',

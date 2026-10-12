@@ -1,0 +1,508 @@
+CMake Deprecation Warning at CMakeLists.txt:4 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /home/pi/sawyer_rs/ros1_ws/devel_conda
+-- Using CMAKE_PREFIX_PATH: /home/pi/sawyer_rs/.conda/envs/noetic
+-- This workspace overlays: /home/pi/sawyer_rs/.conda/envs/noetic
+CMake Warning (dev) at /home/pi/sawyer_rs/.conda/envs/noetic/share/catkin/cmake/python.cmake:4 (find_package):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
+
+Call Stack (most recent call first):
+  /home/pi/sawyer_rs/.conda/envs/noetic/share/catkin/cmake/all.cmake:164 (include)
+  /home/pi/sawyer_rs/.conda/envs/noetic/share/catkin/cmake/catkinConfig.cmake:20 (include)
+  CMakeLists.txt:58 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found PythonInterp: /home/pi/sawyer_rs/scripts/python_noetic.sh (found suitable version "3.12.15", minimum required is "3.12")
+-- Using PYTHON_EXECUTABLE: /home/pi/sawyer_rs/scripts/python_noetic.sh
+-- Using default Python package layout
+-- Found PY_em: /home/pi/sawyer_rs/tools/empy3/em.py
+-- Using empy: /home/pi/sawyer_rs/tools/empy3/em.py
+-- Using CATKIN_ENABLE_TESTING: OFF
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 2 packages in topological order:
+-- ~~  - intera_core_msgs
+-- ~~  - intera_motion_msgs
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'intera_core_msgs'
+-- ==> add_subdirectory(intera_core_msgs)
+CMake Deprecation Warning at intera_core_msgs/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Generating .msg files for action intera_core_msgs/CalibrationCommand /home/pi/sawyer_rs/ros1_ws/src/intera_core_msgs/action/CalibrationCommand.action
+Generating for action CalibrationCommand
+-- intera_core_msgs: 42 messages, 3 services
+-- +++ processing catkin package: 'intera_motion_msgs'
+-- ==> add_subdirectory(intera_motion_msgs)
+CMake Deprecation Warning at intera_motion_msgs/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Generating .msg files for action intera_motion_msgs/MotionCommand /home/pi/sawyer_rs/ros1_ws/src/intera_motion_msgs/action/MotionCommand.action
+Generating for action MotionCommand
+-- intera_motion_msgs: 18 messages, 0 services
+-- Configuring done (1.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/pi/sawyer_rs/ros1_ws/build_conda
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_AnalogIOState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_AnalogIOStates
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_AnalogOutputCommand
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_SolvePositionIK
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_RobotAssemblyState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CollisionAvoidanceState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CameraControl
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CameraSettings
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_DigitalIOState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CollisionDetectionState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_DigitalIOStates
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_DigitalOutputCommand
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_EndpointState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_EndpointNamesArray
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_HeadPanCommand
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_HeadState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_EndpointStates
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_HomingCommand
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_HomingState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_InteractionControlCommand
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IOComponentCommand
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_InteractionControlState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IOComponentStatus
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IOComponentConfiguration
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IODataStatus
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IODeviceConfiguration
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IODeviceStatus
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IONodeConfiguration
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_JointCommand
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IONodeStatus
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IOStatus
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_JointLimits
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_NavigatorState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_NavigatorStates
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_SEAJointState
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_URDFConfiguration
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CalibrationCommandActionGoal
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CalibrationCommandAction
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CalibrationCommandActionResult
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CalibrationCommandGoal
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CalibrationCommandActionFeedback
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CalibrationCommandFeedback
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_IOComponentCommandSrv
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_CalibrationCommandResult
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target _intera_core_msgs_generate_messages_check_deps_SolvePositionFK
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionCommandFeedback
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_EndpointTrackingError
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_JointTrackingError
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_InterpolatedPath
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionStatus
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_Trajectory
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_TrackingOptions
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_TrajectoryAnalysis
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_WaypointSimple
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_TrajectoryOptions
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_WaypointOptions
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_Waypoint
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionCommandActionFeedback
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionCommandAction
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionCommandActionGoal
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionCommandActionResult
+[  0%] Generating C++ code from intera_core_msgs/AnalogIOState.msg
+[  0%] Generating Python from MSG intera_core_msgs/AnalogIOState
+[  0%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionCommandGoal
+[  1%] Generating Python from MSG intera_core_msgs/AnalogIOStates
+[  1%] Built target _intera_motion_msgs_generate_messages_check_deps_MotionCommandResult
+[  1%] Generating EusLisp code from intera_core_msgs/AnalogIOState.msg
+[  1%] Generating C++ code from intera_core_msgs/AnalogIOStates.msg
+[  1%] Generating C++ code from intera_core_msgs/AnalogOutputCommand.msg
+[  2%] Generating EusLisp code from intera_core_msgs/AnalogIOStates.msg
+[  2%] Generating EusLisp code from intera_core_msgs/AnalogOutputCommand.msg
+[  2%] Generating Python from MSG intera_core_msgs/AnalogOutputCommand
+[  2%] Generating C++ code from intera_core_msgs/RobotAssemblyState.msg
+[  3%] Generating Python from MSG intera_core_msgs/RobotAssemblyState
+[  3%] Generating EusLisp code from intera_core_msgs/RobotAssemblyState.msg
+[  3%] Generating EusLisp code from intera_core_msgs/CameraControl.msg
+[  3%] Generating C++ code from intera_core_msgs/CameraControl.msg
+[  4%] Generating Python from MSG intera_core_msgs/CameraControl
+[  4%] Generating C++ code from intera_core_msgs/CameraSettings.msg
+[  4%] Generating Lisp code from intera_core_msgs/AnalogIOState.msg
+[  5%] Generating EusLisp code from intera_core_msgs/CameraSettings.msg
+[  5%] Generating Python from MSG intera_core_msgs/CameraSettings
+[  6%] Generating C++ code from intera_core_msgs/CollisionAvoidanceState.msg
+[  7%] Generating Lisp code from intera_core_msgs/AnalogIOStates.msg
+[  7%] Generating EusLisp code from intera_core_msgs/CollisionAvoidanceState.msg
+[  7%] Generating Lisp code from intera_core_msgs/AnalogOutputCommand.msg
+[  7%] Generating C++ code from intera_core_msgs/CollisionDetectionState.msg
+[  7%] Generating Python from MSG intera_core_msgs/CollisionAvoidanceState
+[  7%] Generating EusLisp code from intera_core_msgs/CollisionDetectionState.msg
+[  7%] Generating Lisp code from intera_core_msgs/RobotAssemblyState.msg
+[  7%] Generating C++ code from intera_core_msgs/DigitalIOState.msg
+[  7%] Generating Lisp code from intera_core_msgs/CameraControl.msg
+[  8%] Generating C++ code from intera_core_msgs/DigitalIOStates.msg
+[  9%] Generating Lisp code from intera_core_msgs/CameraSettings.msg
+[ 10%] Generating EusLisp code from intera_core_msgs/DigitalIOState.msg
+[ 10%] Generating Lisp code from intera_core_msgs/CollisionAvoidanceState.msg
+[ 10%] Generating C++ code from intera_core_msgs/DigitalOutputCommand.msg
+[ 10%] Generating Python from MSG intera_core_msgs/CollisionDetectionState
+[ 10%] Generating Lisp code from intera_core_msgs/CollisionDetectionState.msg
+[ 10%] Generating C++ code from intera_core_msgs/EndpointNamesArray.msg
+[ 11%] Generating Lisp code from intera_core_msgs/DigitalIOState.msg
+[ 11%] Generating EusLisp code from intera_core_msgs/DigitalIOStates.msg
+[ 11%] Generating Lisp code from intera_core_msgs/DigitalIOStates.msg
+[ 12%] Generating Python from MSG intera_core_msgs/DigitalIOState
+[ 12%] Generating Lisp code from intera_core_msgs/DigitalOutputCommand.msg
+[ 12%] Generating C++ code from intera_core_msgs/EndpointState.msg
+[ 13%] Generating Lisp code from intera_core_msgs/EndpointNamesArray.msg
+[ 13%] Generating EusLisp code from intera_core_msgs/DigitalOutputCommand.msg
+[ 13%] Generating Python from MSG intera_core_msgs/DigitalIOStates
+[ 14%] Generating C++ code from intera_core_msgs/EndpointStates.msg
+[ 14%] Generating Lisp code from intera_core_msgs/EndpointState.msg
+[ 14%] Generating C++ code from intera_core_msgs/HeadPanCommand.msg
+[ 15%] Generating EusLisp code from intera_core_msgs/EndpointNamesArray.msg
+[ 15%] Generating Lisp code from intera_core_msgs/EndpointStates.msg
+[ 15%] Generating C++ code from intera_core_msgs/HeadState.msg
+[ 15%] Generating EusLisp code from intera_core_msgs/EndpointState.msg
+[ 15%] Generating Python from MSG intera_core_msgs/DigitalOutputCommand
+[ 16%] Generating Lisp code from intera_core_msgs/HeadPanCommand.msg
+[ 16%] Generating Lisp code from intera_core_msgs/HeadState.msg
+[ 17%] Generating C++ code from intera_core_msgs/HomingCommand.msg
+[ 17%] Generating EusLisp code from intera_core_msgs/EndpointStates.msg
+[ 17%] Generating Lisp code from intera_core_msgs/HomingCommand.msg
+[ 17%] Generating C++ code from intera_core_msgs/HomingState.msg
+[ 18%] Generating Python from MSG intera_core_msgs/EndpointNamesArray
+[ 18%] Generating Lisp code from intera_core_msgs/HomingState.msg
+[ 18%] Generating C++ code from intera_core_msgs/InteractionControlCommand.msg
+[ 18%] Generating EusLisp code from intera_core_msgs/HeadPanCommand.msg
+[ 19%] Generating Lisp code from intera_core_msgs/InteractionControlCommand.msg
+[ 20%] Generating C++ code from intera_core_msgs/InteractionControlState.msg
+[ 20%] Generating Python from MSG intera_core_msgs/EndpointState
+[ 20%] Generating Lisp code from intera_core_msgs/InteractionControlState.msg
+[ 21%] Generating EusLisp code from intera_core_msgs/HeadState.msg
+[ 22%] Generating Lisp code from intera_core_msgs/IOComponentCommand.msg
+[ 22%] Generating C++ code from intera_core_msgs/IOComponentCommand.msg
+[ 22%] Generating Python from MSG intera_core_msgs/EndpointStates
+[ 22%] Generating EusLisp code from intera_core_msgs/HomingCommand.msg
+[ 22%] Generating Lisp code from intera_core_msgs/IOComponentConfiguration.msg
+[ 22%] Generating C++ code from intera_core_msgs/IOComponentConfiguration.msg
+[ 22%] Generating Lisp code from intera_core_msgs/IOComponentStatus.msg
+[ 22%] Generating EusLisp code from intera_core_msgs/HomingState.msg
+[ 23%] Generating Lisp code from intera_core_msgs/IODataStatus.msg
+[ 24%] Generating Python from MSG intera_core_msgs/HeadPanCommand
+[ 24%] Generating C++ code from intera_core_msgs/IOComponentStatus.msg
+[ 25%] Generating EusLisp code from intera_core_msgs/InteractionControlCommand.msg
+[ 25%] Generating Lisp code from intera_core_msgs/IODeviceConfiguration.msg
+[ 26%] Generating C++ code from intera_core_msgs/IODataStatus.msg
+[ 26%] Generating Lisp code from intera_core_msgs/IODeviceStatus.msg
+[ 26%] Generating EusLisp code from intera_core_msgs/InteractionControlState.msg
+[ 26%] Generating Python from MSG intera_core_msgs/HeadState
+[ 27%] Generating Lisp code from intera_core_msgs/IONodeConfiguration.msg
+[ 27%] Generating C++ code from intera_core_msgs/IODeviceConfiguration.msg
+[ 28%] Generating EusLisp code from intera_core_msgs/IOComponentCommand.msg
+[ 28%] Generating Lisp code from intera_core_msgs/IONodeStatus.msg
+[ 28%] Generating C++ code from intera_core_msgs/IODeviceStatus.msg
+[ 28%] Generating Python from MSG intera_core_msgs/HomingCommand
+[ 28%] Generating EusLisp code from intera_core_msgs/IOComponentConfiguration.msg
+[ 28%] Generating Lisp code from intera_core_msgs/IOStatus.msg
+[ 29%] Generating C++ code from intera_core_msgs/IONodeConfiguration.msg
+[ 29%] Generating Lisp code from intera_core_msgs/JointCommand.msg
+[ 29%] Generating EusLisp code from intera_core_msgs/IOComponentStatus.msg
+[ 30%] Generating Python from MSG intera_core_msgs/HomingState
+[ 30%] Generating C++ code from intera_core_msgs/IONodeStatus.msg
+[ 31%] Generating Lisp code from intera_core_msgs/JointLimits.msg
+[ 31%] Generating C++ code from intera_core_msgs/IOStatus.msg
+[ 31%] Generating Lisp code from intera_core_msgs/NavigatorState.msg
+[ 32%] Generating EusLisp code from intera_core_msgs/IODataStatus.msg
+[ 32%] Generating C++ code from intera_core_msgs/JointCommand.msg
+[ 33%] Generating Python from MSG intera_core_msgs/InteractionControlCommand
+[ 33%] Generating Lisp code from intera_core_msgs/NavigatorStates.msg
+[ 33%] Generating C++ code from intera_core_msgs/JointLimits.msg
+[ 33%] Generating EusLisp code from intera_core_msgs/IODeviceConfiguration.msg
+[ 34%] Generating Lisp code from intera_core_msgs/SEAJointState.msg
+[ 35%] Generating C++ code from intera_core_msgs/NavigatorState.msg
+[ 35%] Generating Python from MSG intera_core_msgs/InteractionControlState
+[ 35%] Generating Lisp code from intera_core_msgs/URDFConfiguration.msg
+[ 35%] Generating C++ code from intera_core_msgs/NavigatorStates.msg
+[ 35%] Generating Lisp code from intera_core_msgs/CalibrationCommandAction.msg
+[ 35%] Generating EusLisp code from intera_core_msgs/IODeviceStatus.msg
+[ 35%] Generating Python from MSG intera_core_msgs/IOComponentCommand
+[ 36%] Generating C++ code from intera_core_msgs/SEAJointState.msg
+[ 37%] Generating EusLisp code from intera_core_msgs/IONodeConfiguration.msg
+[ 37%] Generating Lisp code from intera_core_msgs/CalibrationCommandActionGoal.msg
+[ 38%] Generating C++ code from intera_core_msgs/URDFConfiguration.msg
+[ 38%] Generating Lisp code from intera_core_msgs/CalibrationCommandActionResult.msg
+[ 38%] Generating EusLisp code from intera_core_msgs/IONodeStatus.msg
+[ 38%] Generating Python from MSG intera_core_msgs/IOComponentConfiguration
+[ 39%] Generating Lisp code from intera_core_msgs/CalibrationCommandActionFeedback.msg
+[ 39%] Generating EusLisp code from intera_core_msgs/IOStatus.msg
+[ 40%] Generating C++ code from intera_core_msgs/CalibrationCommandAction.msg
+[ 41%] Generating Lisp code from intera_core_msgs/CalibrationCommandGoal.msg
+[ 41%] Generating Lisp code from intera_core_msgs/CalibrationCommandResult.msg
+[ 42%] Generating Python from MSG intera_core_msgs/IOComponentStatus
+[ 42%] Generating C++ code from intera_core_msgs/CalibrationCommandActionGoal.msg
+[ 42%] Generating Lisp code from intera_core_msgs/CalibrationCommandFeedback.msg
+[ 42%] Generating EusLisp code from intera_core_msgs/JointCommand.msg
+[ 42%] Generating Lisp code from intera_core_msgs/IOComponentCommandSrv.srv
+[ 43%] Generating C++ code from intera_core_msgs/CalibrationCommandActionResult.msg
+[ 43%] Generating EusLisp code from intera_core_msgs/JointLimits.msg
+[ 44%] Generating Lisp code from intera_core_msgs/SolvePositionFK.srv
+[ 44%] Generating Python from MSG intera_core_msgs/IODataStatus
+[ 44%] Generating Lisp code from intera_core_msgs/SolvePositionIK.srv
+[ 44%] Generating C++ code from intera_core_msgs/CalibrationCommandActionFeedback.msg
+[ 45%] Generating EusLisp code from intera_core_msgs/NavigatorState.msg
+[ 45%] Built target intera_core_msgs_generate_messages_lisp
+[ 45%] Generating EusLisp code from intera_core_msgs/NavigatorStates.msg
+[ 45%] Generating C++ code from intera_core_msgs/CalibrationCommandGoal.msg
+[ 45%] Generating Python from MSG intera_core_msgs/IODeviceConfiguration
+[ 46%] Generating EusLisp code from intera_core_msgs/SEAJointState.msg
+[ 47%] Generating C++ code from intera_core_msgs/CalibrationCommandResult.msg
+[ 47%] Generating EusLisp code from intera_core_msgs/URDFConfiguration.msg
+[ 47%] Generating C++ code from intera_core_msgs/CalibrationCommandFeedback.msg
+[ 47%] Generating Python from MSG intera_core_msgs/IODeviceStatus
+[ 48%] Generating Python from MSG intera_core_msgs/IONodeConfiguration
+[ 48%] Generating EusLisp code from intera_core_msgs/CalibrationCommandAction.msg
+[ 49%] Generating C++ code from intera_core_msgs/IOComponentCommandSrv.srv
+[ 49%] Generating Python from MSG intera_core_msgs/IONodeStatus
+[ 49%] Generating Javascript code from intera_core_msgs/AnalogIOState.msg
+[ 50%] Generating EusLisp code from intera_core_msgs/CalibrationCommandActionGoal.msg
+[ 50%] Generating C++ code from intera_core_msgs/SolvePositionFK.srv
+[ 51%] Generating Javascript code from intera_core_msgs/AnalogIOStates.msg
+[ 51%] Generating Javascript code from intera_core_msgs/AnalogOutputCommand.msg
+[ 51%] Generating Python from MSG intera_core_msgs/IOStatus
+[ 51%] Generating C++ code from intera_core_msgs/SolvePositionIK.srv
+[ 52%] Generating Javascript code from intera_core_msgs/RobotAssemblyState.msg
+[ 52%] Generating EusLisp code from intera_core_msgs/CalibrationCommandActionResult.msg
+[ 52%] Generating Javascript code from intera_core_msgs/CameraControl.msg
+[ 52%] Built target intera_core_msgs_generate_messages_cpp
+[ 52%] Generating Python from MSG intera_core_msgs/JointCommand
+[ 53%] Generating Lisp code from intera_motion_msgs/EndpointTrackingError.msg
+[ 54%] Generating Javascript code from intera_core_msgs/CameraSettings.msg
+[ 54%] Generating EusLisp code from intera_core_msgs/CalibrationCommandActionFeedback.msg
+[ 54%] Generating Javascript code from intera_core_msgs/CollisionAvoidanceState.msg
+[ 54%] Generating Lisp code from intera_motion_msgs/InterpolatedPath.msg
+[ 54%] Generating Javascript code from intera_core_msgs/CollisionDetectionState.msg
+[ 54%] Generating Lisp code from intera_motion_msgs/JointTrackingError.msg
+[ 55%] Generating EusLisp code from intera_core_msgs/CalibrationCommandGoal.msg
+[ 56%] Generating Javascript code from intera_core_msgs/DigitalIOState.msg
+[ 57%] Generating Lisp code from intera_motion_msgs/MotionStatus.msg
+[ 58%] Generating Python from MSG intera_core_msgs/JointLimits
+[ 58%] Generating Javascript code from intera_core_msgs/DigitalIOStates.msg
+[ 58%] Generating EusLisp code from intera_core_msgs/CalibrationCommandResult.msg
+[ 58%] Generating Lisp code from intera_motion_msgs/TrackingOptions.msg
+[ 58%] Generating Python from MSG intera_core_msgs/NavigatorState
+[ 58%] Generating Javascript code from intera_core_msgs/DigitalOutputCommand.msg
+[ 58%] Generating Lisp code from intera_motion_msgs/Trajectory.msg
+[ 59%] Generating Javascript code from intera_core_msgs/EndpointNamesArray.msg
+[ 60%] Generating Lisp code from intera_motion_msgs/TrajectoryAnalysis.msg
+[ 60%] Generating Javascript code from intera_core_msgs/EndpointState.msg
+[ 60%] Generating Javascript code from intera_core_msgs/EndpointStates.msg
+[ 60%] Generating Python from MSG intera_core_msgs/NavigatorStates
+[ 60%] Generating EusLisp code from intera_core_msgs/CalibrationCommandFeedback.msg
+[ 60%] Generating Lisp code from intera_motion_msgs/TrajectoryOptions.msg
+[ 61%] Generating Javascript code from intera_core_msgs/HeadPanCommand.msg
+[ 61%] Generating Lisp code from intera_motion_msgs/Waypoint.msg
+[ 61%] Generating EusLisp code from intera_core_msgs/IOComponentCommandSrv.srv
+[ 61%] Generating Javascript code from intera_core_msgs/HeadState.msg
+[ 61%] Generating Python from MSG intera_core_msgs/SEAJointState
+[ 61%] Generating Javascript code from intera_core_msgs/HomingCommand.msg
+[ 62%] Generating Lisp code from intera_motion_msgs/WaypointOptions.msg
+[ 63%] Generating Javascript code from intera_core_msgs/HomingState.msg
+[ 63%] Generating Lisp code from intera_motion_msgs/WaypointSimple.msg
+[ 64%] Generating EusLisp code from intera_core_msgs/SolvePositionFK.srv
+[ 65%] Generating Javascript code from intera_core_msgs/InteractionControlCommand.msg
+[ 66%] Generating Lisp code from intera_motion_msgs/MotionCommandAction.msg
+[ 66%] Generating Python from MSG intera_core_msgs/URDFConfiguration
+[ 66%] Generating Javascript code from intera_core_msgs/InteractionControlState.msg
+[ 66%] Generating Lisp code from intera_motion_msgs/MotionCommandActionGoal.msg
+[ 66%] Generating EusLisp code from intera_core_msgs/SolvePositionIK.srv
+[ 66%] Generating Javascript code from intera_core_msgs/IOComponentCommand.msg
+[ 67%] Generating Lisp code from intera_motion_msgs/MotionCommandActionResult.msg
+[ 67%] Generating Python from MSG intera_core_msgs/CalibrationCommandAction
+[ 67%] Generating Javascript code from intera_core_msgs/IOComponentConfiguration.msg
+[ 67%] Generating Lisp code from intera_motion_msgs/MotionCommandActionFeedback.msg
+[ 67%] Generating EusLisp manifest code for intera_core_msgs
+[ 67%] Generating Javascript code from intera_core_msgs/IOComponentStatus.msg
+[ 67%] Generating Lisp code from intera_motion_msgs/MotionCommandGoal.msg
+[ 68%] Generating Javascript code from intera_core_msgs/IODataStatus.msg
+[ 68%] Generating Javascript code from intera_core_msgs/IODeviceConfiguration.msg
+[ 68%] Generating Python from MSG intera_core_msgs/CalibrationCommandActionGoal
+[ 68%] Generating Lisp code from intera_motion_msgs/MotionCommandResult.msg
+[ 68%] Generating Javascript code from intera_core_msgs/IODeviceStatus.msg
+[ 68%] Generating Lisp code from intera_motion_msgs/MotionCommandFeedback.msg
+[ 68%] Built target intera_motion_msgs_generate_messages_lisp
+[ 69%] Generating Javascript code from intera_core_msgs/IONodeConfiguration.msg
+[ 69%] Generating Python from MSG intera_core_msgs/CalibrationCommandActionResult
+[ 70%] Generating Python from MSG intera_core_msgs/CalibrationCommandActionFeedback
+[ 70%] Generating Javascript code from intera_core_msgs/IONodeStatus.msg
+[ 70%] Generating Javascript code from intera_core_msgs/IOStatus.msg
+[ 70%] Generating Python from MSG intera_core_msgs/CalibrationCommandGoal
+[ 70%] Generating Python from MSG intera_core_msgs/CalibrationCommandResult
+[ 70%] Generating Javascript code from intera_core_msgs/JointCommand.msg
+[ 70%] Built target intera_core_msgs_generate_messages_eus
+[ 71%] Generating Python from MSG intera_core_msgs/CalibrationCommandFeedback
+[ 72%] Generating Javascript code from intera_core_msgs/JointLimits.msg
+[ 72%] Generating Javascript code from intera_core_msgs/NavigatorState.msg
+[ 72%] Generating C++ code from intera_motion_msgs/EndpointTrackingError.msg
+[ 72%] Generating EusLisp code from intera_motion_msgs/EndpointTrackingError.msg
+[ 72%] Generating Javascript code from intera_core_msgs/NavigatorStates.msg
+[ 72%] Generating C++ code from intera_motion_msgs/InterpolatedPath.msg
+[ 72%] Generating Python code from SRV intera_core_msgs/IOComponentCommandSrv
+[ 72%] Generating Javascript code from intera_core_msgs/SEAJointState.msg
+[ 72%] Generating EusLisp code from intera_motion_msgs/InterpolatedPath.msg
+[ 73%] Generating C++ code from intera_motion_msgs/JointTrackingError.msg
+[ 73%] Generating Javascript code from intera_core_msgs/URDFConfiguration.msg
+[ 73%] Generating Python code from SRV intera_core_msgs/SolvePositionFK
+[ 73%] Generating C++ code from intera_motion_msgs/MotionStatus.msg
+[ 73%] Generating Javascript code from intera_core_msgs/CalibrationCommandAction.msg
+[ 74%] Generating EusLisp code from intera_motion_msgs/JointTrackingError.msg
+[ 74%] Generating Javascript code from intera_core_msgs/CalibrationCommandActionGoal.msg
+[ 75%] Generating C++ code from intera_motion_msgs/TrackingOptions.msg
+[ 75%] Generating Python code from SRV intera_core_msgs/SolvePositionIK
+[ 75%] Generating EusLisp code from intera_motion_msgs/MotionStatus.msg
+[ 75%] Generating Javascript code from intera_core_msgs/CalibrationCommandActionResult.msg
+[ 76%] Generating Javascript code from intera_core_msgs/CalibrationCommandActionFeedback.msg
+[ 76%] Generating C++ code from intera_motion_msgs/Trajectory.msg
+[ 76%] Generating Javascript code from intera_core_msgs/CalibrationCommandGoal.msg
+[ 76%] Generating EusLisp code from intera_motion_msgs/TrackingOptions.msg
+[ 77%] Generating Python msg __init__.py for intera_core_msgs
+[ 77%] Generating Javascript code from intera_core_msgs/CalibrationCommandResult.msg
+[ 77%] Generating C++ code from intera_motion_msgs/TrajectoryAnalysis.msg
+[ 78%] Generating EusLisp code from intera_motion_msgs/Trajectory.msg
+[ 79%] Generating Javascript code from intera_core_msgs/CalibrationCommandFeedback.msg
+[ 79%] Generating C++ code from intera_motion_msgs/TrajectoryOptions.msg
+[ 79%] Generating Javascript code from intera_core_msgs/IOComponentCommandSrv.srv
+[ 80%] Generating Python srv __init__.py for intera_core_msgs
+[ 80%] Generating EusLisp code from intera_motion_msgs/TrajectoryAnalysis.msg
+[ 81%] Generating C++ code from intera_motion_msgs/Waypoint.msg
+[ 82%] Generating Javascript code from intera_core_msgs/SolvePositionFK.srv
+[ 82%] Generating EusLisp code from intera_motion_msgs/TrajectoryOptions.msg
+[ 82%] Built target intera_core_msgs_generate_messages_py
+[ 83%] Generating EusLisp code from intera_motion_msgs/Waypoint.msg
+[ 83%] Generating C++ code from intera_motion_msgs/WaypointOptions.msg
+[ 83%] Generating Javascript code from intera_core_msgs/SolvePositionIK.srv
+[ 83%] Built target intera_core_msgs_generate_messages_nodejs
+[ 83%] Generating C++ code from intera_motion_msgs/MotionCommandAction.msg
+[ 83%] Generating C++ code from intera_motion_msgs/WaypointSimple.msg
+[ 83%] Generating Python from MSG intera_motion_msgs/EndpointTrackingError
+[ 83%] Generating EusLisp code from intera_motion_msgs/WaypointOptions.msg
+[ 84%] Generating C++ code from intera_motion_msgs/MotionCommandActionGoal.msg
+[ 84%] Generating C++ code from intera_motion_msgs/MotionCommandActionResult.msg
+[ 84%] Generating EusLisp code from intera_motion_msgs/WaypointSimple.msg
+[ 84%] Generating Python from MSG intera_motion_msgs/InterpolatedPath
+[ 85%] Generating Python from MSG intera_motion_msgs/JointTrackingError
+[ 85%] Generating C++ code from intera_motion_msgs/MotionCommandActionFeedback.msg
+[ 85%] Generating EusLisp code from intera_motion_msgs/MotionCommandAction.msg
+[ 86%] Generating C++ code from intera_motion_msgs/MotionCommandGoal.msg
+[ 86%] Generating Python from MSG intera_motion_msgs/MotionStatus
+[ 86%] Generating C++ code from intera_motion_msgs/MotionCommandResult.msg
+[ 87%] Generating EusLisp code from intera_motion_msgs/MotionCommandActionGoal.msg
+[ 87%] Generating C++ code from intera_motion_msgs/MotionCommandFeedback.msg
+[ 87%] Generating Python from MSG intera_motion_msgs/TrackingOptions
+[ 87%] Built target intera_motion_msgs_generate_messages_cpp
+[ 87%] Generating EusLisp code from intera_motion_msgs/MotionCommandActionResult.msg
+[ 87%] Generating Javascript code from intera_motion_msgs/EndpointTrackingError.msg
+[ 88%] Generating Javascript code from intera_motion_msgs/InterpolatedPath.msg
+[ 88%] Generating Javascript code from intera_motion_msgs/JointTrackingError.msg
+[ 88%] Generating EusLisp code from intera_motion_msgs/MotionCommandActionFeedback.msg
+[ 89%] Generating Python from MSG intera_motion_msgs/Trajectory
+[ 89%] Generating Javascript code from intera_motion_msgs/MotionStatus.msg
+[ 90%] Generating EusLisp code from intera_motion_msgs/MotionCommandGoal.msg
+[ 91%] Generating Javascript code from intera_motion_msgs/TrackingOptions.msg
+[ 91%] Generating Javascript code from intera_motion_msgs/Trajectory.msg
+[ 91%] Generating EusLisp code from intera_motion_msgs/MotionCommandResult.msg
+[ 91%] Generating Javascript code from intera_motion_msgs/TrajectoryAnalysis.msg
+[ 91%] Generating Python from MSG intera_motion_msgs/TrajectoryAnalysis
+[ 91%] Generating Python from MSG intera_motion_msgs/TrajectoryOptions
+[ 92%] Generating Javascript code from intera_motion_msgs/TrajectoryOptions.msg
+[ 92%] Generating EusLisp code from intera_motion_msgs/MotionCommandFeedback.msg
+[ 92%] Generating Javascript code from intera_motion_msgs/Waypoint.msg
+[ 93%] Generating Python from MSG intera_motion_msgs/Waypoint
+[ 93%] Generating Python from MSG intera_motion_msgs/WaypointOptions
+[ 93%] Generating Javascript code from intera_motion_msgs/WaypointOptions.msg
+[ 94%] Generating Javascript code from intera_motion_msgs/WaypointSimple.msg
+[ 95%] Generating EusLisp manifest code for intera_motion_msgs
+[ 95%] Generating Python from MSG intera_motion_msgs/WaypointSimple
+[ 95%] Generating Python from MSG intera_motion_msgs/MotionCommandAction
+[ 95%] Generating Javascript code from intera_motion_msgs/MotionCommandAction.msg
+[ 95%] Generating Javascript code from intera_motion_msgs/MotionCommandActionGoal.msg
+[ 95%] Generating Python from MSG intera_motion_msgs/MotionCommandActionGoal
+[ 95%] Generating Javascript code from intera_motion_msgs/MotionCommandActionResult.msg
+[ 96%] Generating Python from MSG intera_motion_msgs/MotionCommandActionResult
+[ 97%] Generating Javascript code from intera_motion_msgs/MotionCommandActionFeedback.msg
+[ 98%] Generating Javascript code from intera_motion_msgs/MotionCommandGoal.msg
+[ 98%] Generating Python from MSG intera_motion_msgs/MotionCommandActionFeedback
+[ 98%] Generating Javascript code from intera_motion_msgs/MotionCommandResult.msg
+[ 98%] Generating Javascript code from intera_motion_msgs/MotionCommandFeedback.msg
+[ 98%] Generating Python from MSG intera_motion_msgs/MotionCommandGoal
+[ 98%] Built target intera_motion_msgs_generate_messages_nodejs
+[ 98%] Built target intera_core_msgs_generate_messages
+[ 99%] Generating Python from MSG intera_motion_msgs/MotionCommandResult
+[ 99%] Generating Python from MSG intera_motion_msgs/MotionCommandFeedback
+[ 99%] Built target intera_motion_msgs_generate_messages_eus
+[100%] Generating Python msg __init__.py for intera_motion_msgs
+[100%] Built target intera_motion_msgs_generate_messages_py
+[100%] Built target intera_motion_msgs_generate_messages
+Base path: /home/pi/sawyer_rs/ros1_ws
+Source space: /home/pi/sawyer_rs/ros1_ws/src
+Build space: /home/pi/sawyer_rs/ros1_ws/build_conda
+Devel space: /home/pi/sawyer_rs/ros1_ws/devel_conda
+Install space: /home/pi/sawyer_rs/ros1_ws/install_conda
+####
+#### Running command: "cmake /home/pi/sawyer_rs/ros1_ws/src -DPYTHON_EXECUTABLE=/home/pi/sawyer_rs/scripts/python_noetic.sh -DCATKIN_ENABLE_TESTING=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCATKIN_DEVEL_PREFIX=/home/pi/sawyer_rs/ros1_ws/devel_conda -DCMAKE_INSTALL_PREFIX=/home/pi/sawyer_rs/ros1_ws/install_conda -G Unix Makefiles" in "/home/pi/sawyer_rs/ros1_ws/build_conda"
+####
+####
+#### Running command: "make -j4" in "/home/pi/sawyer_rs/ros1_ws/build_conda"
+####

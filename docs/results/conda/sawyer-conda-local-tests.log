@@ -1,0 +1,547 @@
+PASS: missing ROS master fails preflight before node registration.
+{
+  "status": "PASS",
+  "clock_basis": "Same workstation CLOCK_REALTIME for source and receiver timestamps; includes serialization and scheduling",
+  "command_fields_identical": true,
+  "commands_sent": 200,
+  "commands_received": 200,
+  "command_loss": 0,
+  "services_verified": [
+    "SolvePositionFK",
+    "SolvePositionIK",
+    "IOComponentCommandSrv"
+  ],
+  "direction_checks": "No ROS 2 bridge publisher on commands and no ROS 2 bridge subscriber on joint states",
+  "ros1_joint_source_hz": 99.99991371436018,
+  "ros2_joint_receive_hz": 100.00507792450674,
+  "joint_messages_received": 211,
+  "joint_sequence_gaps": 0,
+  "joint_interarrival_ms": {
+    "samples": 210,
+    "mean": 9.999492233333333,
+    "p50": 9.999616,
+    "p95": 10.235459,
+    "max": 10.475505
+  },
+  "joint_interarrival_jitter_stddev_ms": 0.14666522216887531,
+  "joint_local_timestamp_latency_ms": {
+    "samples": 211,
+    "mean": 0.46576814218009477,
+    "p50": 0.462697,
+    "p95": 0.66206,
+    "max": 1.125061
+  },
+  "command_forwarding_latency_ms": {
+    "samples": 200,
+    "mean": 0.45787682,
+    "p50": 0.454173,
+    "p95": 0.669976,
+    "max": 1.011521
+  },
+  "command_ack_roundtrip_ms": {
+    "samples": 200,
+    "mean": 0.905228515,
+    "p50": 0.901642,
+    "p95": 1.257969,
+    "max": 2.110175
+  }
+}
+
+
+
+test_angle_expressions_reject_code_and_invalid_arithmetic (test_move_joint.MoveJointTests.test_angle_expressions_reject_code_and_invalid_arithmetic) ... ok
+test_angle_normalization_preserves_options_and_rejects_invalid_values (test_move_joint.MoveJointTests.test_angle_normalization_preserves_options_and_rejects_invalid_values) ... ok
+test_arm_and_head_execute_without_approval_flags (test_move_joint.MoveJointTests.test_arm_and_head_execute_without_approval_flags) ... ok
+test_default_deadline_and_strict_tolerance_still_report_missed_targets (test_move_joint.MoveJointTests.test_default_deadline_and_strict_tolerance_still_report_missed_targets) ... ok
+test_direct_execution_and_argument_validation (test_move_joint.MoveJointTests.test_direct_execution_and_argument_validation) ... ok
+test_dry_run_and_invalid_target_do_not_publish (test_move_joint.MoveJointTests.test_dry_run_and_invalid_target_do_not_publish) ... ok
+test_end_options_and_relative_end_rejection (test_move_joint.MoveJointTests.test_end_options_and_relative_end_rejection) ... ok
+test_end_targets_follow_live_and_urdf_limits_in_dry_run (test_move_joint.MoveJointTests.test_end_targets_follow_live_and_urdf_limits_in_dry_run) ... ok
+test_execute_both_limit_endpoints_without_overshoot_and_reject_short_time (test_move_joint.MoveJointTests.test_execute_both_limit_endpoints_without_overshoot_and_reject_short_time) ... ok
+test_feedback_allowance_does_not_relax_command_limits_or_hide_large_overshoot (test_move_joint.MoveJointTests.test_feedback_allowance_does_not_relax_command_limits_or_hide_large_overshoot) ... ok
+test_feedback_joint_names_and_out_of_order_samples (test_move_joint.MoveJointTests.test_feedback_joint_names_and_out_of_order_samples) ... ok
+test_float32_head_target_and_new_live_limit (test_move_joint.MoveJointTests.test_float32_head_target_and_new_live_limit) ... ok
+test_goal_timeout_is_a_failure_and_stale_feedback_cannot_succeed (test_move_joint.MoveJointTests.test_goal_timeout_is_a_failure_and_stale_feedback_cannot_succeed) ... ok
+test_head_limit_endpoints_round_inward_to_float32 (test_move_joint.MoveJointTests.test_head_limit_endpoints_round_inward_to_float32) ... ok
+test_live_and_urdf_position_limits (test_move_joint.MoveJointTests.test_live_and_urdf_position_limits) ... ok
+test_minimum_time_uses_exact_quintic_extrema (test_move_joint.MoveJointTests.test_minimum_time_uses_exact_quintic_extrema) ... ok
+test_minimum_time_without_acceleration_data (test_move_joint.MoveJointTests.test_minimum_time_without_acceleration_data) ... ok
+test_operator_lower_limit_overshoot_completes_and_repeated_end_sends_nothing (test_move_joint.MoveJointTests.test_operator_lower_limit_overshoot_completes_and_repeated_end_sends_nothing) ... ok
+test_operator_residual_finishes_on_time_and_repeating_zero_sends_nothing (test_move_joint.MoveJointTests.test_operator_residual_finishes_on_time_and_repeating_zero_sends_nothing) ... ok
+test_pi_expressions_for_absolute_and_relative_angles (test_move_joint.MoveJointTests.test_pi_expressions_for_absolute_and_relative_angles) ... ok
+test_pi_target_still_obeys_joint_limits_before_publication (test_move_joint.MoveJointTests.test_pi_target_still_obeys_joint_limits_before_publication) ... ok
+test_quintic_shape_and_zero_endpoint_derivatives (test_move_joint.MoveJointTests.test_quintic_shape_and_zero_endpoint_derivatives) ... ok
+test_recovery_from_small_measured_overshoot_keeps_all_commands_in_limits (test_move_joint.MoveJointTests.test_recovery_from_small_measured_overshoot_keeps_all_commands_in_limits) ... ok
+test_relative_recovery_uses_actual_feedback_and_rejects_further_outward_target (test_move_joint.MoveJointTests.test_relative_recovery_uses_actual_feedback_and_rejects_further_outward_target) ... ok
+test_slow_controller_reaches_absolute_zero_once (test_move_joint.MoveJointTests.test_slow_controller_reaches_absolute_zero_once) ... ok
+test_space_separated_negative_angles_and_real_cli_arguments (test_move_joint.MoveJointTests.test_space_separated_negative_angles_and_real_cli_arguments) ... ok
+test_too_short_absolute_and_relative_plans_send_nothing (test_move_joint.MoveJointTests.test_too_short_absolute_and_relative_plans_send_nothing) ... ok
+test_unmoving_passive_head_reports_controller_mode (test_move_joint.MoveJointTests.test_unmoving_passive_head_reports_controller_mode) ... ok
+test_live_limit_intersection_and_malformed_arrays (test_safety.SafetyTests.test_live_limit_intersection_and_malformed_arrays) ... ok
+test_partial_joint_states_do_not_refresh_other_joints (test_safety.SafetyTests.test_partial_joint_states_do_not_refresh_other_joints) ... ok
+test_quintic_endpoints_and_extrema (test_safety.SafetyTests.test_quintic_endpoints_and_extrema) ... ok
+test_readiness_fails_closed (test_safety.SafetyTests.test_readiness_fails_closed) ... ok
+test_stale_and_collision_feedback_abort (test_safety.SafetyTests.test_stale_and_collision_feedback_abort) ... ok
+test_unsafe_inputs_rejected (test_safety.SafetyTests.test_unsafe_inputs_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.308s
+
+OK
+
+{
+  "start": {
+    "right_j2": 0.0,
+    "right_j4": 0.0,
+    "right_j5": 0.0,
+    "right_j6": 0.0,
+    "right_j1": 0.0,
+    "right_j3": 0.0,
+    "right_j0": 0.0
+  },
+  "target": {
+    "right_j2": 0.0,
+    "right_j4": 0.0,
+    "right_j5": 0.0,
+    "right_j6": 0.0,
+    "right_j1": 0.0,
+    "right_j3": 0.0,
+    "right_j0": 0.01
+  },
+  "duration": 2.0,
+  "mode": "POSITION_MODE",
+  "execute": false,
+  "midpoint_position_velocity_acceleration": [
+    {
+      "right_j0": 0.005,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.009375,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    }
+  ]
+}
+
+
+right_j2: 0.000000 -> 0.010000 rad in 2 s
+Minimum quintic time: 0.339809 s
+Dry run: no commands sent.
+
+
+head_pan: 0.000000 -> 0.010000 rad in 2 s
+Minimum quintic time: 0.339809 s
+Dry run: no commands sent.
+
+
+PASS: dry-run application produced no physical-command publisher.
+head_pan: 0.000000 -> 0.010000 rad in 2 s
+Minimum quintic time: 0.339809 s
+head_pan: 1.0/2 s, measured 0.004935 rad, target error 0.005065 rad
+{
+  "joint": "head_pan",
+  "status": "reached",
+  "start_rad": 0.0,
+  "target_rad": 0.01,
+  "measured_rad": 0.009999987669289112,
+  "final_error_rad": 1.2330710888117102e-08,
+  "samples": 198,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.0,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.0001850789994933,
+  "minimum_time_seconds": 0.3398088451717647,
+  "settle_seconds": 0.0001850789994932711,
+  "maximum_tracking_error_rad": 0.0001528904268267811,
+  "rms_tracking_error_rad": 6.757678682276382e-05,
+  "head_state": {
+    "pan": 0.009999987669289112,
+    "pan_mode": 1,
+    "is_turning": false,
+    "is_blocked": false,
+    "age_seconds": 0.0005372140003601089,
+    "fresh": true
+  }
+}
+
+
+head_pan: 0.010000 -> 0.000000 rad in 2 s
+Minimum quintic time: 0.339809 s
+head_pan: 1.0/2 s, measured 0.005068 rad, target error 0.005068 rad
+head_pan: 2.0/2 s, measured 0.000000 rad, target error 0.000000 rad
+{
+  "joint": "head_pan",
+  "status": "reached",
+  "start_rad": 0.009999999776482582,
+  "target_rad": 0.0,
+  "measured_rad": 1.8214160180107797e-09,
+  "final_error_rad": 1.8214160180107797e-09,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.009999999776482582,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.005041626001912,
+  "minimum_time_seconds": 0.3398088451717647,
+  "settle_seconds": 0.005041626001911936,
+  "maximum_tracking_error_rad": 0.00015787677847623437,
+  "rms_tracking_error_rad": 6.826100579795458e-05,
+  "head_state": {
+    "pan": 5.617378064926015e-07,
+    "pan_mode": 1,
+    "is_turning": false,
+    "is_blocked": false,
+    "age_seconds": 0.037567436000244925,
+    "fresh": true
+  }
+}
+
+
+PASS: isolated head relative and absolute quintic execution; no arm commands.
+right_j2: 0.000000 -> 0.050000 rad in 2 s
+Minimum quintic time: 0.759836 s
+right_j2: 1.0/2 s, measured 0.024784 rad, target error 0.025216 rad
+right_j2: 2.0/2 s, measured 0.050000 rad, target error 0.000000 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.0,
+  "target_rad": 0.05,
+  "measured_rad": 0.049999998654771186,
+  "final_error_rad": 1.3452288172288718e-09,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.0,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.0075629359998857,
+  "minimum_time_seconds": 0.7598356856515927,
+  "settle_seconds": 0.007562935999885667,
+  "maximum_tracking_error_rad": 0.0007979458622921903,
+  "rms_tracking_error_rad": 0.0003424199504787419
+}
+
+
+right_j2: 0.050000 -> 0.000000 rad in 2 s
+Minimum quintic time: 0.759836 s
+right_j2: 1.0/2 s, measured 0.025146 rad, target error 0.025146 rad
+right_j2: 2.0/2 s, measured 0.000000 rad, target error 0.000000 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.05,
+  "target_rad": 0.0,
+  "measured_rad": 8.057896563190559e-08,
+  "final_error_rad": 8.057896563190559e-08,
+  "samples": 199,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.05,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 2.0,
+  "elapsed_seconds": 2.009439214998565,
+  "minimum_time_seconds": 0.7598356856515927,
+  "settle_seconds": 0.009439214998565149,
+  "maximum_tracking_error_rad": 0.0009253471521672718,
+  "rms_tracking_error_rad": 0.00034317337632099536
+}
+
+
+PASS: direct arm relative and absolute execution; only the selected joint is commanded.
+PASS: minimum-time rejection sends no commands.
+right_j2: 0.000000 -> 0.100000 rad in 1.1 s
+Minimum quintic time: 1.074570 s
+right_j2: 1.0/1.1 s, measured 0.099208 rad, target error 0.000792 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.0,
+  "target_rad": 0.1,
+  "measured_rad": 0.09999986106716437,
+  "final_error_rad": 1.3893283563881642e-07,
+  "samples": 110,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.0,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 1.1,
+  "elapsed_seconds": 1.1044969350004976,
+  "minimum_time_seconds": 1.074569931823542,
+  "settle_seconds": 0.004496935000497526,
+  "maximum_tracking_error_rad": 0.003235523638925389,
+  "rms_tracking_error_rad": 0.0013051035847219726
+}
+
+
+right_j2: 0.100000 -> 0.000000 rad in 1.1 s
+Minimum quintic time: 1.074570 s
+right_j2: 1.0/1.1 s, measured 0.000796 rad, target error 0.000796 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 0.1,
+  "target_rad": 0.0,
+  "measured_rad": 1.2328346805923207e-07,
+  "final_error_rad": 1.2328346805923207e-07,
+  "samples": 110,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.1,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 1.1,
+  "elapsed_seconds": 1.1047955510002794,
+  "minimum_time_seconds": 1.074569931823542,
+  "settle_seconds": 0.004795551000279286,
+  "maximum_tracking_error_rad": 0.0028323453571379997,
+  "rms_tracking_error_rad": 0.0012334103545495346
+}
+
+
+right_j2 is already at 0.000000 rad; no commands sent.
+{
+  "joint": "right_j2",
+  "status": "already_at_target",
+  "start_rad": 0.0,
+  "target_rad": 0.0,
+  "measured_rad": 0.0,
+  "final_error_rad": 0.0,
+  "samples": 0,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 0.0,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 5.0,
+  "elapsed_seconds": 0.0,
+  "minimum_time_seconds": 0.0,
+  "settle_seconds": 0.0,
+  "maximum_tracking_error_rad": 0.0,
+  "rms_tracking_error_rad": 0.0
+}
+
+
+PASS: measured arrival at absolute zero and repeated zero produces no commands.
+publishing and latching message for 3.0 seconds
+
+
+right_j2: -0.001642 -> -1.000000 rad in 5 s
+Joint limits: -1.000000 to 1.000000 rad (selected -end)
+Minimum quintic time: 3.743843 s
+right_j2: 1.0/5 s, measured -0.059874 rad, target error 0.940126 rad
+right_j2: 2.0/5 s, measured -0.318432 rad, target error 0.681568 rad
+right_j2: 3.0/5 s, measured -0.683896 rad, target error 0.316104 rad
+right_j2: 4.0/5 s, measured -0.943877 rad, target error 0.056123 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": -0.0016419921875,
+  "target_rad": -1.0,
+  "measured_rad": -1.001641974126944,
+  "final_error_rad": 0.0016419741269440014,
+  "samples": 495,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": -0.0016419921875,
+  "limit_overshoot_rad": 0.0016419741269440014,
+  "trajectory_seconds": 5.0,
+  "elapsed_seconds": 5.004142935998971,
+  "minimum_time_seconds": 3.7438425292968747,
+  "settle_seconds": 0.004142935998970643,
+  "maximum_tracking_error_rad": 0.005924977297178169,
+  "rms_tracking_error_rad": 0.0017428420578270655
+}
+
+
+right_j2 is already at -1.000000 rad; no commands sent.
+{
+  "joint": "right_j2",
+  "status": "already_at_target",
+  "start_rad": -1.0016419921875,
+  "target_rad": -1.0,
+  "measured_rad": -1.0016419921875,
+  "final_error_rad": 0.001641992187499941,
+  "samples": 0,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": -1.0,
+  "limit_overshoot_rad": 0.001641992187499941,
+  "trajectory_seconds": 5.0,
+  "elapsed_seconds": 0.0,
+  "minimum_time_seconds": 0.13769565217975138,
+  "settle_seconds": 0.0,
+  "maximum_tracking_error_rad": 0.001641992187499941,
+  "rms_tracking_error_rad": 0.0
+}
+
+
+right_j2: -1.001642 -> 1.000000 rad in 8 s
+Quintic reference starts at the in-limit position -1.000000 rad
+Joint limits: -1.000000 to 1.000000 rad (selected +end)
+Minimum quintic time: 7.506157 s
+right_j2: 1.0/8 s, measured -0.970173 rad, target error 1.970173 rad
+right_j2: 2.0/8 s, measured -0.795738 rad, target error 1.795738 rad
+right_j2: 3.0/8 s, measured -0.455770 rad, target error 1.455770 rad
+right_j2: 4.0/8 s, measured -0.000435 rad, target error 1.000435 rad
+right_j2: 5.0/8 s, measured 0.450199 rad, target error 0.549801 rad
+right_j2: 6.0/8 s, measured 0.793356 rad, target error 0.206644 rad
+right_j2: 7.0/8 s, measured 0.967261 rad, target error 0.032739 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": -1.0016419921875,
+  "target_rad": 1.0,
+  "measured_rad": 0.9983579979927905,
+  "final_error_rad": 0.001642002007209542,
+  "samples": 791,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": -1.0,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 8.0,
+  "elapsed_seconds": 8.003894853998645,
+  "minimum_time_seconds": 7.5061574707031244,
+  "settle_seconds": 0.003894853998644976,
+  "maximum_tracking_error_rad": 0.011081029337750403,
+  "rms_tracking_error_rad": 0.004749464422405833
+}
+
+
+publishing and latching message for 3.0 seconds
+
+
+right_j2: 1.000000 -> 0.000000 rad in 5 s
+Minimum quintic time: 3.750000 s
+right_j2: 1.0/5 s, measured 0.943150 rad, target error 0.943150 rad
+right_j2: 2.0/5 s, measured 0.683812 rad, target error 0.683812 rad
+right_j2: 3.0/5 s, measured 0.317955 rad, target error 0.317955 rad
+right_j2: 4.0/5 s, measured 0.057690 rad, target error 0.057690 rad
+{
+  "joint": "right_j2",
+  "status": "reached",
+  "start_rad": 1.0,
+  "target_rad": 0.0,
+  "measured_rad": 2.041824664900105e-08,
+  "final_error_rad": 2.041824664900105e-08,
+  "samples": 495,
+  "tolerance_rad": 0.008726646,
+  "reference_start_rad": 1.0,
+  "limit_overshoot_rad": 0.0,
+  "trajectory_seconds": 5.0,
+  "elapsed_seconds": 5.003916038996977,
+  "minimum_time_seconds": 3.75,
+  "settle_seconds": 0.003916038996976567,
+  "maximum_tracking_error_rad": 0.007468644353528453,
+  "rms_tracking_error_rad": 0.002783916783592651
+}
+
+
+PASS: small measured limit overshoot completes, repeated -end sends nothing, +end recovers with all commands in limits.
+PASS: out-of-limit target is rejected without publishing commands.
+publishing and latching message for 3.0 seconds
+
+
+{
+  "master": "http://127.0.0.1:11421",
+  "joint": null,
+  "command_topic": "/robot/limb/right/joint_command",
+  "verified_command_subscribers": [
+    {
+      "name": "/isolated_ros1_fixture",
+      "uri": "http://127.0.0.1:39241/"
+    }
+  ],
+  "state": {
+    "homed": true,
+    "ready": true,
+    "enabled": true,
+    "stopped": false,
+    "error": false,
+    "lowVoltage": false,
+    "estop_button": 0,
+    "estop_source": 0
+  },
+  "collision": false,
+  "positions": {
+    "right_j0": 0.0,
+    "right_j1": 0.0,
+    "right_j2": 0.0,
+    "right_j3": 0.0,
+    "right_j4": 0.0,
+    "right_j5": 0.0,
+    "right_j6": 0.0
+  },
+  "ready": true,
+  "position_limit_errors": [],
+  "errors": []
+}
+
+
+{
+  "start": {
+    "right_j6": 0.0,
+    "right_j3": 0.0,
+    "right_j2": 0.0,
+    "right_j1": 0.0,
+    "right_j5": 0.0,
+    "right_j0": 0.0,
+    "right_j4": 0.0
+  },
+  "target": {
+    "right_j6": 0.0,
+    "right_j3": 0.0,
+    "right_j2": 0.01,
+    "right_j1": 0.0,
+    "right_j5": 0.0,
+    "right_j0": 0.0,
+    "right_j4": 0.0
+  },
+  "duration": 2.0,
+  "mode": "POSITION_MODE",
+  "execute": true,
+  "midpoint_position_velocity_acceleration": [
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.005,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.009375,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    },
+    {
+      "right_j0": 0.0,
+      "right_j1": 0.0,
+      "right_j2": 0.0,
+      "right_j3": 0.0,
+      "right_j4": 0.0,
+      "right_j5": 0.0,
+      "right_j6": 0.0
+    }
+  ]
+}
+Aborted: Robot readiness or collision check failed
+[ros2run]: Process exited with failure 1
+
+
+PASS: separate guarded full-arm application still aborts on collision.

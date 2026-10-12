@@ -1,534 +1,359 @@
-# Sawyer ROS 1 ↔ ROS 2 workstation bridge
+# Sawyer ROS 1–ROS 2 bridge with Conda
 
-Sawyer's controller remains ROS 1. This project uses the existing Pixi Noetic
-and Humble installations, original Sawyer message sources, and `ros1_bridge` to
-expose selected telemetry and joint-position commands to ROS 2.
+This workstation connects ROS 2 applications to Sawyer's existing ROS 1
+controller using the customized C++ `ros1_bridge`. It receives joint states and
+safety feedback and supports the existing position-command applications.
+The robot's software and network configuration are unchanged.
 
-For an explanation of where each component runs and how commands and feedback
-travel between environments, read [How our setup works](docs/HOW_THE_SETUP_WORKS.md).
-
-No Docker, custom transport gateway, ROS reinstallation, or onboard change is
-required. The previously working bridge installation and joint-state-only
-configuration remain available.
+The original working Pixi implementation is preserved on `main` at
+`37d2c20`. This branch is `conda`. See [MIGRATION.md](MIGRATION.md) for inspection,
+script decisions, test results, and remaining hardware validation.
 
 ```text
-Sawyer's original ROS 1 controller and master
-    ↕ ROS 1 Ethernet (direct connection to the bridge)
-C++ ros1_bridge (Pixi Humble + Noetic libraries + both interface workspaces)
-    ↕ ROS 2 DDS
-Python sawyer_ros2_control / move_joint.py (Pixi Humble)
+Sawyer ROS 1 master/controller (Ethernet)
+       ↕ ROS 1 messages
+C++ parameter_bridge (Conda Humble + selected Noetic libraries)
+       ↕ ROS 2 DDS
+sawyer_ros2_control (Conda Humble)
 
-Optional ROS 1 diagnostic tools run separately in Pixi Noetic.
+ROS 1 diagnostics and configuration run separately in Conda Noetic.
 ```
 
-## Environment and dependencies
+Two environments are necessary. The inspected working RoboStack packages use
+**Python 3.12.15 in both environments**, NumPy 2.5.3 and Boost 1.88.0. These are
+Conda builds of Noetic/Humble, rather than Ubuntu's Python 3.8/3.10 builds.
+System Humble under `/opt/ros/humble` uses Python 3.10 and is not part of this
+bridge's build or runtime. Do not source it into a project environment.
+[RoboStack documents this isolation requirement](https://robostack.github.io/GettingStarted.html).
 
-Both Pixi environments use Python **3.12**. System Humble in `/opt/ros/humble`
-uses Python **3.10**. The project wrappers sanitize inherited Python, ROS,
-compiler, and library paths before starting a locked Pixi runtime. Use the
-wrappers rather than sourcing both installations into one shell.
+Conda manages the same package ecosystem as the working Pixi installation.
+`environment.yml` describes Humble; `environment-noetic.yml` describes Noetic.
+Desktop GUIs, RViz and tutorials are excluded. Exact transitive package builds
+and MD5 checksums are in `config/conda/*-linux-64.explicit.txt`; use these locks
+for the reproducible installation tested here. Vendored EmPy 3.3.4 is retained
+for legacy generators because the package environments include incompatible
+EmPy 4. System Python and `/opt/ros` are not changed.
+
+## Install on a new PC
+
+Prerequisites: Ubuntu 22.04 **x86_64**, Git, Conda/Miniforge, about 10 GB free
+for environments/builds, a wired connection routable to Sawyer, and permission
+to access the controller. An existing system ROS installation may remain.
+No system Noetic installation, Docker, Intera SDK build, or `sudo pip` is needed.
+
+If Conda is absent, install [Miniforge](https://github.com/conda-forge/miniforge#install)
+using its Linux x86_64 installer, then open a Conda-enabled Bash terminal.
+For existing Miniconda, initialize the shell with its installation path, e.g.:
+
+```bash
+source ~/miniconda3/etc/profile.d/conda.sh
+# Or: source ~/miniforge3/etc/profile.d/conda.sh
+conda --version
+```
+
+Clone this branch (the customized bridge source is included; no submodule step):
+
+```bash
+git clone --branch conda https://github.com/priyankan-v/Sawyer_Bridge.git ~/sawyer_rs
+cd ~/sawyer_rs
+```
+
+The clone command requires this branch to have been pushed by its owner.
+Until then, transfer this working checkout including the new tracked sources.
+For this existing PC, simply use the current `conda` checkout.
+
+Create the two environment prefixes inside the repository. Run from its root:
+
+```bash
+export CONDA_PKGS_DIRS="$PWD/.conda/pkgs"
+export CONDA_CHANNEL_PRIORITY=strict
+conda create -y -p "$PWD/.conda/envs/noetic" --file config/conda/noetic-linux-64.explicit.txt
+conda create -y -p "$PWD/.conda/envs/humble" --file config/conda/humble-linux-64.explicit.txt
+```
+
+The readable YAML alternative performs a fresh dependency solve and may select
+newer transitive packages. Revalidate it before using hardware:
+
+```bash
+conda env create -p "$PWD/.conda/envs/noetic" -f environment-noetic.yml
+conda env create -p "$PWD/.conda/envs/humble" -f environment.yml
+```
+
+Choose one creation method. Do not update an existing tested environment
+silently. [Conda explains explicit locks and YAML environments](https://docs.conda.io/projects/conda/en/stable/user-guide/tasks/manage-environments.html).
+
+## Build once
+
+Build outputs have separate `*_conda` names so existing Pixi outputs stay usable.
+Run each block in sequence. `env.sh` starts an isolated shell and initializes
+its ROS environment; `exit` returns to the parent terminal. It intentionally
+clears inherited ROS/Python/compiler paths. Do not **source** this script.
+
+**Noetic build shell:**
 
 ```bash
 cd ~/sawyer_rs
-pixi install --locked                    # only needed on a new workstation
-./scripts/env.sh ros1 python --version
-./scripts/env.sh ros2 python --version
-./scripts/env.sh ros1 rosversion -d
-./scripts/env.sh ros2 ros2 --help
+./scripts/env.sh ros1
+cd "$SAWYER_ROOT/ros1_ws"
+catkin_make --build build_conda -j4 \
+  -DCATKIN_DEVEL_PREFIX="$SAWYER_ROOT/ros1_ws/devel_conda" \
+  -DCMAKE_INSTALL_PREFIX="$SAWYER_ROOT/ros1_ws/install_conda" \
+  -DPYTHON_EXECUTABLE="$SAWYER_ROOT/scripts/python_noetic.sh" \
+  -DCATKIN_ENABLE_TESTING=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+exit
 ```
 
-The locked EmPy 4 package is incompatible with legacy ROS 1 generators.
-`tools/empy3` supplies the unmodified pure-Python EmPy 3.3.4 module, with source
-and license, under Python 3.12. The catkin Python wrapper ensures its precedence
-even inside catkin's cached generator environment. No Python 3.10 packages are
-imported by Pixi interpreters. Installed Pixi packages and `pixi.lock` are intact.
-
-For system Humble CLI diagnostics only:
+**Humble build shell:**
 
 ```bash
-./scripts/env.sh system-ros2 /usr/bin/python3 /opt/ros/humble/bin/ros2 --help
+./scripts/env.sh ros2
+cd "$SAWYER_ROOT/ros2_ws"
+export CMAKE_BUILD_PARALLEL_LEVEL=4
+colcon --log-base log_conda build --build-base build_conda --install-base install_conda \
+  --symlink-install --parallel-workers 2 --cmake-args -DBUILD_TESTING=OFF \
+  -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+exit
 ```
 
-This mode uses only system Python 3.10 paths; project custom Python interfaces
-were built for Pixi Python 3.12, so use the Pixi ROS 2 wrapper for them. System
-Humble is not used to compile or run the project's bridge.
-
-## Build
-
-The copied source repositories must exist at `intera_common`, `intera_sdk`, and
-`sawyer_robot`. Only the two original interface packages are included in catkin.
-SDK code and robot description packages are inspected, not unnecessarily built.
+**Bridge build shell:**
 
 ```bash
-cd ~/sawyer_rs
-./scripts/build.sh ros1
-./scripts/build.sh ros2
-./scripts/build.sh bridge
-# Equivalent full sequence, after the original repositories are present:
-./scripts/build.sh all
+SAWYER_BUILD=1 ./scripts/env.sh bridge
+cd "$SAWYER_ROOT/bridge_ws"
+export CMAKE_BUILD_PARALLEL_LEVEL=4
+colcon --log-base log_conda build --base-paths ros1_bridge \
+  --build-base build_conda --install-base install_conda --symlink-install \
+  --packages-select ros1_bridge --cmake-force-configure --cmake-args -DBUILD_TESTING=OFF \
+  -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" \
+  -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -Dxmlrpcpp_DIR="$xmlrpcpp_DIR" \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+exit
 ```
 
-`prepare_interfaces.py` makes relative links in `ros1_ws/src` to unchanged
-original ROS 1 sources and creates separate ROS 2 `ament_cmake`/`rosidl` packages
-in `ros2_ws/src`. It records source hashes and field renames in
-`docs/interface_manifest.json`. ROS 2 messages, services and actions are all
-ported; interface generation alone does not establish action interoperability.
+The original ROS 1 sources are relative links into `intera_common`. The ROS 2
+ports and complete field mappings are already checked in. Only regenerate
+them when intentionally updating interfaces:
+`/usr/bin/python3 scripts/prepare_interfaces.py`.
+The catkin toplevel file is a portable copy of the upstream file, replacing
+its former absolute Pixi symlink. The bridge's Sawyer patch is already present
+in `bridge_ws/ros1_bridge`; do not apply it again.
 
-ROS 1 uses `catkin_make`; ROS 2 uses `colcon build`. The bridge uses the existing
-checkout and Conda compiler, with ROS 1 package discovery through pkg-config
-and ROS 2 discovery through ament. ROS 2 CMake prefixes precede Noetic to prevent
-same-name package conflicts. ROS 1 interface source paths and generated Python
-paths are supplied explicitly to the bridge generator.
+## Connect and run (two terminals)
 
-The rebuilt bridge goes to `bridge_ws/build_sawyer`, `install_sawyer`, and
-`log_sawyer`. The original `build`, `install`, and `log` directories are retained.
-`patches/ros1_bridge_sawyer.patch` records the small source extensions needed for
-directional topics and complete service conversion; the build script checks
-that this patch is applied. Its base commit is recorded beside the patch.
-
-```bash
-SAWYER_BUILD_JOBS=8 ./scripts/build.sh bridge  # optional, sufficient RAM required
-./scripts/env.sh ros1 rosmsg show intera_core_msgs/JointCommand
-./scripts/env.sh ros1 rosmsg show intera_core_msgs/RobotAssemblyState
-./scripts/env.sh ros1 rosmsg show intera_core_msgs/EndpointState
-./scripts/env.sh ros2 ros2 interface show intera_core_msgs/msg/JointCommand
-./scripts/env.sh ros2 ros2 interface show intera_core_msgs/msg/RobotAssemblyState
-./scripts/env.sh ros2 ros2 interface show intera_core_msgs/msg/EndpointState
-./scripts/env.sh ros1 python scripts/verify_ros1.py
-./scripts/env.sh ros2 python scripts/verify_interfaces.py
-./scripts/env.sh bridge ros2 run ros1_bridge dynamic_bridge -- --print-pairs > docs/results/bridge_pairs.txt
-/usr/bin/python3 scripts/check_pairs.py docs/results/bridge_pairs.txt
-```
-
-Build logs are in `docs/results/build_*.log`. CMake deprecation and CMP0148
-developer warnings come from older upstream catkin/Humble CMake modules; they
-are retained in the logs. The policy compatibility argument accommodates the
-installed CMake without modifying original packages. Compiler failures are
-treated as failures and corrected before runtime validation.
-
-## Network and startup after reboot
-
-Previously verified lab addresses are controller `169.254.121.3`, workstation
-`169.254.121.2`, and ROS master `http://169.254.121.3:11311`. The live wired
-interface inspected during this work is **enp0s31f6**. Verify your current network
-before using these values. Scripts do not change network configuration.
+Sawyer's previously used controller address is `169.254.121.3`; this PC's wired
+address is `169.254.121.2`. Verify routing and the actual workstation IP before
+using these values on another PC. Never assign the same IP to two PCs.
+The controller must be able to connect back to `ROS_IP` for ROS 1 TCPROS.
 
 ```bash
 cd ~/sawyer_rs
 ip -br addr
-cp config/network.env.example config/network.env   # once; inspect addresses first
+ip route get 169.254.121.3
+cp -n config/network.env.example config/network.env
+# Edit config/network.env to reflect your workstation; retain the correct master.
+cat config/network.env
+```
+
+The example uses `ROS_MASTER_URI=http://169.254.121.3:11311` and DDS domain 42.
+Scripts do not change interface addresses, the controller, or the robot's state.
+
+**Terminal 1 — activate and start read-only bridging:**
+
+```bash
+cd ~/sawyer_rs
+conda activate "$PWD/.conda/envs/humble"
 source config/network.env
-./scripts/sawyer.sh
+./scripts/env.sh ros1 python scripts/preflight.py --output .runtime/readonly-preflight.json
+./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py
 ```
 
-`sawyer.sh` reads the controller's actual topic types, graph, safety state and
-joint limits, and checks the command subscriber's own XML-RPC subscriptions.
-It never publishes commands or enables the robot. On each reboot, power and
-connect Sawyer using normal lab procedures, then use these terminals:
+Run preflight successfully before starting the launch command. This initializes
+ROS 1 separately, loads `/sawyer_bridge/*` ROS 1 parameters, then starts the C++
+`parameter_bridge` in its mixed-library environment. If configuration fails,
+the bridge is not started. The default configuration has command paths disabled.
+No node automatically enables the robot. Start only one bridge per robot/domain.
 
-Terminal 1 — selected read-only bridge:
+**Terminal 2 — initialize ROS 2, then inspect:**
 
 ```bash
 cd ~/sawyer_rs
-pixi run bridge-start
-```
-
-Terminal 2 — ROS 2 monitoring:
-
-```bash
-cd ~/sawyer_rs
-pixi run ros2-shell
-# Run these commands inside the shell that opens:
-ros2 topic echo /robot/joint_states --once --qos-reliability best_effort
-ros2 topic echo /robot/state --once
-ros2 topic echo /robot/limb/right/endpoint_state --once
+conda activate "$PWD/.conda/envs/humble"
+./scripts/env.sh ros2
+# The isolated shell automatically reads config/network.env and the Conda overlay.
+ros2 topic list --no-daemon
+ros2 topic type /robot/joint_states
+ros2 topic echo /robot/joint_states sensor_msgs/msg/JointState --once --qos-reliability best_effort
 ros2 topic hz /robot/joint_states
+ros2 interface show intera_core_msgs/msg/JointCommand
 ros2 run sawyer_ros2_control command read
 ```
 
-Terminal 3 — optional ROS 1 diagnostics:
+Check `right_j0` through `right_j6`, finite positions and velocities, timestamps,
+and a steady rate. Sawyer may publish separate arm/head/gripper JointState
+messages on the same topic; applications merge arm subsets. Joint states use
+best-effort QoS. `Ctrl-C` stops `hz`; the guarded `command read` collects all
+seven arm joints and requires their velocities.
+
+For ROS 1 troubleshooting without leaving Terminal 2, run an isolated subprocess:
 
 ```bash
-cd ~/sawyer_rs
-pixi run ros1-shell
-# Run these commands inside the shell that opens:
-rostopic info /robot/limb/right/joint_command
-rostopic echo -n 1 /robot/state
+"$SAWYER_ROOT/scripts/env.sh" ros1 rostopic info /robot/limb/right/joint_command
+"$SAWYER_ROOT/scripts/env.sh" ros1 rosmsg show intera_core_msgs/JointCommand
+"$SAWYER_ROOT/scripts/env.sh" ros1 python "$SAWYER_ROOT/scripts/preflight.py"
 ```
 
-Enter the appropriate shell once per terminal, then run ordinary ROS commands
-without prefixing each command with `scripts/env.sh`. Shell tasks automatically
-load `config/network.env` and workspace overlays. Type `exit` to return to the
-original terminal. The prompt identifies the selected environment. Do not source
-`/opt/ros/humble` inside these shells. The environment wrapper remains available
-for scripts and isolated one-shot commands.
+## Prepare position control without movement
 
-The new bridge uses the ROS 1 node name `/sawyer_selective_bridge`, so it does
-not replace the existing `/ros_bridge` process. Use one selected bridge instance
-per ROS graph. `config/bridge.yaml` and the legacy instructions in
-`0_DAILY_STARTUP.md` remain available for the original joint-state bridge.
-
-## Selected topics and QoS
-
-`config/sawyer_bridge.yaml` enables only joint states, assembly state, endpoint
-state, collision state, joint limits, and head state. Command topics and optional controls
-are disabled by default. Edit `enabled` on individual entries to select them;
-restart the bridge after configuration changes. No dynamic all-topics bridge is
-started by these scripts.
-
-The command direction is strictly ROS 2 → ROS 1; telemetry is ROS 1 → ROS 2.
-Sensor telemetry uses best-effort keep-last queues. State and collision use
-reliable depth 1. Limits use reliable transient-local publication to preserve
-the ROS 1 latched information. Commands use reliable volatile depth 1 and a
-200 ms DDS lifespan to limit old queued setpoints. The extension applies command
-QoS to the ROS 2 subscriber. DDS and ordinary Python scheduling do not provide
-hard real-time guarantees.
-
-The three `parameter_bridge` positional arguments name ROS **1 parameters**.
-The startup script loads its configuration under `/sawyer_bridge`, preserving
-the original root `/topics` configuration. See [docs/INTERFACES.md](docs/INTERFACES.md)
-for exact syntax, service direction conventions, endpoint types, and mappings.
-
-## Local validation before commanding Sawyer
+Run the isolated forwarding/safety tests below first. Inspect a small target
+using the existing application in Terminal 2:
 
 ```bash
-cd ~/sawyer_rs
-./scripts/test_local.sh
+ros2 run sawyer_ros2_control move_joint --joint right_j2 --distance 0.01 --time 5 --dry-run
+```
+
+`move_joint` is the original single-joint application: **it publishes unless
+`--dry-run` is supplied**. It validates measured feedback, limits and minimum
+trajectory duration, but does not implement the guarded application's full
+readiness/collision monitoring. Its source remains unchanged.
+
+For the first approved hardware test, use the existing guarded `command`
+application, which defaults to a plan and requires explicit execution flags.
+Capture a target 0.01 rad from the current `right_j2` feedback:
+
+```bash
+ros2 run sawyer_ros2_control command read > "$SAWYER_ROOT/.runtime/current-joints.json"
+TARGET=$(python -c 'import json,os; from pathlib import Path; p=Path(os.environ["SAWYER_ROOT"])/".runtime/current-joints.json"; print(json.loads(p.read_text())["right_j2"]+0.01)')
+ros2 run sawyer_ros2_control command one --joint right_j2 --position "$TARGET" --duration 5
+```
+
+The planner rejects a target outside live/URDF limits, excessive displacement,
+an unready/moving robot, stale feedback or a collision. If this direction is
+invalid, stop and choose a reviewed in-range target. Do not bypass the checks.
+
+**Only after explicit operator approval:** stop Terminal 1's read-only launch
+with `Ctrl-C`, then restart it with command transport enabled:
+
+```bash
+./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py commands:=true
+```
+
+In Terminal 2, with the reviewed `TARGET` still set, the exact motion command is:
+
+```bash
+"$SAWYER_ROOT/scripts/env.sh" ros1 python "$SAWYER_ROOT/scripts/preflight.py" \
+  --require-ready --output "$SAWYER_ROOT/.runtime/preflight.json" && \
+ros2 run sawyer_ros2_control command one --joint right_j2 --position "$TARGET" \
+  --duration 5 --execute --operator-approved --report "$SAWYER_ROOT/.runtime/approved-motion.json"
+```
+
+This uses POSITION_MODE, 0.05 speed ratio, 0.02 rad maximum displacement,
+0.2 s command timeout, live limits, collision/freshness checks and tracking-error
+monitoring. It requires a preflight less than 30 seconds old and a passing local
+transport result. No physical motion was run during migration.
+
+**Shutdown:** stop the command program with `Ctrl-C`, then stop the bridge in
+Terminal 1. The guarded application attempts a measured-position hold only
+when feedback and safety state are valid, then stops publishing; the controller's
+command timeout remains active. An emergency requires the physical stop controls.
+Exit the isolated shell, then run `unset PYTHONPATH; conda deactivate` in each
+parent shell. Clearing ROS Python paths before calling Conda avoids loading
+Python 3.12 ROS dependencies in Conda base's different Python version. Do not kill
+unrelated ROS processes or shut down Sawyer's master.
+
+## Validation commands
+
+Run from the repository root. These check interfaces and print converters
+without publishing commands:
+
+```bash
+./scripts/env.sh ros1 python scripts/verify_ros1.py
+./scripts/env.sh ros2 python scripts/verify_interfaces.py
+./scripts/env.sh bridge ros2 run ros1_bridge dynamic_bridge -- --print-pairs > .runtime/conda-pairs.txt
+/usr/bin/python3 scripts/check_pairs.py .runtime/conda-pairs.txt
 ./scripts/env.sh ros2 python -m unittest discover -s tests -v
-./scripts/test_native.sh
 ```
 
-The transport test owns a separate localhost ROS 1 master on port **11421**,
-DDS domain **87**, and `ROS_LOCALHOST_ONLY=1`. It sends 200 fully populated ROS 2
-`JointCommand` messages to `/sawyer_bridge_test/joint_command` and checks exact
-ROS 1 field equality, including timestamp and frame_id. It never connects that
-topic to Sawyer. It also tests telemetry, QoS, one-way graph direction, FK/IK/IO
-mock services, and the command application's publication-free dry run.
-It refuses to use an existing master on its test port and cleans up only its
-own process groups. A successful run records `docs/results/local_transport.json`.
-The native C++ regression check verifies exact ROS 1 wire bytes and round trips
-for empty arrays, boolean arrays and JointCommand. It reuses the built bridge's
-link command to preserve the established ROS 1/2 library selections.
+Run the existing integration suite on its private localhost master and DDS
+domain. It exercises real bridge conversions with simulated joints only:
 
-Read-only physical verification:
+```bash
+env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_local.py
+```
+
+The runner enforces master `127.0.0.1:11421`, ROS_IP `127.0.0.1`, DDS domain 87
+and `ROS_LOCALHOST_ONLY=1`, refuses an occupied master port, and cleans up only
+its own processes. It never attaches motion fixtures to Sawyer's graph.
+
+Native C++ wire/ABI checks:
+
+```bash
+./scripts/env.sh bridge bash -c 'cmake -S "$SAWYER_ROOT/tests/native" -B "$SAWYER_ROOT/.runtime/native_build_conda" -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX"'
+./scripts/env.sh bridge cmake --build .runtime/native_build_conda --parallel 2
+./scripts/env.sh bridge python tests/native/link_test.py
+./scripts/env.sh bridge .runtime/native_build_conda/check_conversion
+```
+
+Optional extended **read-only hardware** suite, with Terminal 1 stopped:
 
 ```bash
 source config/network.env
-./scripts/test_hardware_readonly.sh
+env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_hardware_readonly.py
 ```
 
-This temporary selected bridge verifies actual telemetry, head/gripper status
-and FK/IK queries. It never creates a JointCommand, head-command, enable or
-gripper-command publisher. Do not run it concurrently with another
-`/sawyer_selective_bridge` instance; stop your selected bridge first. The original
-legacy bridge can remain running. This test cleans up its temporary bridge.
+It checks extra head/gripper telemetry and FK/IK services that may not be exposed
+on every controller. It never publishes robot commands. A failure in extra
+telemetry is reported rather than treated as a successful core bridge test.
 
-## Move one joint (arm or head)
+## Troubleshooting and files
 
-Running `scripts/move_joint.py` starts the movement immediately. Select a joint,
-a relative distance or absolute position, and a trajectory time. Angles are
-**radians** and time is **seconds**.
-
-### Terminal 1: start the bridge
-
-```bash
-cd ~/sawyer_rs
-pixi run bridge-start --commands --head-commands
-```
-
-Leave it running. If the selected bridge is already running, stop it with
-Ctrl+C before restarting with these command paths. For arm-only control use
-`--commands`; for head-only control use `--head-commands`.
-
-### Terminal 2: enter ROS 2 once
-
-```bash
-cd ~/sawyer_rs
-pixi run ros2-shell
-```
-
-Inside this shell, read current joint positions if needed:
-
-```bash
-ros2 topic echo /robot/joint_states --once --qos-reliability best_effort
-```
-
-### Move by a relative distance
-
-Choose `right_j0`, `right_j1`, `right_j2`, `right_j3`, `right_j4`, `right_j5`,
-`right_j6`, or `head_pan`:
-
-```bash
-JOINT=right_j0
-DISTANCE=0.01
-DURATION=5
-python scripts/move_joint.py --joint "$JOINT" --distance "$DISTANCE" --time "$DURATION"
-```
-
-This commands `right_j0` by +0.01 rad over a five-second reference. Negative
-distance moves in the opposite joint-coordinate direction. Each run calculates
-its target from the current position, so repeating it adds another displacement.
-
-For the head:
-
-```bash
-python scripts/move_joint.py --joint head_pan --distance -0.01 --time 5
-```
-
-### Move to an absolute position
-
-Replace `0.10` with your desired joint-state angle:
-
-```bash
-python scripts/move_joint.py --joint right_j0 --position 0.10 --time 5
-```
-
-Use `--position` or `--distance`, exactly one at a time. `--duration` is an alias
-for `--time`.
-
-Both angle arguments accept `pi` and arithmetic expressions in radians:
-
-```bash
-python scripts/move_joint.py --joint right_j0 --position "pi/2" --time 5
-python scripts/move_joint.py --joint right_j0 --position -pi/2 --time 5
-python scripts/move_joint.py --joint right_j0 --distance "pi/12" --time 5
-```
-
-Both `--position -pi/2` and `--position=-pi/2` work. Quote expressions containing
-spaces, for example `--position "-(pi / 2)"`. Numbers, `pi`, parentheses and `+ - * /` are
-supported; functions and Python code are not accepted. Joint limits and minimum
-trajectory time are checked after converting the expression to radians.
-
-To move to the selected joint's limits:
-
-```bash
-# Lower joint-position limit.
-python scripts/move_joint.py --position -end --time 5 --joint right_j5
-
-# Upper joint-position limit.
-python scripts/move_joint.py --position +end --time 5 --joint right_j5
-```
-
-`-end` selects the lower limit and `+end` the upper limit from the intersection
-of current controller and URDF limits. The resolved radians and limit range are
-printed before execution. These options apply to `--position`; `--distance`
-remains a relative angle. Five seconds must still meet the calculated minimum
-time; if it does not, the script prints the required duration before commands
-are sent. Add `--dry-run` to preview the limit target and minimum time.
-
-Small measured overshoot at a limit is handled separately from command limits.
-Feedback up to **0.008726646 rad (0.5°)** outside a boundary is accepted; larger
-excursions still stop the application. The raw measured angle is retained in
-reports. For example, `right_j6 = -4.714042` with lower limit `-4.7124` counts
-as already at `-end`, and a command to `+end` can move back through the allowed
-range. Its quintic reference starts at the boundary; every published setpoint
-and requested target remains strictly within limits. Reports include
-`reference_start_rad` and `limit_overshoot_rad`.
-
-For absolute zero:
-
-```bash
-python scripts/move_joint.py --joint right_j0 --position 0.0 --time 5
-```
-
-The absolute target remains **0.0 rad**; the quintic reference moves from the
-measured starting angle to that target. The script prints progress once per
-second and finishes at the requested trajectory time, with no extra settling
-wait by default. Fresh measured feedback within **0.008726646 rad (0.5°)** counts
-as arrival, matching the original Intera SDK's arm tolerance. A residual such as
-0.004249 rad therefore succeeds and is still reported accurately. Repeating an
-absolute command already within tolerance sends no commands. A larger residual
-still returns `status: not_reached` at the deadline.
-
-Optional `--tolerance` changes the arrival tolerance, and `--settle-timeout`
-explicitly allows extra settling time. For example, to request a stricter 0.002
-rad tolerance and allow up to two extra seconds:
-
-```bash
-python scripts/move_joint.py --joint right_j1 --position 0.0 --time 5 --tolerance 0.002 --settle-timeout 2
-```
-
-### Minimum trajectory time
-
-For either an absolute target or a relative distance, the script calculates the
-minimum feasible time for its quintic curve using the selected joint's live
-velocity/acceleration limits. Velocity is also bounded by the URDF value.
+- Missing prefix: create both `.conda/envs/*` prefixes. For external prefixes,
+  export `SAWYER_NOETIC_PREFIX` and `SAWYER_HUMBLE_PREFIX` before building/running.
+- Conda base plugin/OpenSSL errors on deactivation: `unset PYTHONPATH` before
+  `conda deactivate` or changing environments. RoboStack activation sets ROS
+  Python paths that must not enter Conda base's Python.
+- Python/NumPy import errors: use `scripts/env.sh`; remove system ROS sourcing
+  from the parent workflow. Do not add system Python 3.10 paths to Python 3.12.
+  Check `./scripts/env.sh ros2 python -c 'import sys,numpy; print(sys.executable,numpy.__version__)'`.
+- No telemetry: inspect wired routing, `ROS_IP`, controller master availability,
+  matching `ROS_DOMAIN_ID`, launch output, and best-effort subscriber QoS.
+- Missing converters: build both interface workspaces before the bridge and run
+  `check_pairs.py`. All 46 Intera messages and three services are expected.
+  The two ported action definitions do not provide ROS action interoperability.
+- CMake errors after changing prefixes: archive/rename only the Conda build and
+  install directories and rebuild. Cached paths cannot be shared with Pixi.
+- EmPy errors: keep `tools/empy3` and `python_noetic.sh`; catkin's cached generator
+  environment otherwise restores EmPy 4 ahead of the compatibility module.
+- Legacy CMake warnings: `CMAKE_POLICY_VERSION_MINIMUM=3.5` accommodates CMake 4;
+  warnings are retained in build logs. Compiler/generator errors are failures.
+- Preflight or motion rejection: inspect the reported state/limits and correct
+  the underlying condition. No auto-enable, homing or calibration is provided.
 
 ```text
-distance = abs(target - measured_start)
-T_velocity = 1.875 * distance / velocity_limit
-T_acceleration = sqrt((10 / sqrt(3)) * distance / acceleration_limit)
-T_minimum = max(T_velocity, T_acceleration)
+environment.yml, environment-noetic.yml   direct, versioned dependencies
+config/conda/                            exact Linux x86_64 package locks
+config/network.env.example               robot-specific network template
+config/sawyer_bridge.yaml                selective direction/QoS topic policy
+ros1_ws/src/                             original catkin interfaces
+ros2_ws/src/                             ament interfaces and existing control app
+bridge_ws/ros1_bridge/                   unchanged customized bridge source
+patches/                                 upstream base and existing Sawyer patch
+scripts/env.sh                           essential environment isolation
+scripts/python_noetic.sh                 essential EmPy generator ordering
+scripts/configure_bridge.py              ROS 1 parameter configuration
+scripts/preflight.py                     read-only graph/safety checks
+scripts/verify_*.py, check_pairs.py        interface/mapping validation
+scripts/prepare_interfaces.py             optional reproducible interface generation
+tests/                                   simulated transport and safety validation
+tools/empy3/                             licensed legacy generator compatibility
+intera_common/, intera_sdk/, sawyer_robot/ original source references and limits
+docs/interface_manifest.json             source hashes and field renames
+docs/results/                            prior results and migration evidence
+MIGRATION.md                             migration audit and validation results
 ```
 
-The entered `--time` must be **at least the calculated minimum**. A shorter time
-prints the minimum and a suggested `--time`, then exits without sending commands.
-It does not automatically change your requested duration. If live acceleration
-data is unavailable, it uses the velocity bound and explicitly labels the result
-as velocity-only.
-
-To calculate and inspect a plan without movement:
-
-```bash
-python scripts/move_joint.py --joint right_j1 --position 0.0 --time 5 --dry-run
-```
-
-The same check applies to `--distance`. Accepted plans print
-`Minimum quintic time: ... s`; saved reports include `minimum_time_seconds`.
-
-### Optional preview and result file
-
-Add `--dry-run` only when you want a preview without movement:
-
-```bash
-python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5 --dry-run
-```
-
-To save the measured result while executing:
-
-```bash
-python scripts/move_joint.py --joint right_j0 --distance 0.01 --time 5 \
-  --report docs/results/joint_motion.json
-```
-
-### What the script does
-
-The single Python script reads the selected joint position and its live limits,
-intersects the position range with the Sawyer URDF range, and checks the starting
-position, target and each published setpoint. Out-of-limit positions are rejected.
-It generates a quintic position reference at 100 Hz with zero starting/ending
-velocity and acceleration. Arm commands use `JointCommand.POSITION_MODE` and
-contain only the selected joint, following the original SDK's partial joint
-command behavior. Head commands use `HeadPanCommand.SET_ACTIVE_MODE` with speed
-ratio 1.0. Arm execution also sets the SDK position-control speed ratio to **1.0**
-before the reference starts, instead of inheriting an earlier slow ratio such as
-0.05. This setting persists on the controller. Physical movement remains subject
-to the robot's normal velocity limits and controller behavior.
-
-The application checks the selected joint's position range and whether the
-requested duration satisfies the quintic velocity/acceleration bounds. It has no
-extra displacement, readiness, collision or tracking gates,
-and it makes no ROS 1 preflight or Bash subprocess calls. Other joints do not
-block the selected joint's limit check. Sawyer's onboard safety mechanisms remain
-active; the robot must be enabled through its normal operator interface. Measured
-arrival is checked at the reference deadline using fresh selected-joint feedback,
-or during optional extra settling. Duplicate or older timestamped feedback is ignored.
-
-Press **Ctrl+C** to stop publishing. The controller may retain the last position
-target; use the robot's normal stop controls for an emergency. The optional
-`--dry-run` is the only preview flag needed. For all arguments:
-
-```bash
-python scripts/move_joint.py --help
-```
-
-For head commands, the result also includes `head_state` with `pan_mode`,
-`is_turning`, `is_blocked` and feedback age. A failed move with fresh
-`pan_mode: 0` means ACTIVE_MODE was not confirmed by the controller. To inspect
-head mode while the command application is running, use another ROS 2 shell:
-
-```bash
-ros2 topic echo /robot/head/head_state --once
-```
-
-The [Intera Head API](https://rethinkrobotics.github.io/intera_sdk_docs/5.1.0/intera_interface/html/intera_interface.head.Head-class.html)
-defines mode 0 as passive and mode 1 as active position control. Successful
-message forwarding alone does not establish that the controller activated its
-head motor.
-
-If the head stays passive, inspect what reaches ROS 1 in another terminal:
-
-```bash
-cd ~/sawyer_rs
-pixi run ros1-shell
-rostopic echo /robot/head/command_head_pan
-```
-
-To capture one command and one head-state message while the command publisher
-keeps running, use ROS 1's `-n 1` option:
-
-```bash
-rostopic echo -n 1 /robot/head/command_head_pan
-rostopic echo -n 1 /robot/head/head_state
-```
-
-This command only observes messages. During an operator-run head command,
-expect changing `target`, `speed_ratio: 1.0` and `pan_mode: 1`. No output means
-the command path needs checking. Correct incoming fields with fresh passive
-head feedback require controller-side diagnosis; increasing trajectory time
-alone does not resolve mode acceptance.
-
-The older full-arm `command` application remains separate and retains its guarded
-execution workflow. Details of the simplified single-joint script are in
-[docs/SINGLE_JOINT_CONTROL.md](docs/SINGLE_JOINT_CONTROL.md).
-
-## Supported interfaces and validation results
-
-The full [interface inventory](docs/INTERFACES.md) distinguishes converters from
-working functionality. Current evidence is stored under `docs/results`:
-
-| Work | Status |
-|---|---|
-| Original ROS 1 messages/services/actions | Built; all 51 source interfaces and generated wrappers load/serialize; source hashes unchanged |
-| ROS 2 messages/services/actions | Built; all 51 interfaces load C type support and serialize; C/C++ libraries generated |
-| Directional bridge and Sawyer converters | Built and tested: all 46 ordinary Sawyer messages and 3 services, plus standard JointState; `bridge_pairs.txt` |
-| Isolated ROS 2 → ROS 1 JointCommand | Tested: 200/200 messages, identical fields, zero observed loss; `local_transport.json` |
-| Actual Sawyer telemetry, head/gripper monitoring, FK/IK | Hardware read-only tested: 100.02 Hz ROS 2 arm states; valid FK and IK responses; `hardware_readonly.json` |
-| Joint-control tests | Nineteen unit tests covering head-mode diagnostics, minimum-time feasibility, direct single-joint motion, measured arrival and the separate guarded full-arm application |
-| Arm quintic command reference | Direct relative/absolute execution through ros1_bridge; only the selected joint is commanded; position-limit rejection tested locally |
-| Physical position movement | Operator reported movement with a large remaining error in the previous script; fixed arrival behavior awaits hardware validation |
-| Head quintic command reference | Implemented; relative/absolute execution tested against an isolated ROS 1 fixture through ros1_bridge; physical motion pending |
-| Enable/disable, gripper actuation | Types/configuration available; hardware actuation not tested or automated |
-| Cartesian motion application | Not implemented |
-| Intera and FollowJointTrajectory ROS 1 actions | Action protocol unsupported by this ros1_bridge; ROS 1 SDK server required for FollowJointTrajectory |
-
-Latest validation (2026-10-12): local tests passed. The read-only physical
-preflight could not reach `169.254.121.3:11311` (`No route to host`), so live
-readiness and physical motion remain unverified. Earlier hardware observations
-above refer to the 2026-10-09 session. See [the progress checkpoint](docs/PROGRESS.md).
-
-Local performance measures separate publish/receive frequency, sequence gaps,
-inter-arrival jitter, and actual timestamped forwarding/ack timing. The local
-publisher and receiver share the workstation clock. Physical read-only tests
-correlate ROS 1 and ROS 2 timestamp/name identities in a common window and report
-receiver frequencies. Controller-to-workstation latency is **not** inferred
-from frequency or reported without verified clock synchronization. These are
-observed samples, not real-time guarantees or proof of end-to-end controller loss.
-
-During the physical test, ROS 1 arm reception was 100.00 Hz and ROS 2 reception
-was 100.02 Hz. All 856 unique arm timestamp/name identities in the common window
-matched, with zero observed mismatches. ROS 2 inter-arrival standard deviation
-was 0.184 ms. On the isolated workstation test, command forwarding averaged
-0.458 ms (p95 0.743 ms); command/ack round-trip averaged 0.900 ms. These timing
-values apply to this local test, not physical robot command latency. See
-[docs/VALIDATION.md](docs/VALIDATION.md) for the milestone record and limitations.
-
-## Troubleshooting
-
-* Python/NumPy import errors: use `scripts/env.sh`; do not combine `/opt/ros/humble`
-  Python 3.10 paths with Pixi Python 3.12. `system-ros2` exists for isolated system
-  CLI diagnostics. Wrapper shells skip user startup files and user site packages.
-* `em.RAW_OPT` missing: build through `scripts/build.sh`; catkin must use
-  `scripts/python_noetic.sh`, which selects project-local EmPy 3.
-* Custom type missing from bridge: verify both workspaces, run `--print-pairs`,
-  then rebuild only `ros1_bridge`. A sourced overlay at runtime cannot add a
-  converter to an already compiled bridge.
-* `cpp_common`/`xmlrpcpp` CMake failure: use the mixed bridge wrapper, which supplies
-  Noetic CMake dependencies after ROS 2 prefixes and supplies ROS 1 pkg-config paths.
-* CMake rejects old minimum version: the build script passes
-  `CMAKE_POLICY_VERSION_MINIMUM=3.5`; retained upstream deprecation warnings are expected.
-* ROS 2 receives no data: check `ROS_DOMAIN_ID` in both terminals, network routes,
-  ROS 1 publisher types, enabled configuration entries and QoS. Use explicit
-  sensor-data QoS for custom subscribers to best-effort telemetry.
-* ROS 1 discovery works but subscriptions fail: verify controller-to-workstation
-  connectivity to the advertised `ROS_IP`; unset conflicting `ROS_HOSTNAME`.
-* Single-joint motion error: check the selected joint's position bounds, current
-  feedback and enabled command bridge. The separate full-arm application also
-  checks readiness, feedback freshness and derivative limits.
-* FK/IK service appears but fails: inspect server availability and returned
-  `is_valid`/`in_collision`/`result_type`. A converter or service advertisement
-  alone does not prove a usable solution.
-* Actions: native ROS 2 action definitions do not convert ROS 1 actionlib's
-  protocol. Use the position-reference application for joint-space control.
-
-Upstream bridge reference: [ros2/ros1_bridge](https://github.com/ros2/ros1_bridge).
+Generated setup `.sh` files under workspace outputs belong to catkin/colcon;
+they are ignored, never hand edited, and regenerated by builds. The historical
+SDK `intera_sdk/intera.sh` is preserved as upstream source but is not used: it
+assumes system ROS Kinetic and placeholder addresses. The two project shell
+scripts above are the only maintained wrappers. `config/bridge.yaml` retains
+the previous joint-state-only configuration for compatibility.

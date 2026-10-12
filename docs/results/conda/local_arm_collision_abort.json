@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "scope": "Separate guarded full-arm application on isolated simulated arm; no physical hardware",
+  "returncode": 1,
+  "arm_commands_observed": 24,
+  "no_commands_after_exit": true,
+  "collision_injected_after_commands": 20,
+  "elapsed_seconds": 2.433812678002141,
+  "abort_reason": "Robot readiness or collision check failed"
+}

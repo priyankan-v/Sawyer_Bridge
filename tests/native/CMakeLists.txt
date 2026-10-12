@@ -6,7 +6,7 @@ find_package(intera_core_msgs REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(ROSCPP REQUIRED IMPORTED_TARGET roscpp)
 add_library(check_conversion OBJECT check_conversion.cpp)
-target_include_directories(check_conversion PRIVATE "$ENV{SAWYER_ROOT}/ros1_ws/devel/include"
-  "$ENV{SAWYER_ROOT}/bridge_ws/install_sawyer/ros1_bridge/include")
+target_include_directories(check_conversion PRIVATE "$ENV{SAWYER_ROOT}/ros1_ws/devel_conda/include"
+  "$ENV{SAWYER_ROOT}/bridge_ws/install_conda/ros1_bridge/include")
 ament_target_dependencies(check_conversion rclcpp intera_core_msgs)
 target_link_libraries(check_conversion PkgConfig::ROSCPP)

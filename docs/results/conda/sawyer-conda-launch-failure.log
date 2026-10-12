@@ -1,0 +1,15 @@
+[INFO] [launch]: All log files can be found below /home/pi/sawyer_rs/.runtime/ros/log/2026-10-12-15-31-21-601687-MAE-HM-ATRC324-L1-7
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [env.sh-1]: process started with pid [23]
+[env.sh-1] Traceback (most recent call last):
+[env.sh-1]   File "/home/pi/sawyer_rs/scripts/configure_bridge.py", line 34, in <module>
+[env.sh-1]     main()
+[env.sh-1]   File "/home/pi/sawyer_rs/scripts/configure_bridge.py", line 16, in main
+[env.sh-1]     with args.config.open() as stream:
+[env.sh-1]          ^^^^^^^^^^^^^^^^^^
+[env.sh-1]   File "/home/pi/sawyer_rs/.conda/envs/noetic/lib/python3.12/pathlib.py", line 1013, in open
+[env.sh-1]     return io.open(self, mode, buffering, encoding, errors, newline)
+[env.sh-1]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[env.sh-1] FileNotFoundError: [Errno 2] No such file or directory: '/nonexistent/sawyer-config.yaml'
+[ERROR] [env.sh-1]: process has died [pid 23, exit code 1, cmd '/home/pi/sawyer_rs/scripts/env.sh ros1 python /home/pi/sawyer_rs/scripts/configure_bridge.py /nonexistent/sawyer-config.yaml'].
+[ERROR] [launch]: Caught exception in launch (see debug for traceback): ROS 1 bridge configuration failed; bridge was not started.

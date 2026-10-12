@@ -34,13 +34,13 @@ try:
     cfg=ROOT/'.runtime/hardware_readonly.json'
     cfg.parent.mkdir(exist_ok=True)
     cfg.write_text(json.dumps(config))
-    bridge=start('hardware_bridge',['scripts/start_bridge.sh',str(cfg)])
+    bridge=start('hardware_bridge',['scripts/env.sh','ros2','ros2','launch','sawyer_ros2_control','bridge.launch.py','config:='+str(cfg)])
     sampler=start('hardware_ros1_sampler',['scripts/env.sh','ros1','python','scripts/measure_ros1.py','docs/results/hardware_ros1_samples.json','15'])
     subprocess.run(['scripts/env.sh','ros2','python','tests/hardware_readonly.py','docs/results/hardware_readonly.json','docs/results/hardware_ros2_samples.json'],check=True,timeout=40)
     sampler.wait(timeout=20)
     assert sampler.returncode==0
     # Dry run must refuse the currently observed out-of-limit configuration.
-    dry=subprocess.run(['scripts/control.sh','one','--joint','right_j0','--position','-2.785','--duration','5'],text=True,capture_output=True,timeout=20)
+    dry=subprocess.run(['scripts/env.sh','ros2','ros2','run','sawyer_ros2_control','command','one','--joint','right_j0','--position','-2.785','--duration','5'],text=True,capture_output=True,timeout=20)
     (ROOT/'docs/results/hardware_command_dry_run.log').write_text(dry.stdout+dry.stderr)
     print(dry.stdout+dry.stderr)
     result=json.loads((ROOT/'docs/results/hardware_readonly.json').read_text())
