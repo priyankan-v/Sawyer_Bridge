@@ -1,0 +1,7 @@
+{
+  "actionlib": {
+    "url": "https://codeload.github.com/ros/actionlib/tar.gz/refs/tags/1.14.3",
+    "version": "1.14.3",
+    "sha256": "b011b93aece74c376ec6c3d2345f2385b3e67bbe6bc6ebe190296685e419d56a"
+  }
+}

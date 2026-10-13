@@ -24,6 +24,7 @@ def checked(response):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('config', type=Path)
+    parser.add_argument('--all-interfaces', action='store_true')
     parser.add_argument('--commands', action='store_true')
     parser.add_argument('--head-commands', action='store_true')
     args = parser.parse_args()
@@ -44,9 +45,14 @@ def main():
         caller = '/configure_sawyer_bridge'
         with xmlrpc.client.ServerProxy(uri, transport=TimeoutTransport()) as master:
             checked(master.getUri(caller))
+            if args.all_interfaces:
+                from sawyer_bridge.discovery import discover, supported_messages
+                unsupported = discover(master, config, supported_messages())
+                for interface in unsupported:
+                    print('UNSUPPORTED interface (definition unavailable): ' + interface)
             # Upload one namespace atomically; the C++ bridge reads its three lists.
             checked(master.setParam(caller, '/sawyer_bridge', {
-                key: config.get(key, []) for key in ('topics', 'services_1_to_2', 'services_2_to_1')}))
+                key: config.get(key, []) for key in ('topics', 'services_1_to_2', 'services_2_to_1', 'actions')}))
         print('Configured Sawyer bridge on ' + uri)
         return 0
     except (OSError, ValueError, RuntimeError, KeyError, yaml.YAMLError, xmlrpc.client.Error) as error:

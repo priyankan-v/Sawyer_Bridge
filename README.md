@@ -2,7 +2,7 @@
 
 `sawyer_bridge` connects your existing ROS 2 Humble installation to Sawyer's
 onboard ROS 1 graph. It provides the C++ bridge, Intera message interfaces and a
-selective topic configuration. Write your own ROS 2 applications using these interfaces.
+startup discovery of Intera topics, services and actions. Write your own ROS 2 applications using these interfaces.
 
 ```text
 Your ROS 2 nodes ↔ packaged C++ bridge ↔ Sawyer's onboard ROS 1
@@ -23,7 +23,7 @@ Install the supplied artifact into your current Conda prefix. If the previous
 `conda remove sawyer-ros2-bridge`:
 
 ```bash
-conda install --offline /path/to/sawyer_bridge-0.4.0-humble_py310_0.conda
+conda install --offline /path/to/sawyer_bridge-0.5.0-humble_py310_0.conda
 source /opt/ros/humble/setup.bash
 source "$CONDA_PREFIX/local_setup.bash"
 ros2 run sawyer_bridge check
@@ -50,15 +50,18 @@ ros2 launch sawyer_bridge bridge.launch.py
 ### What starts
 
 1. A short configuration process reads `sawyer_bridge.yaml`, writes its topic and
-   service lists to Sawyer's ROS 1 parameter server, then exits.
+   service/action lists to Sawyer's ROS 1 parameter server, then exits. By default,
+   it discovers advertised Intera endpoints in both ROS graphs (allow about five
+   seconds for DDS discovery). Service probes exchange headers without calling services.
 2. The C++ `parameter_bridge` process starts one ROS 1 client node and one ROS 2
    client node, both named `sawyer_bridge` in their respective graphs.
 3. It reads `/sawyer_bridge/topics`, `/sawyer_bridge/services_1_to_2` and
-   `/sawyer_bridge/services_2_to_1`. Each enabled topic creates a subscriber on
+   `/sawyer_bridge/services_2_to_1` and `/sawyer_bridge/actions`. Each enabled topic creates a subscriber on
    the source side and a publisher on the destination side. Compiled converters
    translate incoming messages. Configured services create forwarding endpoints;
-   the default service lists are empty.
-4. A ROS 1 callback thread and ROS 2 executor keep forwarding messages until Ctrl+C.
+   discovered Intera service servers are exposed in the other ROS graph.
+4. Action adapters forward goals, feedback, results and cancellation between
+   ROS 1 and ROS 2. The ROS 1 callback thread and ROS 2 executor process them until Ctrl+C.
 
 There is one ROS package for launching, configuring and running the transport:
 **`sawyer_bridge`**. The launch command runs in the foreground. Sawyer already
@@ -80,15 +83,23 @@ ros2 topic echo /robot/joint_states
 ros2 topic hz /robot/joint_states
 ```
 
-The default configuration forwards joint states, robot state, joint limits,
-endpoint state, collision state and head state. Command topics are disabled.
+The default mode discovers all supported advertised Intera endpoints, including
+command topics. Enabling transport publishes no commands or goals by itself.
+For the previous telemetry-only workflow, use:
+
+```bash
+ros2 launch sawyer_bridge bridge.launch.py all_interfaces:=false
+```
+
+Discovery is a startup snapshot: start your ROS 2 servers first, and restart the
+bridge after adding endpoints. It does not invent topic names for unused types.
 
 ## Connect your application
 
-To forward commands from your own ROS 2 application, restart the bridge with:
+In telemetry mode, enable the arm command path explicitly with:
 
 ```bash
-ros2 launch sawyer_bridge bridge.launch.py commands:=true
+ros2 launch sawyer_bridge bridge.launch.py all_interfaces:=false commands:=true
 # Add head_commands:=true if your application needs head-pan commands.
 ```
 
@@ -109,18 +120,36 @@ cp "$CONDA_PREFIX/share/sawyer_bridge/config/sawyer_bridge.yaml" ./bridge.yaml
 ros2 launch sawyer_bridge bridge.launch.py config:="$PWD/bridge.yaml"
 ```
 
-Services are disabled by default. Built-in core and Intera mappings are compiled
-into the bridge; adding a YAML entry cannot add an unsupported message mapping.
-ROS actions are not forwarded by this bridge.
+With `all_interfaces:=false`, the YAML lists alone select the endpoints.
+Service types use `intera_core_msgs/ServiceName` for `services_2_to_1` (a ROS 1
+server), and `intera_core_msgs/srv/ServiceName` for `services_1_to_2` (a ROS 2 server).
+Action entries specify `action`, `type`, `direction` and optional `server_timeout`
+(default 5 seconds for lost server/goal acknowledgement; not a trajectory deadline).
+An action endpoint uses one direction; use distinct names for native servers in
+both graphs. Action examples are in the installed YAML.
+
+Coverage: **47 regular Intera messages, 3 services and 2 actions**
+(`CalibrationCommand`, `MotionCommand`), with both forwarding directions.
+`CameraStrobe` matches the robot's published ROS 1 definition/MD5.
+The robot also advertises **`CameraFieldCalibrationCommand`**, whose goal
+schema is absent from the available SDK. Discovery reports and skips it; its
+complete `.action` definition is required to support it. The bridge never guesses it.
+
+Actions need protocol adapters because ROS 1 and ROS 2 action transports differ
+([ROS 2 action design](https://design.ros2.org/articles/actions.html)). They run
+inside the same C++ bridge process. A ROS 1 rejection after local ROS 2 acceptance
+returns an aborted ROS 2 goal with the original result. ROS 2 goal rejection has
+no result payload, so the ROS 1 result contains `ROS2_GOAL_REJECTED`. Server loss
+aborts outstanding goals; it does not report success.
 
 ## Stop and troubleshoot
 
-Stop your application safely first, then press **Ctrl+C** in the bridge terminal.
+Cancel/finish active actions and stop your application safely first, then press **Ctrl+C** in the bridge terminal.
 Stopping the bridge disconnects transport; it does not disable the robot.
 
 - **Master connection failed:** check `ROS_MASTER_URI`, network and robot availability.
 - **No joint states:** check `ROS_IP` is reachable from Sawyer, and matching `ROS_DOMAIN_ID` values.
-- **Command subscriber absent:** start with `commands:=true` and confirm your application's QoS is compatible.
+- **Command subscriber absent:** use discovery mode, or telemetry mode with `commands:=true` and confirm your application's QoS is compatible.
 - **Missing library/type support:** source both setup files and run `ros2 run sawyer_bridge check`. Keep Conda ROS/Python libraries out of the system Humble library paths.
 
 ## Repository

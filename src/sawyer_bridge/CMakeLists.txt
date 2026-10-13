@@ -15,6 +15,7 @@ find_package(rmw REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
 find_package(rmw_implementation_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
 
@@ -177,8 +178,10 @@ install(TARGETS ${PROJECT_NAME}
 
 custom_executable(parameter_bridge
   "src/parameter_bridge.cpp"
+  "src/actions.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES ${message_packages})
+ament_target_dependencies(parameter_bridge rclcpp_action intera_core_msgs intera_motion_msgs)
 target_link_libraries(parameter_bridge
   ${PROJECT_NAME})
 

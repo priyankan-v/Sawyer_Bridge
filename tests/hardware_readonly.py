@@ -44,7 +44,7 @@ process = None
 with tempfile.TemporaryFile(mode='w+') as log:
     try:
         process = subprocess.Popen([str(package_prefix() / 'lib/sawyer_bridge/parameter_bridge'),
-                                    parameter, caller + '/no_services', caller + '/no_services',
+                                    parameter, caller + '/no_services', caller + '/no_services', caller + '/no_actions',
                                     '__name:=' + caller.lstrip('/')], env=environment,
                                    stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         os.environ['ROS_DOMAIN_ID'] = '198'

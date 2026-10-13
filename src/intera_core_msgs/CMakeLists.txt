@@ -13,6 +13,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/AnalogOutputCommand.msg"
   "msg/CameraControl.msg"
   "msg/CameraSettings.msg"
+  "msg/CameraStrobe.msg"
   "msg/CollisionAvoidanceState.msg"
   "msg/CollisionDetectionState.msg"
   "msg/DigitalIOState.msg"

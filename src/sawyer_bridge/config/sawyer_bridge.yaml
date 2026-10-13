@@ -17,3 +17,9 @@ services_2_to_1: []
 # Discover actual service servers before enabling, e.g.:
 # - {service: /ExternalTools/right/PositionKinematicsNode/IKService, type: intera_core_msgs/SolvePositionIK, package: ''}
 # - {service: /ExternalTools/right/PositionKinematicsNode/FKService, type: intera_core_msgs/SolvePositionFK, package: ''}
+
+# Automatically populated from advertised servers when all_interfaces:=true.
+actions: []
+# Explicit examples (one direction per endpoint):
+# - {action: /motion/motion_command, type: intera_motion_msgs/action/MotionCommand, direction: 2to1, enabled: true}
+# - {action: /my_ros2_calibration, type: intera_core_msgs/action/CalibrationCommand, direction: 1to2, enabled: true}

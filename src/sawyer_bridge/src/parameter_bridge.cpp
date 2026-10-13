@@ -31,6 +31,7 @@
 #include "rclcpp/rclcpp.hpp"
 
 #include "ros1_bridge/bridge.hpp"
+#include "sawyer_bridge/actions.hpp"
 
 rclcpp::QoS qos_from_params(XmlRpc::XmlRpcValue qos_params)
 {
@@ -268,6 +269,8 @@ int main(int argc, char * argv[])
     services_2_to_1_parameter_name = argv[3];
   }
 
+  const char * actions_parameter_name = argc > 4 ? argv[4] : "/sawyer_bridge/actions";
+
   // Topics
   XmlRpc::XmlRpcValue topics;
   if (
@@ -469,6 +472,13 @@ int main(int argc, char * argv[])
       stderr,
       "The parameter '%s' either doesn't exist or isn't an array\n",
       services_2_to_1_parameter_name);
+  }
+
+  std::vector<std::shared_ptr<sawyer_bridge::ActionBridge>> action_bridges;
+  try { action_bridges = sawyer_bridge::create_action_bridges(ros1_node, ros2_node, actions_parameter_name); }
+  catch (const std::exception & error) {
+    RCLCPP_ERROR(ros2_node->get_logger(), "Action configuration failed: %s", error.what());
+    return 1;
   }
 
   // ROS 1 asynchronous spinner

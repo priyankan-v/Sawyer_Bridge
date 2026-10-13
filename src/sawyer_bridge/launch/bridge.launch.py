@@ -14,7 +14,7 @@ def start(context):
     prefix = Path(get_package_prefix('sawyer_bridge'))
     config = LaunchConfiguration('config').perform(context)
     command = [str(prefix / 'lib/sawyer_bridge/configure_bridge'), config]
-    for name in ('commands', 'head_commands'):
+    for name in ('commands', 'head_commands', 'all_interfaces'):
         value = LaunchConfiguration(name).perform(context).lower()
         if value not in ('true', 'false'):
             raise ValueError(f'{name} must be true or false')
@@ -45,6 +45,8 @@ def generate_launch_description():
     share = Path(get_package_share_directory('sawyer_bridge'))
     return LaunchDescription([
         DeclareLaunchArgument('config', default_value=str(share / 'config/sawyer_bridge.yaml')),
+        DeclareLaunchArgument('all_interfaces', default_value='true',
+                              description='Discover all advertised Intera message, service and action endpoints'),
         DeclareLaunchArgument('commands', default_value='false'),
         DeclareLaunchArgument('head_commands', default_value='false'),
         OpaqueFunction(function=start),

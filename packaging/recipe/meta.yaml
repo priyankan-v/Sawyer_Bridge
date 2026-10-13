@@ -1,11 +1,11 @@
 package:
   name: sawyer_bridge
-  version: "0.4.0"
+  version: "0.5.0"
 
 # The native build uses system Humble and system Python, never Conda's ABI.
 # Build packaging/build_package.py first; this recipe relocates that staged tree.
 source:
-  path: ../../.runtime/unified-prefix
+  path: ../../.runtime/full-prefix
 
 build:
   number: 0

@@ -18,6 +18,7 @@ add_message_files( DIRECTORY msg
         RobotAssemblyState.msg
         CameraControl.msg
         CameraSettings.msg
+        CameraStrobe.msg
         CollisionAvoidanceState.msg
         CollisionDetectionState.msg
         DigitalIOState.msg

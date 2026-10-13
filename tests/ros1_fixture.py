@@ -12,7 +12,7 @@ if sys.argv[1] == 'master':
     raise SystemExit(0)
 
 import rospy
-from intera_core_msgs.msg import JointCommand, HeadPanCommand
+from intera_core_msgs.msg import JointCommand, HeadPanCommand, CameraStrobe
 from sensor_msgs.msg import JointState, Image
 from std_msgs.msg import String
 
@@ -31,6 +31,8 @@ head_ack = rospy.Publisher('/sawyer_pkg_test/head_ack', HeadPanCommand, queue_si
 rospy.Subscriber('/sawyer_pkg_test/head', HeadPanCommand, head_ack.publish, queue_size=5)
 joints = rospy.Publisher('/sawyer_pkg_test/joints', JointState, queue_size=5)
 image = rospy.Publisher('/sawyer_pkg_test/image', Image, queue_size=1)
+strobe = rospy.Publisher('/sawyer_pkg_test/strobe', CameraStrobe, queue_size=1)
+assert CameraStrobe._md5sum == '7886e4ecc3bbbe7c1e9a3321acbb3a39'
 rate = rospy.Rate(20)
 while not rospy.is_shutdown():
     state = JointState(name=['right_j5'], position=[0.25], velocity=[0.125], effort=[1.5])
@@ -38,4 +40,5 @@ while not rospy.is_shutdown():
     joints.publish(state)
     frame = Image(height=1, width=2, encoding='rgb8', step=6, data=bytes([255, 0, 0, 0, 255, 0]))
     image.publish(frame)
+    strobe.publish(CameraStrobe(time=rospy.Time(123, 456), node=-9))
     rate.sleep()
