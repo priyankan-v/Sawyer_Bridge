@@ -232,12 +232,12 @@ rclcpp::QoS qos_from_params(XmlRpc::XmlRpcValue qos_params)
 int main(int argc, char * argv[])
 {
   // ROS 1 node
-  ros::init(argc, argv, "ros_bridge");
+  ros::init(argc, argv, "sawyer_bridge");
   ros::NodeHandle ros1_node;
 
   // ROS 2 node
   rclcpp::init(argc, argv);
-  auto ros2_node = rclcpp::Node::make_shared("ros_bridge");
+  auto ros2_node = rclcpp::Node::make_shared("sawyer_bridge");
 
   std::list<ros1_bridge::BridgeHandles> all_handles;
   std::list<ros1_bridge::ServiceBridge1to2> service_bridges_1_to_2;
@@ -249,15 +249,15 @@ int main(int argc, char * argv[])
   // topic: the name of the topic to bridge (e.g. '/topic_name')
   // type: the type of the topic to bridge (e.g. 'pkgname/msg/MsgName')
   // queue_size: the queue size to use (default: 100)
-  const char * topics_parameter_name = "topics";
+  const char * topics_parameter_name = "/sawyer_bridge/topics";
   // the services parameters need to be arrays
   // and each item needs to be a dictionary with the following keys;
   // service: the name of the service to bridge (e.g. '/service_name')
   // type: the type of the service to bridge (e.g. 'pkgname/srv/SrvName')
-  const char * services_1_to_2_parameter_name = "services_1_to_2";
-  const char * services_2_to_1_parameter_name = "services_2_to_1";
+  const char * services_1_to_2_parameter_name = "/sawyer_bridge/services_1_to_2";
+  const char * services_2_to_1_parameter_name = "/sawyer_bridge/services_2_to_1";
   const char * service_execution_timeout_parameter_name =
-    "ros1_bridge/parameter_bridge/service_execution_timeout";
+    "/sawyer_bridge/service_execution_timeout";
   if (argc > 1) {
     topics_parameter_name = argv[1];
   }

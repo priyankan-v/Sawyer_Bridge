@@ -1,6 +1,6 @@
 # Sawyer bridge for ROS 2 Humble
 
-`sawyer-ros2-bridge` connects your existing ROS 2 Humble installation to Sawyer's
+`sawyer_bridge` connects your existing ROS 2 Humble installation to Sawyer's
 onboard ROS 1 graph. It provides the C++ bridge, Intera message interfaces and a
 selective topic configuration. Write your own ROS 2 applications using these interfaces.
 
@@ -18,10 +18,12 @@ Requires **Ubuntu 22.04 x86_64**, Conda and system **ROS 2 Humble** installed un
 `/opt/ros/humble`. System Python 3.10, Humble’s Python dependencies, PyYAML and Ubuntu Boost 1.74/console_bridge
 runtime libraries must be available; see [PACKAGING.md](PACKAGING.md) for details.
 
-Install the supplied artifact into your current Conda prefix:
+Install the supplied artifact into your current Conda prefix. If the previous
+`sawyer-ros2-bridge` package is installed, remove it first with
+`conda remove sawyer-ros2-bridge`:
 
 ```bash
-conda install --offline /path/to/sawyer-ros2-bridge-0.3.0-humble_py310_0.conda
+conda install --offline /path/to/sawyer_bridge-0.4.0-humble_py310_0.conda
 source /opt/ros/humble/setup.bash
 source "$CONDA_PREFIX/local_setup.bash"
 ros2 run sawyer_bridge check
@@ -45,9 +47,27 @@ export ROS_DOMAIN_ID=42
 ros2 launch sawyer_bridge bridge.launch.py
 ```
 
-The launch command loads topic parameters through XML-RPC and starts the C++
-`parameter_bridge`. It runs in the foreground. Sawyer supplies the ROS 1 master;
-this package does not start one.
+### What starts
+
+1. A short configuration process reads `sawyer_bridge.yaml`, writes its topic and
+   service lists to Sawyer's ROS 1 parameter server, then exits.
+2. The C++ `parameter_bridge` process starts one ROS 1 client node and one ROS 2
+   client node, both named `sawyer_bridge` in their respective graphs.
+3. It reads `/sawyer_bridge/topics`, `/sawyer_bridge/services_1_to_2` and
+   `/sawyer_bridge/services_2_to_1`. Each enabled topic creates a subscriber on
+   the source side and a publisher on the destination side. Compiled converters
+   translate incoming messages. Configured services create forwarding endpoints;
+   the default service lists are empty.
+4. A ROS 1 callback thread and ROS 2 executor keep forwarding messages until Ctrl+C.
+
+There is one ROS package for launching, configuring and running the transport:
+**`sawyer_bridge`**. The launch command runs in the foreground. Sawyer already
+runs the ROS 1 master. No master, motion program, camera viewer or robot-enabling
+process is started on your PC.
+
+The executable alone reads parameters already stored on the ROS 1 master; it
+cannot load YAML by itself. Use the launch command above to load the list and
+start transport together. Changes to the list take effect when the bridge restarts.
 
 ## Read joint states — terminal 2
 
@@ -91,7 +111,7 @@ ros2 launch sawyer_bridge bridge.launch.py config:="$PWD/bridge.yaml"
 
 Services are disabled by default. Built-in core and Intera mappings are compiled
 into the bridge; adding a YAML entry cannot add an unsupported message mapping.
-ROS actions are not forwarded by ros1_bridge.
+ROS actions are not forwarded by this bridge.
 
 ## Stop and troubleshoot
 
@@ -107,12 +127,15 @@ Stopping the bridge disconnects transport; it does not disable the robot.
 
 | Path | Purpose |
 |---|---|
-| `src/ros1_bridge/` | C++ bridge and build-time conversion generator |
 | `src/intera_*_msgs/` | ROS 2 Intera interfaces |
-| `src/sawyer_bridge/` | Launch, configuration and package check |
+| `src/sawyer_bridge/` | C++ transport, launch, configuration, conversion generator and package check |
 | `interfaces/ros1/` | Matching ROS 1 Intera definitions, used during compilation |
 | `packaging/` | Native builder, pinned sources, relocation and Conda recipe |
 | `tests/` | Maintainer conversion/transport tests; excluded from the artifact |
 
 Build and validation instructions: [PACKAGING.md](PACKAGING.md).
 Previous implementations remain on their original branches.
+
+The C++ transport is derived from the upstream ROS 2 `ros1_bridge` project.
+Its original C++ namespace and mapping format are retained internally; no
+separate `ros1_bridge` ROS package is installed.

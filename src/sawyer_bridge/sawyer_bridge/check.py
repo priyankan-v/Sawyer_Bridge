@@ -19,8 +19,8 @@ def main():
         from intera_motion_msgs.msg import MotionStatus
         for interface in (JointCommand, MotionStatus):
             interface.__class__.__import_type_support__()
-        prefix = Path(get_package_prefix('ros1_bridge'))
-        bridge = prefix / 'lib/ros1_bridge/dynamic_bridge'
+        prefix = Path(get_package_prefix('sawyer_bridge'))
+        bridge = prefix / 'lib/sawyer_bridge/dynamic_bridge'
         linked = subprocess.run(['/usr/bin/ldd', str(bridge)], capture_output=True, text=True, check=True)
         if 'not found' in linked.stdout:
             raise RuntimeError(linked.stdout)

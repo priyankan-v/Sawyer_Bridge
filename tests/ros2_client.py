@@ -31,6 +31,8 @@ try:
         head.publish(HeadPanCommand(target=0.125, speed_ratio=0.25, pan_mode=1))
         rclpy.spin_once(node, timeout_sec=0.05)
     assert len(received) == 4, list(received)
+    endpoints = node.get_publishers_info_by_topic('/sawyer_pkg_test/joints')
+    assert {endpoint.node_name for endpoint in endpoints} == {'sawyer_bridge'}, endpoints
     ack = received['ack']
     assert ack == {'mode': 1, 'names': ['right_j5'], 'position': [0.1], 'velocity': [],
                    'acceleration': [], 'effort': [], 'frame_id': 'package-test', 'stamp': 123000000456}, ack
@@ -39,7 +41,7 @@ try:
     assert list(state.velocity) == [0.125] and list(state.effort) == [1.5]
     assert bytes(received['image'].data) == bytes([255, 0, 0, 0, 255, 0])
     assert received['head'].target == 0.125 and received['head'].pan_mode == 1
-    print('PASS: exact JointCommand fields/empty arrays/header, JointState feedback, HeadPanCommand and Image pixels')
+    print('PASS: sawyer_bridge ROS 2 node, exact JointCommand fields/empty arrays/header, JointState feedback, HeadPanCommand and Image pixels')
 finally:
     node.destroy_node()
     rclpy.shutdown()

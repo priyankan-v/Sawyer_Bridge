@@ -21,11 +21,10 @@ def start(context):
         if value == 'true':
             command.append('--' + name.replace('_', '-'))
     configure = ExecuteProcess(cmd=command, output='screen')
-    bridge_prefix = Path(get_package_prefix('ros1_bridge'))
-    bridge = ExecuteProcess(cmd=[str(bridge_prefix / 'lib/ros1_bridge/parameter_bridge'),
+    bridge = ExecuteProcess(cmd=[str(prefix / 'lib/sawyer_bridge/parameter_bridge'),
                                  '/sawyer_bridge/topics',
                                  '/sawyer_bridge/services_1_to_2', '/sawyer_bridge/services_2_to_1',
-                                 '__name:=sawyer_selective_bridge'], output='screen')
+                                 '__name:=sawyer_bridge'], output='screen')
 
     def configured(event, _context):
         if event.returncode != 0:

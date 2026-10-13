@@ -14,7 +14,7 @@ from ament_index_python.packages import get_package_prefix
 
 
 def package_prefix():
-    return Path(get_package_prefix('ros1_bridge'))
+    return Path(get_package_prefix('sawyer_bridge'))
 
 socket.setdefaulttimeout(3)
 uri = os.environ['ROS_MASTER_URI']
@@ -43,7 +43,7 @@ node = None
 process = None
 with tempfile.TemporaryFile(mode='w+') as log:
     try:
-        process = subprocess.Popen([str(package_prefix() / 'lib/ros1_bridge/parameter_bridge'),
+        process = subprocess.Popen([str(package_prefix() / 'lib/sawyer_bridge/parameter_bridge'),
                                     parameter, caller + '/no_services', caller + '/no_services',
                                     '__name:=' + caller.lstrip('/')], env=environment,
                                    stdout=log, stderr=subprocess.STDOUT, start_new_session=True)

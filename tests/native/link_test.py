@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 
 root=Path(os.environ['SAWYER_ROOT'])
-build=root/'.runtime/clean-build/bridge-build/ros1_bridge'
+build=root/'.runtime/clean-build/bridge-build/sawyer_bridge'
 command=shlex.split((build/'CMakeFiles/dynamic_bridge.dir/link.txt').read_text())
 obj=root/'.runtime/clean-native/CMakeFiles/check_conversion.dir/check_conversion.cpp.o'
 binary=root/'.runtime/clean-native/check_conversion'

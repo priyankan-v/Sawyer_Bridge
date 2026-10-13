@@ -162,7 +162,7 @@ def build(args):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(notice, destination)
     for name, location in [('intera_common', ROOT / 'interfaces/ros1'),
-                           ('ros1_bridge', ROOT / 'src/ros1_bridge')]:
+                           ('ros1_bridge', ROOT / 'src/sawyer_bridge')]:
         for notice in location.glob('*'):
             if notice.is_file() and notice.name.lower().startswith(('license', 'copying')):
                 destination = licenses / name / notice.name
@@ -173,9 +173,9 @@ def build(args):
     env['CMAKE_BUILD_PARALLEL_LEVEL'] = str(args.jobs)
     ros2 = ROOT / 'src'
     run(['/usr/bin/colcon', '--log-base', work / 'ros2-log', 'build',
-         '--base-paths', ros2 / 'intera_core_msgs', ros2 / 'intera_motion_msgs', ros2 / 'sawyer_bridge',
+         '--base-paths', ros2 / 'intera_core_msgs', ros2 / 'intera_motion_msgs',
          '--build-base', work / 'ros2-build', '--install-base', prefix, '--merge-install',
-         '--parallel-workers', '1', '--cmake-args', '-DBUILD_TESTING=OFF',
+         '--parallel-workers', '1', '--cmake-force-configure', '--cmake-args', '-DBUILD_TESTING=OFF',
          '-DCMAKE_BUILD_TYPE=Release', '-DPython3_EXECUTABLE=/usr/bin/python3'], env, work)
     env['AMENT_PREFIX_PATH'] = str(prefix) + ':' + env.get('AMENT_PREFIX_PATH', '')
     env['CMAKE_PREFIX_PATH'] = str(prefix) + ':' + env.get('CMAKE_PREFIX_PATH', '') + ':' + str(private)
@@ -187,10 +187,13 @@ def build(args):
     env['LD_LIBRARY_PATH'] = str(private / 'lib') + ':' + str(prefix / 'lib') + ':' + env.get('LD_LIBRARY_PATH', '')
     env['SAWYER_BRIDGE_PACKAGES'] = 'builtin_interfaces;std_msgs;geometry_msgs;sensor_msgs;intera_core_msgs;intera_motion_msgs'
     run(['/usr/bin/colcon', '--log-base', work / 'bridge-log', 'build',
-         '--base-paths', ROOT / 'src/ros1_bridge', '--build-base', work / 'bridge-build',
+         '--base-paths', ROOT / 'src/sawyer_bridge', '--build-base', work / 'bridge-build',
          '--install-base', prefix, '--merge-install', '--parallel-workers', '1',
-         '--cmake-args', '-DBUILD_TESTING=OFF', '-DCMAKE_BUILD_TYPE=Release',
-         '-DPython3_EXECUTABLE=/usr/bin/python3', '-Dxmlrpcpp_DIR=' + str(private / 'share/xmlrpcpp/cmake'),
+         '--cmake-force-configure', '--cmake-args', '-DBUILD_TESTING=OFF', '-DCMAKE_BUILD_TYPE=Release',
+         '-DPython3_EXECUTABLE=/usr/bin/python3',
+         '-Dintera_core_msgs_DIR=' + str(prefix / 'share/intera_core_msgs/cmake'),
+         '-Dintera_motion_msgs_DIR=' + str(prefix / 'share/intera_motion_msgs/cmake'),
+         '-Dxmlrpcpp_DIR=' + str(private / 'share/xmlrpcpp/cmake'),
          '-DCMAKE_C_COMPILER=/usr/bin/cc', '-DCMAKE_CXX_COMPILER=/usr/bin/c++'], env, work)
     # Ship only the C++ runtime libraries, not ROS 1 tools, Python or build headers.
     runtime = prefix / 'libexec/sawyer/ros1/lib'

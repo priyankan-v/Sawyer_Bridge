@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(ros1_bridge)
+project(sawyer_bridge)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -13,6 +13,7 @@ endif()
 find_package(rmw REQUIRED)
 
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rmw_implementation_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
@@ -64,6 +65,10 @@ endforeach()
 
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
+
+ament_python_install_package(${PROJECT_NAME})
+install(PROGRAMS bin/configure_bridge bin/check DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
 
 ament_package(
   CONFIG_EXTRAS ${cmake_extras_files}

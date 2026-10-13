@@ -22,7 +22,7 @@ def main():
                         help='Build-only ROS 1 prefix; these tools are never installed in the package')
     parser.add_argument('--report', type=Path)
     args = parser.parse_args()
-    prefix = Path(get_package_prefix('ros1_bridge'))
+    prefix = Path(get_package_prefix('sawyer_bridge'))
     helper = Path(__file__).resolve().parent
     env = dict(os.environ)
     # Port is allocated locally; refuse collision rather than attaching to a master.
@@ -79,6 +79,9 @@ def main():
             if result.returncode:
                 raise RuntimeError(result.stdout + result.stderr)
             assert bridge.poll() is None, 'Bridge exited unexpectedly'
+            graph = master.getSystemState('/package_test')
+            assert graph[0] == 1
+            assert any('/sawyer_bridge' in nodes for topic, nodes in graph[2][0]), graph
             report = {'status': 'PASS', 'scope': 'Isolated localhost fixture; no physical robot commands',
                       'package_prefix': str(prefix), 'master': env['ROS_MASTER_URI'],
                       'domain': env['ROS_DOMAIN_ID'], 'checks': result.stdout.strip(), 'wall_time': time.time()}
