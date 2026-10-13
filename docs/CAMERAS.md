@@ -2,31 +2,30 @@
 
 The camera viewer supports head/hand selection, simultaneous streams and explicit
 stream shutdown. Commands affect only camera streaming; they send no joint commands.
-Conda environments and the existing `ros1_bridge` architecture stay the same.
+The installed package uses existing system Humble and privately bundled ROS 1
+clients. No Noetic/Humble Conda environments are required.
 
 ## Start the bridge and viewer
 
-Build the application using the [README build instructions](../README.md#camera-video)
-if this is a new installation. Existing symlink builds load the updated Python code
-without rebuilding.
-
-**Terminal 1**, from the repository root: stop any existing bridge, then run:
+Install the package as documented in [README](../README.md#install-on-a-users-machine).
+Initialize each terminal with:
 
 ```bash
-cd ~/sawyer_rs
-source config/network.env
-./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py cameras:=true
+source /opt/ros/humble/setup.bash
+source "$CONDA_PREFIX/local_setup.bash"
+# Set your existing ROS_MASTER_URI, ROS_IP and ROS_DOMAIN_ID from README.
+```
+
+**Terminal 1:** stop any existing bridge, then run:
+
+```bash
+ros2 launch sawyer_ros2_control bridge.launch.py cameras:=true
 ```
 
 For joint control in the same session, add `commands:=true` to that launch.
 Camera selection does not enable the robot or move its joints.
 
-**Terminal 2:** enter the isolated Humble shell:
-
-```bash
-cd ~/sawyer_rs
-./scripts/env.sh ros2
-```
+**Terminal 2:** after the same initialization, start the viewer.
 
 Choose one of these commands:
 
@@ -163,7 +162,7 @@ before starting the selected one. That is its software policy; it does not prove
 the controller cannot deliver two streams. [Official SDK behavior](https://rethinkrobotics.github.io/intera_sdk_docs/5.1.0/intera_interface/html/intera_interface.camera.Cameras-class.html)
 
 The explicit `--start-both` option uses the same camera IO `set` protocol with
-`camera_streaming=true` on each camera independently. A Noetic process checks
+`camera_streaming=true` on each camera independently. A private ROS 1 helper checks
 command timestamps in the controller acknowledgements and the resulting state.
 The bridge and ROS 2 viewer can already handle both Image topics.
 
@@ -217,7 +216,7 @@ Inspect current settings and rates yourself:
 
 ```bash
 ros2 run sawyer_ros2_control camera_viewer --stream-info \
-  --report "$SAWYER_ROOT/.runtime/camera-info.json"
+  --report "${SAWYER_STATE_DIR:-$HOME/.local/state/sawyer_ros2}/camera-info.json"
 ```
 
 This samples existing ROS 1 streams for three seconds and changes no camera state.
@@ -225,13 +224,13 @@ To check ROS 2 delivery after explicitly starting both:
 
 ```bash
 ros2 run sawyer_ros2_control camera_viewer --start-both --headless --duration 6 \
-  --require-both --stop-on-exit --report "$SAWYER_ROOT/.runtime/camera-video.json"
+  --require-both --stop-on-exit --report "${SAWYER_STATE_DIR:-$HOME/.local/state/sawyer_ros2}/camera-video.json"
 ```
 
 ## Implementation and validation
 
 - `camera_viewer.py`: Humble subscriptions, CLI, NumPy decoding and Tk display.
-- `scripts/camera_control.py`: isolated Noetic IO control and read-only information;
+- `scripts/camera_control.py`: isolated private ROS 1 IO control and read-only information;
   standard ROS 1 packages only, with bounded waits and acknowledgement checks.
 - `config/sawyer_bridge.yaml`: opt-in, one-way head/hand image forwarding.
 - No new shell wrappers or dependencies; existing motion logic is unchanged.

@@ -1,6 +1,6 @@
 # How `move_joint` reaches Sawyer
 
-This guide traces the current Conda implementation of:
+This guide traces the current `conda-pkg` implementation of:
 
 ```bash
 ros2 run sawyer_ros2_control move_joint --joint right_j5 --position 0.0 --time 5
@@ -52,48 +52,29 @@ There are two relevant workstation processes: the Python application and the
 C++ bridge. The robot's `/realtime_loop` is a separate process onboard Sawyer.
 The bridge forwards messages; it does not generate the trajectory or drive motors.
 
-## 3. Environment and bridge preparation
+## 3. Package and bridge preparation
 
-[scripts/env.sh](../scripts/env.sh) establishes isolated runtimes:
+This branch uses existing system Humble with the installed Sawyer overlay:
 
-| Mode | Environment and workspace used |
-|---|---|
-| `ros2` | `.conda/envs/humble` and `ros2_ws/install_conda/local_setup.bash`. Runs this Python application. |
-| `ros1` | `.conda/envs/noetic` and `ros1_ws/devel_conda/setup.bash`. Runs bridge configuration and preflight. |
-| `bridge` | Humble runtime plus selected Noetic paths, ROS 1 custom interfaces and `bridge_ws/install_conda`. Runs the compiled C++ bridge. |
-
-The installed `move_joint` launcher currently uses Humble's Python 3.12 through
-its generated shebang. `ros2 run` itself does not activate Conda or source ROS.
-The initialized shell supplies the correct package index, Python and library paths.
-
-The robot connection settings come from [config/network.env](../config/network.env):
-
-```text
-ROS_MASTER_URI=http://169.254.121.3:11311
-ROS_IP=169.254.121.2
-ROS_DOMAIN_ID=42
+```bash
+source /opt/ros/humble/setup.bash
+source "$CONDA_PREFIX/local_setup.bash"
 ```
 
-`ROS_MASTER_URI` locates the ROS 1 master. The master handles registration and
-discovery; command payloads travel over the publisher/subscriber TCPROS connection,
-not through the master. `ROS_IP` advertises this workstation's ROS 1 address.
-`ROS_DOMAIN_ID` must match between the ROS 2 application and bridge.
+`move_joint` runs with system Python 3.10. The bridge loads ROS 2 libraries from
+`/opt/ros/humble` and private ROS 1 libraries from the package's
+`libexec/sawyer/ros1/lib`. No Noetic/Humble Conda environment is created or sourced.
 
-The bridge must already be running with `commands:=true`. At bridge startup:
+Robot addresses and `ROS_DOMAIN_ID` are set separately as documented in README.
+The ROS 1 master handles discovery; command payloads use the direct TCPROS
+publisher/subscriber connection. The ROS 2 application and bridge share a DDS domain.
 
-1. [bridge.launch.py](../ros2_ws/src/sawyer_ros2_control/launch/bridge.launch.py)
-   starts [configure_bridge.py](../scripts/configure_bridge.py) in the Noetic runtime.
-2. The helper reads [config/sawyer_bridge.yaml](../config/sawyer_bridge.yaml).
-   `commands:=true` enables the arm command, speed-ratio and command-timeout topic
-   entries, which are disabled in the file by default.
-3. It writes the topic configuration to ROS 1 parameter `/sawyer_bridge/topics`.
-4. After successful configuration, launch starts the existing `parameter_bridge`
-   executable in the mixed bridge runtime. It reads that parameter and creates
-   the configured subscriptions, publishers and compiled message mappings.
-
-This preparation happens when launching the bridge, not each time you run
-`move_joint`. Neither bridge launch nor `move_joint` automatically enables motors.
-See the [README operating procedure](../README.md#position-control) before motion.
+At bridge launch, [bridge.launch.py](../ros2_ws/src/sawyer_ros2_control/launch/bridge.launch.py)
+locates the installed configuration and helpers through the ament package index.
+It invokes `configure_bridge.py` through `sawyer_runtime`, using private ROS 1
+Python modules in an isolated subprocess. After settings are uploaded, it starts
+the installed C++ `parameter_bridge`. Arm commands remain disabled unless
+`commands:=true` is supplied. Launch does not enable motors or generate motion.
 
 ## 4. How ROS 2 finds the Python file
 
@@ -110,7 +91,7 @@ launcher under the package's `lib` directory. The execution chain is:
 ```text
 ros2 run
   → find sawyer_ros2_control in the ament package index
-  → ros2_ws/install_conda/sawyer_ros2_control/lib/sawyer_ros2_control/move_joint
+  → $CONDA_PREFIX/lib/sawyer_ros2_control/move_joint
   → load sawyer_ros2_control.move_joint:main
   → ros2_ws/src/sawyer_ros2_control/sawyer_ros2_control/move_joint.py
   → scripts/move_joint.py
@@ -118,12 +99,12 @@ ros2 run
 
 The package's `move_joint.py` is a **symlink** to
 [scripts/move_joint.py](../scripts/move_joint.py). With the current symlink build,
-Python may report a module path under `ros2_ws/build_conda`; resolving that path
-reaches the same source file. The installed launcher is generated during build;
-edit the source, rather than that launcher.
+Python may report a module path under `the development build directory`; resolving that path
+reaches the same source file. The installed launcher and module are generated/copied during packaging;
+edit the source and rebuild the package rather than editing installed files.
 
 The local ROS CLI implementation uses `ros2run/command/run.py` and
-`ros2run/api/__init__.py` under Humble's `lib/python3.12/site-packages`.
+`ros2run/api/__init__.py` under system Humble's Python 3.10 modules.
 It discovers the executable and starts it as a subprocess with your arguments.
 
 ## 5. What `scripts/move_joint.py` does
@@ -217,11 +198,11 @@ The C++ receive/convert/publish path is:
    arrays. Its current generated source is:
 
    ```text
-   bridge_ws/build_conda/ros1_bridge/generated/intera_core_msgs__msg__JointCommand__factories.cpp
+   .runtime/pkg-build/bridge-build/ros1_bridge/generated/intera_core_msgs__msg__JointCommand__factories.cpp
    ```
 
 The executable is
-`bridge_ws/install_conda/ros1_bridge/lib/ros1_bridge/parameter_bridge`, using the
+`$CONDA_PREFIX/lib/ros1_bridge/parameter_bridge`, using the
 compiled bridge library. Generated converters are compiled during the bridge
 build; the runtime does not read `.msg` or converter source files for each command.
 
@@ -259,10 +240,11 @@ after commands cease depends on its onboard controller and existing settings.
 
 ## 8. Inspect the path without moving the robot
 
-From the repository root, enter the ROS 2 shell:
+Initialize system Humble and the installed package:
 
 ```bash
-./scripts/env.sh ros2
+source /opt/ros/humble/setup.bash
+source "$CONDA_PREFIX/local_setup.bash"
 ```
 
 Then inspect the installed executable, source and interfaces:
@@ -271,7 +253,8 @@ Then inspect the installed executable, source and interfaces:
 ros2 pkg prefix sawyer_ros2_control
 ros2 pkg executables sawyer_ros2_control
 ros2 run sawyer_ros2_control move_joint --help
-readlink -f "$SAWYER_ROOT/ros2_ws/src/sawyer_ros2_control/sawyer_ros2_control/move_joint.py"
+# In a source checkout only:
+readlink -f ros2_ws/src/sawyer_ros2_control/sawyer_ros2_control/move_joint.py
 ros2 interface show intera_core_msgs/msg/JointCommand
 ros2 topic info /robot/limb/right/joint_command --verbose
 ros2 topic info /robot/limb/right/set_speed_ratio --verbose
@@ -283,14 +266,12 @@ With telemetry available, this reads feedback and plans without publishing:
 ros2 run sawyer_ros2_control move_joint --joint right_j5 --position 0.0 --time 5 --dry-run
 ```
 
-Inspect the robot-side subscriber and uploaded bridge settings separately:
+Run the installed read-only preflight to verify Sawyer's ROS 1 command subscriber:
 
 ```bash
-"$SAWYER_ROOT/scripts/env.sh" ros1 rostopic info /robot/limb/right/joint_command
-"$SAWYER_ROOT/scripts/env.sh" ros1 rosparam get /sawyer_bridge/topics
+ros2 run sawyer_ros2_control preflight --joint right_j5 --require-ready
 ```
 
-The separate ROS 1 process inherits the shell's network settings. No movement is
-needed to inspect these files and registrations. This guide was checked against
-the current source, installed entry-point resolution and `move_joint --help`;
-no robot-motion command was executed to write it.
+It uses private ROS 1 dependencies in a separate helper process. No motion was
+executed to prepare this guide. The package workflow and platform requirements
+are described in [PACKAGING.md](../PACKAGING.md).

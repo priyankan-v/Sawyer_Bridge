@@ -264,6 +264,9 @@ def get_ros2_messages():
         in ament_index_python.get_resources('ros1_bridge_foreign_mapping').items()
     })
     for package_name, val_tuple in resources.items():
+        selected = os.environ.get('SAWYER_BRIDGE_PACKAGES')
+        if selected and package_name not in selected.split(';'):
+            continue
         prefix_path, resource_type = val_tuple
         if resource_type == 'rosidl_interfaces':  # Required, otherwise linking fails
             pkgs.append(package_name)
@@ -326,6 +329,9 @@ def get_ros2_services():
     })
     resource_type = 'rosidl_interfaces'
     for package_name, val_tuple in resources.items():
+        selected = os.environ.get('SAWYER_BRIDGE_PACKAGES')
+        if selected and package_name not in selected.split(';'):
+            continue
         prefix_path, resource_type = val_tuple
         if resource_type == 'rosidl_interfaces':  # Required, otherwise linking fails
             pkgs.append(package_name)

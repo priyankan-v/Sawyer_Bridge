@@ -133,6 +133,11 @@ list(APPEND generated_files "${generated_path}/get_mappings.cpp")
 
 # generate per interface compilation units to keep the memory usage low
 ament_index_get_resources(ros2_interface_packages "rosidl_interfaces")
+# A Sawyer package build limits discovery to core and Intera interfaces.
+# Unset this variable to retain the upstream discovery behavior.
+if(DEFINED ENV{SAWYER_BRIDGE_PACKAGES})
+  set(ros2_interface_packages "$ENV{SAWYER_BRIDGE_PACKAGES}")
+endif()
 # actionlib_msgs is deprecated, but we will quiet the warning until the bridge has support for
 # ROS actions: https://github.com/ros2/design/issues/195
 set(actionlib_msgs_DEPRECATED_QUIET TRUE)

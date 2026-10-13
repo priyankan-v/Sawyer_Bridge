@@ -21,6 +21,7 @@ config/network.env
 # Test runners regenerate these; retain only Conda evidence and safety proof.
 /docs/results/*
 !/docs/results/conda/
+!/docs/results/conda-pkg/
 !/docs/results/local_transport.json
 .pytest_cache/
 .mypy_cache/
@@ -30,3 +31,7 @@ config/network.env
 *.swp
 *.tmp
 .DS_Store
+
+# Locally built Conda packages and channels
+/dist/
+/conda-bld/

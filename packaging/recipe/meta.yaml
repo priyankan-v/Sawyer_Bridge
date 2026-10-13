@@ -1,0 +1,47 @@
+package:
+  name: sawyer-ros2-bridge
+  version: "0.2.0"
+
+# The native build uses system Humble and system Python, never Conda's ABI.
+# Build packaging/build_package.py first; this recipe relocates that staged tree.
+source:
+  path: ../../.runtime/pkg-prefix
+
+build:
+  number: 1
+  string: humble_py310_1
+  skip: true  # [not linux64]
+  script: |
+    set -eu
+    for folder in include lib libexec local share; do
+      /bin/mkdir -p "$PREFIX/$folder"
+      /bin/cp -a "$SRC_DIR/$folder/." "$PREFIX/$folder/"
+    done
+    /bin/cp "$SRC_DIR"/local_setup.* "$SRC_DIR"/_local_setup_util* "$PREFIX/"
+    /bin/cp "$SRC_DIR/.colcon_install_layout" "$PREFIX/"
+  # relocate.py has already set $ORIGIN paths. Preserve the external Humble
+  # RPATH, which Conda's automatic ELF relocation would otherwise remove.
+  binary_relocation: false
+  detect_binary_files_with_prefix: true
+
+requirements:
+  run:
+    - __linux
+    - __glibc >=2.35
+
+test:
+  commands:
+    - /bin/bash -c 'source /opt/ros/humble/setup.bash; source "$PREFIX/local_setup.bash"; ros2 run sawyer_ros2_control sawyer_runtime --check'
+    - /bin/bash -c 'source /opt/ros/humble/setup.bash; source "$PREFIX/local_setup.bash"; ros2 run sawyer_ros2_control move_joint --help'
+
+about:
+  home: https://github.com/priyankan-v/Sawyer_Bridge
+  license: MIT AND Apache-2.0 AND BSD-3-Clause
+  license_file:
+    - share/sawyer_ros2_control/licenses/project-LICENSE
+  summary: Sawyer-specific ROS 1 bridge and Intera interfaces for existing system ROS 2 Humble
+  description: |
+    Ubuntu 22.04 x86_64 only. Requires external ROS 2 Humble under /opt/ros/humble,
+    system Python 3.10, NumPy, Tk, PyYAML, rospkg and Ubuntu Boost 1.74 libraries.
+    Contains private ROS 1 client dependencies; installs no ROS distribution or
+    Conda Python. Source Humble and this package's local_setup.bash before use.

@@ -241,9 +241,9 @@ def main(argv=None):
     if args.command_timeout > 0.2 or args.command_timeout < 3 / args.rate:
         parser.error('Command timeout must cover at least three periods and be at most 0.2 seconds')
     if args.execute:
-        root = Path(os.environ['SAWYER_ROOT'])
-        preflight = json.loads((root / '.runtime/preflight.json').read_text())
-        transport = json.loads((root / 'docs/results/local_transport.json').read_text())
+        from sawyer_ros2_control.runtime import state_directory, transport_report
+        preflight = json.loads((state_directory() / 'preflight.json').read_text())
+        transport = json.loads(transport_report().read_text())
         age = time.time() - preflight['wall_time']
         if not 0 <= age <= 30 or not preflight.get('ready') or preflight['errors'] \
                 or preflight['master'] != os.environ.get('ROS_MASTER_URI') \

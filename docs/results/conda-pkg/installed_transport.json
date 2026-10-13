@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "scope": "Isolated localhost fixture; no physical robot commands",
+  "package_prefix": "/home/pi/sawyer_rs/.runtime/package-install-release",
+  "master": "http://127.0.0.1:59233",
+  "domain": "133",
+  "checks": "PASS: exact JointCommand fields/empty arrays/header, JointState feedback, HeadPanCommand and Image pixels",
+  "wall_time": 1791929576.2574625
+}

@@ -382,15 +382,14 @@ def run_viewer(args):
 
 
 def camera_command(action, camera=None, report=None):
-    root = Path(os.environ['SAWYER_ROOT'])
-    command = [str(root / 'scripts/env.sh'), 'ros1', 'python',
-               str(root / 'scripts/camera_control.py'), action]
+    from sawyer_ros2_control.runtime import run_backend
+    command = [action]
     if camera is not None:
         command.append(camera)
     if report is not None:
         command.extend(['--report', str(report)])
     # No Noetic imports or IO command publishers enter the ROS 2 process.
-    subprocess.run(command, check=True, timeout=35)
+    run_backend('camera_control', command, timeout=35)
 
 
 def main(argv=None):

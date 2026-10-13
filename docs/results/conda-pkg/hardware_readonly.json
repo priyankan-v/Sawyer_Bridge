@@ -1,0 +1,44 @@
+{
+  "scope": "Installed package telemetry-only bridge; no motion or camera-control commands",
+  "master": "http://169.254.121.3:11311",
+  "package_prefix": "/home/pi/sawyer_rs/.runtime/package-install-release",
+  "status": "PASS",
+  "samples": 703,
+  "positions": {
+    "head_pan": 0.1200634765625,
+    "right_j0": -0.001650390625,
+    "right_j1": -0.00331640625,
+    "right_j2": -0.009201171875,
+    "right_j3": -1.5697333984375,
+    "right_j4": 2.8983994140625,
+    "right_j5": 0.397904296875,
+    "right_j6": -4.5422880859375,
+    "torso_t0": 0.0,
+    "right_gripper_l_finger_joint": 0.0
+  },
+  "velocities": {
+    "head_pan": -0.001,
+    "right_j0": -0.001,
+    "right_j1": -0.001,
+    "right_j2": -0.001,
+    "right_j3": -0.001,
+    "right_j4": -0.001,
+    "right_j5": -0.001,
+    "right_j6": -0.001,
+    "torso_t0": 0.0,
+    "right_gripper_l_finger_joint": 0.0
+  },
+  "receive_hz": 119.9927197237874,
+  "limits": [
+    "right_j0",
+    "right_j1",
+    "right_j2",
+    "right_j3",
+    "right_j4",
+    "right_j5",
+    "right_j6",
+    "head_pan"
+  ],
+  "robot_enabled": true,
+  "robot_ready": true
+}

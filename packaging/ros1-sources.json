@@ -1,0 +1,82 @@
+{
+  "catkin": {
+    "url": "https://codeload.github.com/ros/catkin/tar.gz/refs/tags/0.8.12",
+    "sha256": "a4108edf1b7811def8a6cb6c802ab528d90856ce72090547789e1517bbea4891",
+    "version": "0.8.12"
+  },
+  "genmsg": {
+    "url": "https://codeload.github.com/ros/genmsg/tar.gz/refs/tags/0.6.1",
+    "sha256": "b3c1a558717991bd544a425b35fb7f2574e5f241cab04412267bcc0db3661ede",
+    "version": "0.6.1"
+  },
+  "gencpp": {
+    "url": "https://codeload.github.com/ros/gencpp/tar.gz/refs/tags/0.7.2",
+    "sha256": "c6de7c3dcc97531e670f39a9f309b3182d344c61cb6b93c69b0cbac4e901ba87",
+    "version": "0.7.2"
+  },
+  "genpy": {
+    "url": "https://codeload.github.com/ros/genpy/tar.gz/refs/tags/0.6.18",
+    "sha256": "6940c04b227a9d60fc7379ca522504abe4a0b244a69e1d11eb9ed934fed5931f",
+    "version": "0.6.18"
+  },
+  "message_generation": {
+    "url": "https://codeload.github.com/ros/message_generation/tar.gz/refs/tags/0.4.1",
+    "sha256": "90ab9649f594d5d007d735bd056f777e5f72bfb4f11f2b891fa5c5139f0a5e2f",
+    "version": "0.4.1"
+  },
+  "message_runtime": {
+    "url": "https://codeload.github.com/ros/message_runtime/tar.gz/refs/tags/0.4.13",
+    "sha256": "c5f97145b5095389d2459c0e7d879c07f5878d0b7ec84b5c388abddfd52bf448",
+    "version": "0.4.13"
+  },
+  "roscpp_core": {
+    "url": "https://codeload.github.com/ros/roscpp_core/tar.gz/refs/tags/0.7.3",
+    "sha256": "9ada9ab00f1c28ef39069f8bb8642a33f127d6c5c49bc3d9057cadbd8d7c172e",
+    "version": "0.7.3"
+  },
+  "ros_comm": {
+    "url": "https://codeload.github.com/ros/ros_comm/tar.gz/refs/tags/1.17.4",
+    "sha256": "180c5bf2810321a6a3c76f9c74fc35b7dd8bccd2d3af5ebd7dca6b416df2bd93",
+    "version": "1.17.4"
+  },
+  "rosconsole": {
+    "url": "https://codeload.github.com/ros/rosconsole/tar.gz/refs/tags/1.14.4",
+    "sha256": "67f8868ed2a50d1cfffef2f18e185036e2ed6a81f576833b0db9729ed5fa5d78",
+    "version": "1.14.4"
+  },
+  "ros": {
+    "url": "https://codeload.github.com/ros/ros/tar.gz/refs/tags/1.15.10",
+    "sha256": "db8dc36f485fd067fcfad7e8592ed49cf9efae5ebd6b6c28e1ad76b7f47784c1",
+    "version": "1.15.10"
+  },
+  "std_msgs": {
+    "url": "https://codeload.github.com/ros/std_msgs/tar.gz/refs/tags/0.5.14",
+    "sha256": "adf1e84d5fa3d7e5e817230171d0147f042992c96eaa69c440cd739ff73b9f32",
+    "version": "0.5.14"
+  },
+  "common_msgs": {
+    "url": "https://codeload.github.com/ros/common_msgs/tar.gz/refs/tags/1.13.2",
+    "sha256": "ac2501620ecb29b5c4125727ccad0be630e00001bdc3ee86ed84df2131044934",
+    "version": "1.13.2"
+  },
+  "rospack": {
+    "url": "https://codeload.github.com/ros/rospack/tar.gz/refs/tags/2.6.4",
+    "sha256": "e7a8296f25bc0f32336ea619935ac6cf2b4cbb72f614a23ac383c6cb29e69337",
+    "version": "2.6.4"
+  },
+  "cmake_modules": {
+    "url": "https://codeload.github.com/ros/cmake_modules/tar.gz/refs/tags/0.5.2",
+    "sha256": "73ced815b6a33ea97fd506a67e168c2db8d948f6634d95f0bbcb46621f7540d5",
+    "version": "0.5.2"
+  },
+  "ros_environment": {
+    "url": "https://codeload.github.com/ros/ros_environment/tar.gz/refs/tags/1.3.2",
+    "sha256": "c0bc78d606e85a5456ce669f33638d8e8872deadb08a745a8ae79874f61f58e3",
+    "version": "1.3.2"
+  },
+  "ros_comm_msgs": {
+    "url": "https://codeload.github.com/ros/ros_comm_msgs/tar.gz/refs/tags/1.11.4",
+    "sha256": "c7534c9e225c5d2244e059779e686e86ab506121ee7020edb0c4600854e30640",
+    "version": "1.11.4"
+  }
+}

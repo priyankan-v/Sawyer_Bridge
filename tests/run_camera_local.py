@@ -146,7 +146,7 @@ try:
     assert all(entry['direction'] == '1to2' for entry in enabled)
     publishers = dict(master_api.getSystemState('/camera_test')[2][0])
     expected = {
-        '/rosout', '/rosout_agg', '/io/internal_camera/head_camera/image_rect_color',
+        '/rosout', '/io/internal_camera/head_camera/image_rect_color',
         '/io/internal_camera/right_hand_camera/image_rect'}
     expected.update('/io/internal_camera/'+name+'/'+suffix
                     for name in ('head_camera', 'right_hand_camera') for suffix in ('state', 'config'))

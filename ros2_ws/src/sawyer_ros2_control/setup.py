@@ -10,4 +10,7 @@ setup(name='sawyer_ros2_control', version='0.1.0', packages=['sawyer_ros2_contro
       description='Guarded Sawyer control and read-only camera viewing through ros1_bridge', license='Apache-2.0',
       entry_points={'console_scripts': ['command = sawyer_ros2_control.command:main',
                                         'move_joint = sawyer_ros2_control.move_joint:main',
+                                        'sawyer_runtime = sawyer_ros2_control.runtime:main',
+                                        'preflight = sawyer_ros2_control.runtime:preflight_main',
+                                        'verify_bridge = sawyer_ros2_control.runtime:verify_main',
                                         'camera_viewer = sawyer_ros2_control.camera_viewer:main']})

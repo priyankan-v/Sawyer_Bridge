@@ -79,6 +79,7 @@ try:
     cfg_path.write_text(json.dumps(config))
     start('local_bridge', ['scripts/env.sh','ros2','ros2','launch','sawyer_ros2_control','bridge.launch.py','config:='+str(cfg_path)])
     run(['scripts/env.sh','ros2','python','tests/ros2_transport.py','docs/results/local_transport.json'],60)
+    (ROOT/'.runtime/local_transport.json').write_text((ROOT/'docs/results/local_transport.json').read_text())
     run(['scripts/env.sh','ros2','python','-m','unittest','discover','-s','tests','-v'])
     run(['scripts/env.sh','ros2','ros2','run','sawyer_ros2_control','command','one','--joint','right_j0','--position','0.01','--duration','2'])
     run(['scripts/env.sh','ros2','ros2','run','sawyer_ros2_control','move_joint','--joint','right_j2','--distance','.01','--time','2','--dry-run'])

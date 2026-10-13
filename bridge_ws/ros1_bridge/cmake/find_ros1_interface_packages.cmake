@@ -35,6 +35,11 @@ function(find_ros1_interface_packages var)
   if(NOT WIN32)
     string(REPLACE ";" ":" PYTHONPATH_WITHOUT_ROS2 "${PYTHONPATH_WITHOUT_ROS2}")
   endif()
+  # Packaged ROS 1 lives beneath the ROS 2 overlay prefix. Keep its private
+  # Python modules when filtering ROS 2 paths during interface discovery.
+  if(DEFINED ENV{SAWYER_ROS1_PYTHONPATH})
+    set(PYTHONPATH_WITHOUT_ROS2 "$ENV{SAWYER_ROS1_PYTHONPATH}:${PYTHONPATH_WITHOUT_ROS2}")
+  endif()
   set(ENV{PYTHONPATH} "${PYTHONPATH_WITHOUT_ROS2}")
 
   # find all known ROS1 message/service packages
