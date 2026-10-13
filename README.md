@@ -23,7 +23,8 @@ conda activate "$PWD/.conda/envs/humble"
 source config/network.env
 ./scripts/env.sh ros1 python scripts/preflight.py && \
 ./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py
-#./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py commands:=true cameras:=true
+#./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py commands:=true cameras:=true head_commands:=true
+
 ```
 
 **This starts telemetry only. Arm command transport is disabled by default.**
@@ -105,6 +106,9 @@ For terminal-only validation, use `--start-both --headless --duration 6 --requir
 installation is needed. A graphical desktop is required unless using `--headless`.
 
 ## Position control
+
+See [How `move_joint` reaches Sawyer](docs/MOVE_JOINT_COMMAND_PATH.md) for the
+execution path, source files, bridge conversion and feedback checks.
 
 Keep Terminal 2's `[sawyer ros2]` shell open. Before motion, check readiness:
 

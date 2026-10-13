@@ -1,0 +1,353 @@
+{
+  "date": "2026-10-12",
+  "scope": "User-provided physical head command test plus read-only agent diagnosis; no further agent motion commands or setting changes",
+  "current_head_state": {
+    "pan": 0.8339228630065918,
+    "isTurning": false,
+    "isBlocked": false,
+    "panMode": 0
+  },
+  "feedback": {
+    "samples": 534,
+    "min": 0.8339228515625,
+    "max": 0.8339228515625
+  },
+  "robot_state": {
+    "homed": true,
+    "ready": true,
+    "enabled": true,
+    "stopped": false,
+    "error": false,
+    "lowVoltage": false,
+    "estop_button": 0,
+    "estop_source": 0
+  },
+  "diagnostics": [],
+  "firmware": {
+    "/manifest/robot_software/version/INTERA_VERSION_STAMP": "5.3.1.192-.0-3d373b7"
+  },
+  "command_subscribers_ros1": [
+    "/realtime_loop"
+  ],
+  "command_publishers_ros1": [
+    "/sawyer_selective_bridge"
+  ],
+  "head_command_bridge_enabled": true,
+  "ros2_head_command_topic": "Enabled for the user test; outgoing ROS 1 bridge connection to /realtime_loop confirmed",
+  "message_mappings": "HeadState and HeadPanCommand present in compiled bridge",
+  "application_command_mode": "HeadPanCommand.SET_ACTIVE_MODE (1)",
+  "movement_unit_tests": {
+    "status": "PASS",
+    "count": 28
+  },
+  "dry_run": {
+    "status": "PASS",
+    "joint": "head_pan",
+    "start": 0.8339228515625,
+    "distance": -0.01,
+    "target": 0.8239228515625,
+    "duration_seconds": 5,
+    "motion_commands_sent": false
+  },
+  "preflight_ready": false,
+  "preflight_errors": [
+    "right_j6: measured -4.7138359375 outside live limits [-4.7124, 4.7124]"
+  ],
+  "historical_capture": {
+    "commands": 20,
+    "targets": [
+      -2.9829959869384766
+    ],
+    "head_states": [
+      {
+        "pan": -2.9829959869384766,
+        "panMode": 0,
+        "isTurning": false,
+        "isBlocked": false
+      }
+    ],
+    "meaning": "Active-mode requests observed at the current measured angle; this does not establish a successful movement test or prove a motor fault"
+  },
+  "conclusion": {
+    "current_failure": "Head remained passive and stationary after controller received 494 commands",
+    "software_transport": "All 494 reported commands reached the controller; not the previously disabled head bridge path",
+    "underlying_controller_or_hardware_cause": "Not identified by read-only checks; controller-side mode/drive diagnosis required",
+    "preflight_limit_error": "Separate full-arm readiness rejection on right_j6; not proof of the cause of passive head mode"
+  },
+  "next_steps": [
+    "Resolve the reported readiness/limit error through normal operator procedure",
+    "Inspect head active-mode/drive status using controller/service diagnostics",
+    "Any additional physical movement or mode-change test requires operator approval; do not change firmware limits/current parameters to force movement"
+  ],
+  "initial_bridge_observation": {
+    "head_command_enabled": false,
+    "note": "Before the user enabled head forwarding and ran the movement test"
+  },
+  "user_motion_attempt": {
+    "joint": "head_pan",
+    "target_rad": 0.0,
+    "duration_seconds": 5.0,
+    "minimum_time_seconds": 0.8686696370442708,
+    "result": "not_reached",
+    "start_rad": 0.8339228515625,
+    "measured_rad": 0.8339228515625,
+    "pan_mode": 0,
+    "state_age_seconds": 0.005387363002228085,
+    "publisher_commands": 494
+  },
+  "transport_confirmation": {
+    "/realtime_loop": {
+      "head_connections": [
+        [
+          198,
+          "http://169.254.121.2:36283/",
+          "i",
+          "TCPROS",
+          "/robot/head/command_head_pan",
+          1,
+          "TCPROS connection on port 49272 to [169.254.121.2:37929 on socket 67]"
+        ]
+      ],
+      "head_stats": [
+        [
+          "/robot/head/command_head_pan",
+          [
+            [
+              198,
+              4446,
+              494,
+              0,
+              0
+            ]
+          ]
+        ]
+      ]
+    },
+    "/sawyer_selective_bridge": {
+      "head_connections": [
+        [
+          15,
+          "/realtime_loop",
+          "o",
+          "TCPROS",
+          "/robot/head/command_head_pan",
+          true,
+          "TCPROS connection on port 37929 to [169.254.121.3:49272 on socket 25]"
+        ]
+      ],
+      "head_stats": [
+        [
+          "/robot/head/command_head_pan",
+          [
+            [
+              15,
+              6422,
+              6422,
+              494,
+              0
+            ]
+          ]
+        ]
+      ]
+    },
+    "read_related_services": []
+  },
+  "counts": {
+    "ros2_application_published": 494,
+    "ros1_bridge_transmitted": 494,
+    "controller_received": 494,
+    "controller_payload_bytes": 4446,
+    "bridge_wire_bytes_including_length_prefix": 6422,
+    "message_payload_bytes": 9
+  },
+  "conversion_verified": "Generated converter copies target, speed_ratio and pan_mode directly; application requests SET_ACTIVE_MODE=1",
+  "navigator_followup": {
+    "operator_report": "Pressed and held navigator square button; pan_mode remained 0",
+    "interpretation": "Navigator head-follow behavior is documented in the manufacturing UI guide; its failure to change mode does not identify an SDK-mode activation cause",
+    "readonly_observation": {
+      "scope": "Read-only graph and feedback observation; no mode or movement commands",
+      "date": "2026-10-12T19:01:49-0500",
+      "command_publishers": [
+        "/sawyer_selective_bridge"
+      ],
+      "command_subscribers": [
+        "/realtime_loop"
+      ],
+      "related_topics": {
+        "/robot/digital_io/head_button_triangle_light/state": "intera_core_msgs/DigitalIOState",
+        "/robot/digital_io/head_button_ok/state": "intera_core_msgs/DigitalIOState",
+        "/robot/head_display": "sensor_msgs/Image",
+        "/robot/digital_io/head_button_triangle/state": "intera_core_msgs/DigitalIOState",
+        "/robot/set_motor_voltage_low": "std_msgs/Bool",
+        "/robot/navigators/head_navigator/state": "intera_core_msgs/NavigatorState",
+        "/io/internal_camera/head_camera/image_raw": "sensor_msgs/Image",
+        "/robot/digital_io/head_red_light/state": "intera_core_msgs/DigitalIOState",
+        "/robot/limb/right/use_default_spring_model": "std_msgs/Empty",
+        "/io/internal_camera/head_camera/config": "intera_core_msgs/IODeviceConfiguration",
+        "/robot/digital_io/head_button_circle_light/state": "intera_core_msgs/DigitalIOState",
+        "/robot/digital_io/head_blue_light/state": "intera_core_msgs/DigitalIOState",
+        "/robot/digital_io/head_button_back_light/state": "intera_core_msgs/DigitalIOState",
+        "/robot/head/command_head_pan": "intera_core_msgs/HeadPanCommand",
+        "/robot/digital_io/head_button_back/state": "intera_core_msgs/DigitalIOState",
+        "/robot/analog_io/head_wheel/value_uint32": "std_msgs/UInt32",
+        "/robot/digital_io/head_button_sawyer_light/state": "intera_core_msgs/DigitalIOState",
+        "/robot/digital_io/head_button_square_light/state": "intera_core_msgs/DigitalIOState",
+        "/diagnostics": "diagnostic_msgs/DiagnosticArray",
+        "/io/internal_camera/head_camera/image_rect_color": "sensor_msgs/Image",
+        "/io/internal_camera/head_camera/command": "intera_core_msgs/IOComponentCommand",
+        "/io/internal_camera/head_camera/camera_info": "sensor_msgs/CameraInfo",
+        "/robot/analog_io/head_wheel/state": "intera_core_msgs/AnalogIOState",
+        "/robot/digital_io/head_green_light/state": "intera_core_msgs/DigitalIOState",
+        "/robot/digital_io/head_button_circle/state": "intera_core_msgs/DigitalIOState",
+        "/io/internal_camera/head_camera/state": "intera_core_msgs/IODeviceStatus",
+        "/io/internal_camera/head_camera/rectify_color/parameter_descriptions": "dynamic_reconfigure/ConfigDescription",
+        "/robot/head/head_state": "intera_core_msgs/HeadState",
+        "/io/internal_camera/head_camera/rectify_color/parameter_updates": "dynamic_reconfigure/Config",
+        "/robot/digital_io/head_button_square/state": "intera_core_msgs/DigitalIOState",
+        "/robot/digital_io/head_button_sawyer/state": "intera_core_msgs/DigitalIOState"
+      },
+      "related_services": [
+        [
+          "/sdk_head_display/set_logger_level",
+          [
+            "/sdk_head_display"
+          ]
+        ],
+        [
+          "/io/internal_camera/head_camera/rectify_color/set_parameters",
+          [
+            "/intera_camera_nodelets"
+          ]
+        ],
+        [
+          "/io/internal_camera/head_camera/rectify_color/set_logger_level",
+          [
+            "/io/internal_camera/head_camera/rectify_color"
+          ]
+        ],
+        [
+          "/sdk_head_display/get_loggers",
+          [
+            "/sdk_head_display"
+          ]
+        ],
+        [
+          "/io/internal_camera/head_camera/rectify_color/get_loggers",
+          [
+            "/io/internal_camera/head_camera/rectify_color"
+          ]
+        ],
+        [
+          "/io/internal_camera/head_camera/command",
+          [
+            "/internal_camera_io"
+          ]
+        ]
+      ],
+      "head_samples": 801,
+      "head_modes": [
+        0
+      ],
+      "last_head_state": {
+        "pan": 0.4301699101924896,
+        "panMode": 0,
+        "isTurning": false,
+        "isBlocked": false
+      },
+      "robot_state": {
+        "enabled": true,
+        "ready": true,
+        "homed": true,
+        "stopped": false,
+        "error": false,
+        "lowVoltage": false,
+        "estop_button": 0,
+        "estop_source": 0
+      },
+      "commands_observed_during_idle_sample": [],
+      "diagnostics": [
+        {
+          "name": "Squish detection",
+          "level": 1,
+          "message": "Squish detected",
+          "values": {
+            "cartesian index": "0",
+            "wrench": "-18.3587",
+            "wrench threshold": "18"
+          }
+        },
+        {
+          "name": "Joint 0 head_pan sds",
+          "level": 0,
+          "message": "[OK]",
+          "values": {
+            "HES invalid pulse count": "0",
+            "HES max period": "0",
+            "HES max pulse width": "0",
+            "HES min period": "-1",
+            "HES min pulse width": "-1",
+            "HES missed pulse count": "228"
+          }
+        },
+        {
+          "name": "Joint 0 head_pan thermal",
+          "level": 0,
+          "message": "[OK]",
+          "values": {
+            "Heatsink temperature (dC)": "380",
+            "Motor temperature (dC)": "298"
+          }
+        },
+        {
+          "name": "Joint 0 head_pan voltage",
+          "level": 0,
+          "message": "[OK]",
+          "values": {
+            "Brake i2t limit": "687675801",
+            "Brake i2t limit active": "0",
+            "Brake i2t limit cycles": "0",
+            "Brake i2t running": "0",
+            "Bus Voltage (mV)": "22705",
+            "Persistent Max Raw Bus Voltage": "22770",
+            "Persistent Min Raw Bus Voltage": "22681"
+          }
+        },
+        {
+          "name": "Joint 0 head_pan warranty_counter",
+          "level": 0,
+          "message": "[OK]",
+          "values": {
+            "Customer Task Time": "1738",
+            "Customer Uptime": "5905412",
+            "En Time": "5599864",
+            "Task Time": "1738",
+            "Uptime": "5905412"
+          }
+        }
+      ],
+      "related_logs": []
+    },
+    "preflight": {
+      "state": {
+        "homed": true,
+        "ready": true,
+        "enabled": true,
+        "stopped": false,
+        "error": false,
+        "lowVoltage": false,
+        "estop_button": 0,
+        "estop_source": 0
+      },
+      "collision": false,
+      "position_limit_errors": [
+        "right_j6: measured -4.7138359375 outside live limits [-4.7124, 4.7124]"
+      ],
+      "ready": false,
+      "errors": [
+        "right_j6: measured -4.7138359375 outside live limits [-4.7124, 4.7124]"
+      ]
+    },
+    "assessment": "No competing ROS head publisher or idle commands observed during eight seconds. Head voltage/thermal diagnostics report OK. A Squish detected warning was observed; later collision feedback was false. These do not establish the cause of passive head mode.",
+    "next_action": "Resolve readiness error, inspect controller logs and SDK-mode head enable/inhibit/drive status with robot support; any additional actuation test requires explicit approval."
+  }
+}
