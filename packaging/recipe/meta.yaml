@@ -1,15 +1,15 @@
 package:
   name: sawyer-ros2-bridge
-  version: "0.2.0"
+  version: "0.3.0"
 
 # The native build uses system Humble and system Python, never Conda's ABI.
 # Build packaging/build_package.py first; this recipe relocates that staged tree.
 source:
-  path: ../../.runtime/pkg-prefix
+  path: ../../.runtime/clean-prefix
 
 build:
-  number: 1
-  string: humble_py310_1
+  number: 0
+  string: humble_py310_0
   skip: true  # [not linux64]
   script: |
     set -eu
@@ -31,17 +31,19 @@ requirements:
 
 test:
   commands:
-    - /bin/bash -c 'source /opt/ros/humble/setup.bash; source "$PREFIX/local_setup.bash"; ros2 run sawyer_ros2_control sawyer_runtime --check'
-    - /bin/bash -c 'source /opt/ros/humble/setup.bash; source "$PREFIX/local_setup.bash"; ros2 run sawyer_ros2_control move_joint --help'
+    - test ! -d "$PREFIX/lib/sawyer_ros2_control"
+    - test ! -d "$PREFIX/libexec/sawyer/ros1/lib/python3"
+    - /bin/bash -c 'source /opt/ros/humble/setup.bash; source "$PREFIX/local_setup.bash"; ros2 run sawyer_bridge check'
+    - /bin/bash -c 'source /opt/ros/humble/setup.bash; source "$PREFIX/local_setup.bash"; ros2 launch sawyer_bridge bridge.launch.py --show-args'
 
 about:
   home: https://github.com/priyankan-v/Sawyer_Bridge
   license: MIT AND Apache-2.0 AND BSD-3-Clause
   license_file:
-    - share/sawyer_ros2_control/licenses/project-LICENSE
+    - share/sawyer_bridge/licenses/project-LICENSE
   summary: Sawyer-specific ROS 1 bridge and Intera interfaces for existing system ROS 2 Humble
   description: |
     Ubuntu 22.04 x86_64 only. Requires external ROS 2 Humble under /opt/ros/humble,
-    system Python 3.10, NumPy, Tk, PyYAML, rospkg and Ubuntu Boost 1.74 libraries.
-    Contains private ROS 1 client dependencies; installs no ROS distribution or
+    system Python 3.10, PyYAML and Ubuntu Boost 1.74 libraries.
+    Contains only private ROS 1 C++ runtime libraries; installs no ROS distribution or
     Conda Python. Source Humble and this package's local_setup.bash before use.

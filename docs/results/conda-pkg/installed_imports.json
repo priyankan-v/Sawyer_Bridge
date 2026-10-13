@@ -1,7 +1,0 @@
-{
-  "python": "/usr/bin/python3",
-  "prefix": "/home/pi/sawyer_rs/.runtime/package-install-release",
-  "ros2": "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py",
-  "private_ros1_imports": "PASS",
-  "state_directory": "/home/pi/sawyer_rs/.runtime/pkg-release-state"
-}

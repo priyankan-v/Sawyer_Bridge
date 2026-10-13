@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>sawyer_bridge</name><version>0.3.0</version>
+  <description>Launch and configure the Sawyer bridge for system Humble.</description>
+  <maintainer email="maintainers@example.com">Sawyer Bridge contributors</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_python</buildtool_depend>
+  <exec_depend>ament_index_python</exec_depend><exec_depend>launch</exec_depend>
+  <exec_depend>python3-yaml</exec_depend><exec_depend>ros1_bridge</exec_depend>
+  <exec_depend>intera_core_msgs</exec_depend><exec_depend>intera_motion_msgs</exec_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

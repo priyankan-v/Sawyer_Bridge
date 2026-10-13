@@ -1,7 +1,0 @@
-topics:
-  - topic: /robot/joint_states
-    type: sensor_msgs/msg/JointState
-    queue_size: 100
-
-services_1_to_2: []
-services_2_to_1: []

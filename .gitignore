@@ -1,37 +1,27 @@
-# Generated workspace outputs
-/bridge_ws/build*/
-/bridge_ws/install*/
-/bridge_ws/log*/
-/ros1_ws/build*/
-/ros1_ws/devel*/
-/ros1_ws/install*/
-/ros2_ws/build*/
-/ros2_ws/install*/
-/ros2_ws/log*/
+# Package builds, downloaded sources and local validation
 .runtime/
+/dist/
+/conda-bld/
+/build/
+/install/
+/log/
 __pycache__/
-*.pyc
+*.py[cod]
 *.egg-info/
-config/network.env
-
-.conda/
-# Local environments/checkouts shared with other branches
-.pixi/
-/bridge_ws/src/
-# Test runners regenerate these; retain only Conda evidence and safety proof.
-/docs/results/*
-!/docs/results/conda/
-!/docs/results/conda-pkg/
-!/docs/results/local_transport.json
 .pytest_cache/
 .mypy_cache/
 *.log
 *.bak
-
 *.swp
 *.tmp
 .DS_Store
-
-# Locally built Conda packages and channels
-/dist/
-/conda-bld/
+# Existing local environments and outputs belonging to preserved branches
+.conda/
+.pixi/
+/bridge_ws/
+/ros1_ws/
+/ros2_ws/
+/build_conda/
+/install_conda/
+/log_conda/
+/config/network.env

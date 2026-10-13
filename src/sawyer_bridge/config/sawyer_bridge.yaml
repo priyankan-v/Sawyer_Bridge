@@ -1,0 +1,19 @@
+# Direction is a project extension to the installed parameter_bridge.
+topics:
+  - {topic: /robot/joint_states, type: sensor_msgs/msg/JointState, queue_size: 5, direction: 1to2, enabled: true, qos: {history: keep_last, depth: 5, reliability: best_effort}}
+  - {topic: /robot/state, type: intera_core_msgs/msg/RobotAssemblyState, queue_size: 1, direction: 1to2, enabled: true, qos: {history: keep_last, depth: 1, reliability: reliable}}
+  - {topic: /robot/limb/right/endpoint_state, type: intera_core_msgs/msg/EndpointState, queue_size: 5, direction: 1to2, enabled: true, qos: {history: keep_last, depth: 5, reliability: best_effort}}
+  - {topic: /robot/limb/right/collision_detection_state, type: intera_core_msgs/msg/CollisionDetectionState, queue_size: 1, direction: 1to2, enabled: true, qos: {history: keep_last, depth: 1, reliability: reliable}}
+  - {topic: /robot/joint_limits, type: intera_core_msgs/msg/JointLimits, queue_size: 1, direction: 1to2, enabled: true, qos: {history: keep_last, depth: 1, reliability: reliable, durability: transient_local}}
+  - {topic: /robot/limb/right/joint_command, type: intera_core_msgs/msg/JointCommand, queue_size: 1, direction: 2to1, enabled: false, qos: {history: keep_last, depth: 1, reliability: reliable, durability: volatile, lifespan: {secs: 0, nsecs: 200000000}}}
+  - {topic: /robot/limb/right/joint_command_timeout, type: std_msgs/msg/Float64, queue_size: 1, direction: 2to1, enabled: false, qos: {history: keep_last, depth: 1, reliability: reliable}}
+  - {topic: /robot/limb/right/set_speed_ratio, type: std_msgs/msg/Float64, queue_size: 1, direction: 2to1, enabled: false, qos: {history: keep_last, depth: 1, reliability: reliable}}
+  - {topic: /robot/head/head_state, type: intera_core_msgs/msg/HeadState, queue_size: 1, direction: 1to2, enabled: true}
+  - {topic: /robot/head/command_head_pan, type: intera_core_msgs/msg/HeadPanCommand, queue_size: 1, direction: 2to1, enabled: false, qos: {history: keep_last, depth: 1, reliability: reliable, durability: volatile, lifespan: {secs: 0, nsecs: 200000000}}}
+  - {topic: /robot/set_super_enable, type: std_msgs/msg/Bool, queue_size: 1, direction: 2to1, enabled: false}
+services_1_to_2: []
+# Upstream convention: services_2_to_1 exposes an existing ROS 1 server to ROS 2.
+services_2_to_1: []
+# Discover actual service servers before enabling, e.g.:
+# - {service: /ExternalTools/right/PositionKinematicsNode/IKService, type: intera_core_msgs/SolvePositionIK, package: ''}
+# - {service: /ExternalTools/right/PositionKinematicsNode/FKService, type: intera_core_msgs/SolvePositionFK, package: ''}

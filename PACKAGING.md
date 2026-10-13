@@ -1,14 +1,11 @@
-# Building the Sawyer Conda package
+# Build and validate the Conda package
 
-Target: **Ubuntu 22.04 x86_64**, external ROS 2 Humble at `/opt/ros/humble`,
-Ubuntu's GCC/Boost 1.74 and `/usr/bin/python3` 3.10. This package intentionally
-uses the system ROS ABI. It is not a RoboStack package, a generic Linux binary,
-or a replacement ROS installation. No Docker or robot firmware changes are used.
+Users install a binary; the following commands are for maintainers on
+**Ubuntu 22.04 x86_64 with system Humble at `/opt/ros/humble`**.
 
-## Builder prerequisites
+## Build dependencies
 
-Install Humble and its interface generators before building. The required Ubuntu
-build dependencies are listed below; install them only if missing:
+Install missing builder prerequisites using Ubuntu packages:
 
 ```bash
 sudo apt install build-essential cmake pkg-config libboost-system-dev \
@@ -16,107 +13,126 @@ sudo apt install build-essential cmake pkg-config libboost-system-dev \
   libboost-chrono-dev libboost-date-time-dev libboost-program-options-dev \
   libconsole-bridge-dev libtinyxml2-dev python3-dev python3-setuptools \
   python3-catkin-pkg python3-rospkg python3-empy python3-yaml python3-numpy \
-  python3-tk python3-colcon-common-extensions
+  python3-colcon-common-extensions
 ```
 
-Humble supplies `ament_cmake`, `rclcpp`, `rclpy`, launch, `rosidl_default_generators`,
-`std_msgs`, `sensor_msgs`, `geometry_msgs` and `action_msgs`. No system Noetic is
-installed. The builder downloads only the pinned ROS 1 source repositories in
-`packaging/ros1-sources.json`, verifies SHA256 and selects individual packages.
-No ROS 1 desktop, navigation, simulator, SDK application or ROS distribution
-metapackage is built. Message generation is limited to C++ and Python.
+Humble must provide `ament_cmake`, `rclcpp`, `rclpy`, launch,
+`rosidl_default_generators`, `std_msgs`, `sensor_msgs`, `geometry_msgs` and
+`action_msgs`. The source manifest pins upstream ROS 1 archives by SHA256.
+ROS 1 message generation, Python tools and the localhost test master stay in
+the ignored build directory. The artifact contains only eight ROS 1 C++ libraries.
 
-## Native build
+## Build the artifact
 
-From the repository root on `conda-pkg`:
-
-```bash
-/usr/bin/python3 packaging/build_package.py --prefix .runtime/pkg-prefix --jobs 2
-```
-
-The builder clears inherited Conda/ROS paths, uses system compiler/Python, builds
-private ROS 1 clients, builds both Intera interface packages and the application
-against Humble, then rebuilds the existing bridge. Its package allowlist is
-`builtin_interfaces`, `std_msgs`, `geometry_msgs`, `sensor_msgs`,
-`intera_core_msgs`, and `intera_motion_msgs`. Interface definitions and joint
-safety logic are preserved. Build/cache outputs stay under `.runtime/`.
-
-## Create the Conda artifact
-
-Package-building tools can live in an isolated **maintainer tools** prefix;
-this is not a ROS environment and is not needed by users:
+From the repository root:
 
 ```bash
+/usr/bin/python3 packaging/build_package.py --prefix .runtime/clean-prefix --jobs 3
 conda create -p "$PWD/.runtime/conda-build-tools" --override-channels \
-  -c conda-forge conda-build conda-index -y
-/usr/bin/python3 packaging/relocate.py .runtime/pkg-prefix \
+  -c conda-forge conda-build conda-index patchelf -y
+/usr/bin/python3 packaging/relocate.py .runtime/clean-prefix \
   --patchelf .runtime/conda-build-tools/bin/patchelf
 .runtime/conda-build-tools/bin/conda-build packaging/recipe --override-channels \
   -c conda-forge --output-folder "$PWD/dist" --croot "$PWD/.runtime/conda-bld"
-```
-
-The recipe packages the native staging prefix. It does not rebuild against
-Conda's Python/Boost, install a ROS metapackage or install another Python runtime.
-Native compilation and Conda archive creation are separate reproducible steps.
-ELF library paths use `$ORIGIN` plus `/opt/ros/humble/lib`. Installed applications
-use `/usr/bin/python3`; the ROS 1 Python modules remain private to helper
-subprocesses. Only supported system libraries are external dependencies.
-
-The staged tree is a package-build artifact. After source changes, rebuild it
-before creating another Conda archive. Keep version/build numbers distinct for
-published releases. Do not upload unvalidated artifacts.
-
-## Install and validate at another prefix
-
-```bash
-conda create -p "$PWD/.runtime/package-install-test" --offline \
-  "$PWD/dist/linux-64/sawyer-ros2-bridge-0.2.0-humble_py310_1.conda" -y
-source /opt/ros/humble/setup.bash
-source "$PWD/.runtime/package-install-test/local_setup.bash"
-export SAWYER_STATE_DIR="$PWD/.runtime/package-test-state"
-ros2 run sawyer_ros2_control sawyer_runtime --check
-ros2 run sawyer_ros2_control verify_bridge
-ros2 run sawyer_ros2_control move_joint --help
-```
-
-`verify_bridge` owns a localhost master, private DDS domain and synthetic fixture.
-It checks ROS 1→ROS 2 JointState/Image and ROS 2→ROS 1 JointCommand/HeadPanCommand
-fields, then cleans up its processes. It never publishes to physical robot topics.
-The bundled pure-Python master is only used by this explicit self-test.
-
-Developer regression tests reuse the staged or installed prefix:
-
-```bash
-export SAWYER_PACKAGE_PREFIX="$PWD/.runtime/package-install-test"
-./scripts/env.sh ros2 python -m unittest discover -s tests -v
-./scripts/env.sh ros1 python tests/camera_control_checks.py
-/usr/bin/python3 tests/run_local.py
-/usr/bin/python3 tests/run_camera_local.py
-```
-
-The source-only ROS 1 master/CLI helpers used by those legacy integration runners
-are restricted to localhost and come from the pinned build cache. They are not
-user installation requirements. GUI tests require a desktop display.
-
-## External runtime dependencies
-
-Conda does not manage the existing system Humble installation. Runtime needs
-Ubuntu's `libstdc++6`, `libgcc-s1`, libc, Boost 1.74 libraries, `libconsole-bridge1.0`,
-`libtinyxml2-9`, `libpython3.10`, and system Python dependencies listed in README.
-Humble provides its own middleware, message and typesupport libraries. A release
-must be tested on a clean Ubuntu 22.04 machine with these prerequisites before
-being described as generally distributable. Other OS/Python/ROS ABIs require a
-separate build; the installed runtime check rejects unsupported platforms.
-
-## Channel publication
-
-```bash
 .runtime/conda-build-tools/bin/python -m conda_index dist
-# Users can then install from a locally served channel:
-conda install -c file:///absolute/path/to/dist sawyer-ros2-bridge
 ```
 
-No public channel is configured or uploaded automatically. Configure channel
-ownership and release credentials separately when publication is authorized.
-See [MIGRATION.md](MIGRATION.md) for the actual validation results and remaining
-hardware checks.
+Use fresh staging/build directories when changing the source layout. Increment
+the recipe's version/build for a new artifact; Conda caches packages by filename.
+The recipe points to `.runtime/clean-prefix`. Build tools are separate from the
+installed payload and are not user runtime dependencies.
+
+## Install at a separate prefix
+
+```bash
+conda create -p "$PWD/.runtime/clean-install" --offline \
+  "$PWD/dist/linux-64/sawyer-ros2-bridge-0.3.0-humble_py310_0.conda" -y
+source /opt/ros/humble/setup.bash
+source "$PWD/.runtime/clean-install/local_setup.bash"
+ros2 run sawyer_bridge check
+ros2 launch sawyer_bridge bridge.launch.py --show-args
+```
+
+ELF paths are relative to the installed prefix, plus `/opt/ros/humble/lib`.
+Conda installs neither Python nor a ROS distribution. External dependencies are
+Ubuntu libc/libstdc++/libgcc, Boost 1.74, console_bridge, system Python 3.10/PyYAML
+and the existing Humble libraries/Python dependencies (including NumPy for
+generated message bindings). Conda's dependency solver cannot validate these
+system prerequisites; the installed `check` command verifies imports and linkage.
+This binary is not compatible with other OS, Python or ROS ABIs.
+
+## Maintainer tests
+
+With the installed overlay sourced:
+
+```bash
+/usr/bin/python3 tests/transport_test.py \
+  --ros1-prefix "$PWD/.runtime/clean-build/ros1-install" \
+  --report "$PWD/.runtime/clean-transport.json"
+/usr/bin/python3 -m unittest discover -s tests -p test_configuration.py -v
+```
+
+The test runs the installed launch file with synthetic configuration, owns a localhost master and isolated DDS domain. It verifies JointState
+and synthetic Image data from ROS 1, and JointCommand/HeadPanCommand data from
+ROS 2. It publishes only to `/sawyer_pkg_test/*`, never robot command topics.
+Tests and ROS 1 Python fixtures are not installed in the artifact.
+
+Native serialization tests also compare empty arrays, boolean arrays, headers
+and converted bytes against generated ROS 1 C++ interfaces:
+
+```bash
+export SAWYER_ROOT="$PWD"
+export SAWYER_PACKAGE_PREFIX="$PWD/.runtime/clean-install"
+export SAWYER_ROS1_BUILD_PREFIX="$PWD/.runtime/clean-build/ros1-install"
+export PKG_CONFIG_PATH="$SAWYER_ROS1_BUILD_PREFIX/lib/pkgconfig"
+cmake -S tests/native -B .runtime/clean-native
+cmake --build .runtime/clean-native
+/usr/bin/python3 tests/native/link_test.py
+export LD_LIBRARY_PATH="$SAWYER_PACKAGE_PREFIX/libexec/sawyer/ros1/lib:$LD_LIBRARY_PATH"
+.runtime/clean-native/check_conversion
+```
+
+Optional **read-only** hardware validation, with the network variables from README:
+
+```bash
+/usr/bin/python3 tests/hardware_readonly.py
+```
+
+It opens only telemetry paths, uses DDS domain 198, and removes its temporary
+ROS 1 parameter namespace. No physical motion or camera control is performed.
+
+## Release status
+
+Validated on this machine on **2026-10-13**:
+
+| Check | Result |
+|---|---|
+| Native build and Conda recipe tests | PASS |
+| Fresh-prefix installation | PASS; one Conda package, no extra ROS/Python environment |
+| Imports, library linkage and required mappings | PASS; all 35 ELF files resolve without build paths; mappings unchanged (49 Intera entries) |
+| Installed launch and localhost transport | PASS; JointState, Image pixels, exact JointCommand/HeadPanCommand fields |
+| Native serialization | PASS; headers, empty arrays and boolean arrays |
+| XML-RPC configuration | PASS; two tests for defaults, opt-in and master rejection |
+| Payload audit | PASS; eight private C++ ROS 1 libraries, no applications/ROS 1 Python/test master |
+| Sawyer read-only telemetry | PASS; 710 messages at 119.95 Hz; all seven arm positions/velocities, limits and robot state |
+
+Artifact: `dist/linux-64/sawyer-ros2-bridge-0.3.0-humble_py310_0.conda`
+(8,370,220 bytes). SHA256:
+
+```text
+1f4b0693e3f6d4e094c5cd194d5f7aa9ce2ccce5eff32712fbb48bd5e9bf5546
+```
+
+Detailed logs/results are local build outputs under `.runtime/clean-*`.
+Conda's linkage audit warns about external system/Humble libraries, which its
+solver does not manage; actual installed linkage/import checks pass.
+No physical actuation was performed. The `conda` and `main` branch references
+are unchanged. Existing local environments, network settings and generated
+workspace outputs are preserved; removed legacy sources/results were archived
+locally under `.runtime/legacy-*` and are excluded from the package.
+A public channel upload and validation on a separate clean PC remain release
+steps. Local channel installation uses:
+
+```bash
+conda install -c "file://$PWD/dist" sawyer-ros2-bridge
+```

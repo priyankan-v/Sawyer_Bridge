@@ -87,6 +87,26 @@ def extract_sources(work, cache):
     return locations
 
 
+def collect_notices(locations, licenses):
+    # Several ROS 1 repositories carry their BSD terms in source headers rather
+    # than a top-level LICENSE. Retain those notices with the compiled binaries.
+    notices = {}
+    for name, location in locations.items():
+        for file in location.rglob('*'):
+            if not file.is_file() or file.suffix not in ('.cpp', '.h', '.hpp'):
+                continue
+            lines = []
+            for line in file.read_text(errors='replace').splitlines():
+                if line.strip() and not line.lstrip().startswith(('//', '/*', '*')):
+                    break
+                lines.append(line)
+            block = '\n'.join(lines).strip()
+            if 'copyright' in block.lower() and ('redistribution' in block.lower() or 'license' in block.lower()):
+                notices.setdefault(block, name + '/' + str(file.relative_to(location)))
+    (licenses / 'UPSTREAM_NOTICES.txt').write_text('\n\n'.join(
+        origin + '\n' + notice for notice, origin in notices.items()) + '\n')
+
+
 def build(args):
     if platform.machine() != 'x86_64' or platform.python_version_tuple()[:2] != ('3', '10'):
         raise RuntimeError('Build with /usr/bin/python3 on Ubuntu 22.04 x86_64 (Python 3.10)')
@@ -96,7 +116,7 @@ def build(args):
     if prefix == Path('/opt/ros/humble') or prefix == ROOT or prefix == Path('/'):
         raise RuntimeError('Choose a dedicated writable package prefix')
     work.mkdir(parents=True, exist_ok=True)
-    private = prefix / 'libexec/sawyer/ros1'
+    private = work / 'ros1-install'
     locations = extract_sources(work, args.cache.resolve())
     workspace = work / 'ros1'
     source = workspace / 'src'
@@ -113,7 +133,7 @@ def build(args):
     for name in ('intera_core_msgs', 'intera_motion_msgs'):
         link = source / name
         if not link.exists():
-            link.symlink_to(ROOT / 'intera_common' / name, target_is_directory=True)
+            link.symlink_to(ROOT / 'interfaces/ros1' / name, target_is_directory=True)
     top = source / 'CMakeLists.txt'
     if not top.exists():
         top.symlink_to(locations['catkin'] / 'cmake/toplevel.cmake')
@@ -132,7 +152,7 @@ def build(args):
     shutil.copytree(locations['ros_comm'] / 'tools/rosmaster/src/rosmaster',
                     private / 'lib/python3/dist-packages/rosmaster', dirs_exist_ok=True)
     # Keep copyright/license notices for every bundled source repository.
-    licenses = prefix / 'share/sawyer_ros2_control/licenses'
+    licenses = prefix / 'share/sawyer_bridge/licenses'
     licenses.mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / 'LICENSE', licenses / 'project-LICENSE')
     for name, location in locations.items():
@@ -141,18 +161,19 @@ def build(args):
                 destination = licenses / name / notice.relative_to(location)
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(notice, destination)
-    for name, location in [('intera_common', ROOT / 'intera_common'),
-                           ('ros1_bridge', ROOT / 'bridge_ws/ros1_bridge')]:
+    for name, location in [('intera_common', ROOT / 'interfaces/ros1'),
+                           ('ros1_bridge', ROOT / 'src/ros1_bridge')]:
         for notice in location.glob('*'):
             if notice.is_file() and notice.name.lower().startswith(('license', 'copying')):
                 destination = licenses / name / notice.name
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(notice, destination)
+    collect_notices(locations, licenses)
     env = system_environment()
     env['CMAKE_BUILD_PARALLEL_LEVEL'] = str(args.jobs)
-    ros2 = ROOT / 'ros2_ws/src'
+    ros2 = ROOT / 'src'
     run(['/usr/bin/colcon', '--log-base', work / 'ros2-log', 'build',
-         '--base-paths', ros2 / 'intera_core_msgs', ros2 / 'intera_motion_msgs', ros2 / 'sawyer_ros2_control',
+         '--base-paths', ros2 / 'intera_core_msgs', ros2 / 'intera_motion_msgs', ros2 / 'sawyer_bridge',
          '--build-base', work / 'ros2-build', '--install-base', prefix, '--merge-install',
          '--parallel-workers', '1', '--cmake-args', '-DBUILD_TESTING=OFF',
          '-DCMAKE_BUILD_TYPE=Release', '-DPython3_EXECUTABLE=/usr/bin/python3'], env, work)
@@ -166,19 +187,18 @@ def build(args):
     env['LD_LIBRARY_PATH'] = str(private / 'lib') + ':' + str(prefix / 'lib') + ':' + env.get('LD_LIBRARY_PATH', '')
     env['SAWYER_BRIDGE_PACKAGES'] = 'builtin_interfaces;std_msgs;geometry_msgs;sensor_msgs;intera_core_msgs;intera_motion_msgs'
     run(['/usr/bin/colcon', '--log-base', work / 'bridge-log', 'build',
-         '--base-paths', ROOT / 'bridge_ws/ros1_bridge', '--build-base', work / 'bridge-build',
+         '--base-paths', ROOT / 'src/ros1_bridge', '--build-base', work / 'bridge-build',
          '--install-base', prefix, '--merge-install', '--parallel-workers', '1',
          '--cmake-args', '-DBUILD_TESTING=OFF', '-DCMAKE_BUILD_TYPE=Release',
          '-DPython3_EXECUTABLE=/usr/bin/python3', '-Dxmlrpcpp_DIR=' + str(private / 'share/xmlrpcpp/cmake'),
          '-DCMAKE_C_COMPILER=/usr/bin/cc', '-DCMAKE_CXX_COMPILER=/usr/bin/c++'], env, work)
-    helpers = prefix / 'libexec/sawyer'
-    helpers.mkdir(parents=True, exist_ok=True)
-    for name in ('preflight.py', 'camera_control.py', 'configure_bridge.py'):
-        shutil.copy2(ROOT / 'scripts' / name, helpers / name)
-    for name in ('selftest.py', 'test_fixture.py', 'test_client.py'):
-        shutil.copy2(ROOT / 'packaging' / name, helpers / name)
-    share = prefix / 'share/sawyer_ros2_control'
-    shutil.copy2(ROOT / 'config/sawyer_bridge.yaml', share / 'sawyer_bridge.yaml')
+    # Ship only the C++ runtime libraries, not ROS 1 tools, Python or build headers.
+    runtime = prefix / 'libexec/sawyer/ros1/lib'
+    runtime.mkdir(parents=True, exist_ok=True)
+    for name in ('cpp_common', 'rostime', 'roscpp_serialization', 'rosconsole',
+                 'rosconsole_backend_interface', 'rosconsole_print', 'roscpp', 'xmlrpcpp'):
+        shutil.copy2(private / 'lib' / ('lib' + name + '.so'), runtime)
+    share = prefix / 'share/sawyer_bridge'
     (share / 'package-build.json').write_text(json.dumps({
         'platform': 'ubuntu-22.04-linux-64', 'ros2': '/opt/ros/humble', 'python': '/usr/bin/python3',
         'private_ros1_sources': json.loads((ROOT / 'packaging/ros1-sources.json').read_text()),
@@ -189,7 +209,7 @@ def build(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--prefix', type=Path, required=True)
-    parser.add_argument('--work', type=Path, default=ROOT / '.runtime/pkg-build')
+    parser.add_argument('--work', type=Path, default=ROOT / '.runtime/clean-build')
     parser.add_argument('--cache', type=Path, default=ROOT / '.runtime/pkg-sources')
     parser.add_argument('--jobs', type=int, default=2)
     build(parser.parse_args())

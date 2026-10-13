@@ -1,1 +1,0 @@
-../../../../scripts/move_joint.py

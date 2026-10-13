@@ -1,81 +1,94 @@
-"""ROS 2 monitoring and kinematics queries only. Never create a command publisher."""
+"""Bounded telemetry check of the installed C++ bridge; never create command paths."""
 import json
 import math
-import statistics
-import sys
-import time
+import os
 from pathlib import Path
-import rclpy
-from rclpy.qos import qos_profile_sensor_data, QoSProfile, DurabilityPolicy
-from sensor_msgs.msg import JointState
-from intera_core_msgs.msg import RobotAssemblyState, EndpointState, CollisionDetectionState, JointLimits, HeadState, IONodeConfiguration, IODeviceStatus
-from intera_core_msgs.srv import SolvePositionFK, SolvePositionIK
+import signal
+import socket
+import subprocess
+import tempfile
+import time
+import xmlrpc.client
 
-rclpy.init()
-node=rclpy.create_node('sawyer_readonly_hardware_verification')
-rows, latest = [], {}
-
-
-def joints(msg):
-    rows.append({'received_ns':time.monotonic_ns(), 'stamp_ns':msg.header.stamp.sec*10**9+msg.header.stamp.nanosec,'names':list(msg.name)})
-    if all(f'right_j{i}' in msg.name for i in range(7)):
-        latest['joints']=msg
+from ament_index_python.packages import get_package_prefix
 
 
-node.create_subscription(JointState,'/robot/joint_states',joints,qos_profile_sensor_data)
-for key,topic,typ,qos in (
-    ('state','/robot/state',RobotAssemblyState,1),
-    ('endpoint','/robot/limb/right/endpoint_state',EndpointState,qos_profile_sensor_data),
-    ('collision','/robot/limb/right/collision_detection_state',CollisionDetectionState,1),
-    ('limits','/robot/joint_limits',JointLimits,QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)),
-    ('head','/robot/head/head_state',HeadState,1),
-    ('gripper_config','/io/end_effector/config',IONodeConfiguration,QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)),
-    ('gripper_state','/io/end_effector/right_gripper/state',IODeviceStatus,1)):
-    node.create_subscription(typ,topic,lambda m,k=key:latest.update({k:m}),qos)
-deadline=time.monotonic()+10
-while time.monotonic()<deadline:
-    rclpy.spin_once(node,timeout_sec=.01)
-required=('joints','state','endpoint','collision','limits','head','gripper_config','gripper_state')
-assert all(k in latest for k in required), ('Missing hardware telemetry',list(latest))
-joint=latest['joints']
-names=[f'right_j{i}' for i in range(7)]
-assert len(joint.name) == len(set(joint.name))
-assert len(joint.position) == len(joint.name) == len(joint.velocity)
-assert all(math.isfinite(v) for v in list(joint.position) + list(joint.velocity))
-configuration=JointState(name=names,position=[joint.position[joint.name.index(j)] for j in names])
+def package_prefix():
+    return Path(get_package_prefix('ros1_bridge'))
 
+socket.setdefaulttimeout(3)
+uri = os.environ['ROS_MASTER_URI']
+master = xmlrpc.client.ServerProxy(uri)
+caller = '/sawyer_package_readonly_' + str(os.getpid())
+report = {'scope': 'Installed package telemetry-only bridge; no motion or camera-control commands',
+          'master': uri, 'package_prefix': str(package_prefix()), 'temporary_namespace': caller}
+try:
+    assert master.getUri(caller)[0] == 1
+except (OSError, AssertionError, xmlrpc.client.Error) as error:
+    report.update(status='UNAVAILABLE', error=str(error))
+    print(json.dumps(report, indent=2))
+    raise SystemExit(2)
 
-def call(typ,suffix,request):
-    client=node.create_client(typ,'/ExternalTools/right/PositionKinematicsNode/'+suffix)
-    assert client.wait_for_service(timeout_sec=5),suffix
-    future=client.call_async(request)
-    rclpy.spin_until_future_complete(node,future,timeout_sec=10)
-    assert future.done(),suffix
-    return future.result()
-
-
-fk=call(SolvePositionFK,'FKService',SolvePositionFK.Request(configuration=[configuration],tip_names=['right_hand']))
-assert fk is not None
-ik_result=None
-if len(fk.pose_stamp) and fk.is_valid[0]:
-    ik=call(SolvePositionIK,'IKService',SolvePositionIK.Request(pose_stamp=[fk.pose_stamp[0]],seed_angles=[configuration],seed_mode=1,tip_names=['right_hand']))
-    assert ik is not None
-    ik_result={'result_type':list(ik.result_type),'solution_count':len(ik.joints)}
-arm=[r for r in rows if all(j in r['names'] for j in names)]
-intervals=[(b['received_ns']-a['received_ns'])/1e6 for a,b in zip(arm,arm[1:])]
-result={'status':'PASS','scope':'read-only physical Sawyer monitoring and kinematics; no robot command publications',
-        'telemetry_verified':list(latest),'positions':dict(zip(configuration.name,configuration.position)),
-        'velocities':{j:joint.velocity[joint.name.index(j)] for j in names},
-        'robot_state':{f:getattr(latest['state'],f) for f in latest['state'].get_fields_and_field_types()},
-        'collision':latest['collision'].collision_state,'endpoint_valid':latest['endpoint'].valid,
-        'head_pan':latest['head'].pan,'gripper_devices':[d.name for d in latest['gripper_config'].devices],
-        'fk':{'is_valid':list(fk.is_valid),'in_collision':list(fk.in_collision),'poses':len(fk.pose_stamp)},
-        'ik':ik_result,'joint_messages':len(rows),'arm_messages':len(arm),
-        'ros2_arm_receive_hz':(len(arm)-1)/((arm[-1]['received_ns']-arm[0]['received_ns'])/1e9),
-        'arm_interarrival_ms':{'mean':statistics.mean(intervals),'stddev':statistics.pstdev(intervals),'max':max(intervals)},
-        'transport_latency':'Not reported: workstation/controller clock synchronization has not been established.'}
-Path(sys.argv[1]).write_text(json.dumps(result,indent=2)+'\n')
-Path(sys.argv[2]).write_text(json.dumps(rows)+'\n')
-print(json.dumps(result,indent=2))
-node.destroy_node()
-rclpy.shutdown()
+topics = [dict(topic='/robot/joint_states', type='sensor_msgs/msg/JointState', direction='1to2',
+               enabled=True, queue_size=5, qos={'reliability': 'best_effort', 'history': 'keep_last', 'depth': 5}),
+          dict(topic='/robot/joint_limits', type='intera_core_msgs/msg/JointLimits', direction='1to2',
+               enabled=True, queue_size=1, qos={'durability': 'transient_local', 'history': 'keep_last', 'depth': 1}),
+          dict(topic='/robot/state', type='intera_core_msgs/msg/RobotAssemblyState', direction='1to2',
+               enabled=True, queue_size=1)]
+assert all(topic['direction'] == '1to2' for topic in topics)
+parameter = caller + '/topics'
+assert master.setParam(caller, parameter, topics)[0] == 1
+environment = dict(os.environ, ROS_DOMAIN_ID='198')
+node = None
+process = None
+with tempfile.TemporaryFile(mode='w+') as log:
+    try:
+        process = subprocess.Popen([str(package_prefix() / 'lib/ros1_bridge/parameter_bridge'),
+                                    parameter, caller + '/no_services', caller + '/no_services',
+                                    '__name:=' + caller.lstrip('/')], env=environment,
+                                   stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        os.environ['ROS_DOMAIN_ID'] = '198'
+        import rclpy
+        from rclpy.qos import QoSProfile, DurabilityPolicy, qos_profile_sensor_data
+        from sensor_msgs.msg import JointState
+        from intera_core_msgs.msg import JointLimits, RobotAssemblyState
+        rclpy.init()
+        node = rclpy.create_node('sawyer_package_readonly_receiver')
+        counts = []
+        positions, velocities, feedback = {}, {}, {}
+        def on_state(msg):
+            counts.append(time.monotonic())
+            positions.update(zip(msg.name, msg.position))
+            velocities.update(zip(msg.name, msg.velocity))
+        subscriptions = [node.create_subscription(JointState, '/robot/joint_states', on_state, qos_profile_sensor_data),
+                         node.create_subscription(JointLimits, '/robot/joint_limits', lambda msg: feedback.update(limits=list(msg.joint_names)),
+                                                  QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)),
+                         node.create_subscription(RobotAssemblyState, '/robot/state',
+                                                  lambda msg: feedback.update(robot_enabled=msg.enabled, robot_ready=msg.ready), 1)]
+        end = time.monotonic() + 6
+        while time.monotonic() < end:
+            rclpy.spin_once(node, timeout_sec=.1)
+        assert process.poll() is None, 'Bridge exited'
+        assert len(counts) > 20 and all(f'right_j{i}' in positions for i in range(7)), positions
+        assert all(math.isfinite(value) for value in positions.values())
+        assert all(f'right_j{i}' in velocities for i in range(7)), velocities
+        assert 'limits' in feedback and 'robot_enabled' in feedback, feedback
+        report.update(status='PASS', samples=len(counts), positions=positions, velocities=velocities,
+                      receive_hz=(len(counts)-1)/(counts[-1]-counts[0]), **feedback)
+        print(json.dumps(report, indent=2))
+    except Exception:
+        log.seek(0)
+        print(log.read())
+        raise
+    finally:
+        if node is not None:
+            node.destroy_node()
+            rclpy.shutdown()
+        if process is not None and process.poll() is None:
+            os.killpg(process.pid, signal.SIGINT)
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                os.killpg(process.pid, signal.SIGKILL)
+                process.wait()
+        master.deleteParam(caller, caller)

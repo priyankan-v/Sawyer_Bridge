@@ -1,159 +1,118 @@
-# Sawyer package for system ROS 2 Humble
+# Sawyer bridge for ROS 2 Humble
 
-The `conda-pkg` branch builds **`sawyer-ros2-bridge`**, a Linux Conda package for
-Sawyer on **Ubuntu 22.04 x86_64 with an existing `/opt/ros/humble` installation**.
-It installs Intera interfaces, the selective C++ `ros1_bridge`, joint-control
-applications and a camera viewer. Required ROS 1 clients live privately inside
-the package; users do not create or source Noetic/Humble Conda environments.
+`sawyer-ros2-bridge` connects your existing ROS 2 Humble installation to Sawyer's
+onboard ROS 1 graph. It provides the C++ bridge, Intera message interfaces and a
+selective topic configuration. Write your own ROS 2 applications using these interfaces.
 
 ```text
-System Humble applications ↔ packaged C++ bridge ↔ Sawyer's onboard ROS 1
+Your ROS 2 nodes ↔ packaged C++ bridge ↔ Sawyer's onboard ROS 1
 ```
 
-The working two-environment implementation remains on `conda`; the original
-implementation remains on `main`. This package is platform-specific because its
-C++ libraries and Python extensions use Ubuntu's Humble/Python 3.10 ABI.
+The package contains **no joint-motion application, camera viewer, SDK, robot
+models or ROS distribution**. Only the ROS 1 C++ libraries needed by the bridge
+are bundled privately. No Noetic installation or separate ROS environments are needed.
 
-## Install on a user's machine
+## Install
 
-Prerequisites: Ubuntu 22.04 x86_64, system Humble, Conda, Python 3.10, NumPy, Tk,
-PyYAML, rospkg, and Ubuntu Boost 1.74/console_bridge libraries. The package does
-not replace system ROS or Python. Confirm the Python helpers are available:
+Requires **Ubuntu 22.04 x86_64**, Conda and system **ROS 2 Humble** installed under
+`/opt/ros/humble`. System Python 3.10, Humble’s Python dependencies, PyYAML and Ubuntu Boost 1.74/console_bridge
+runtime libraries must be available; see [PACKAGING.md](PACKAGING.md) for details.
 
-```bash
-/usr/bin/python3 -c 'import numpy, tkinter, yaml, rospkg'
-```
-
-If a Python dependency is absent, install the corresponding Ubuntu package
-(`python3-numpy`, `python3-tk`, `python3-yaml`, `python3-rospkg`). Boost/system
-runtime requirements are documented in [PACKAGING.md](PACKAGING.md).
-
-For a locally supplied artifact:
+Install the supplied artifact into your current Conda prefix:
 
 ```bash
-# Run in your existing Conda installation/prefix; no new ROS environment is needed.
-conda install --offline /path/to/sawyer-ros2-bridge-0.2.0-humble_py310_1.conda
+conda install --offline /path/to/sawyer-ros2-bridge-0.3.0-humble_py310_0.conda
 source /opt/ros/humble/setup.bash
 source "$CONDA_PREFIX/local_setup.bash"
-ros2 run sawyer_ros2_control sawyer_runtime --check
-ros2 run sawyer_ros2_control verify_bridge
+ros2 run sawyer_bridge check
 ```
 
-The self-test connects exclusively to its own localhost graph. It writes transport
-validation under `~/.local/state/sawyer_ros2/`. Override the location with
-`SAWYER_STATE_DIR`. Source Humble and the package overlay in each new terminal.
-Package executables use `/usr/bin/python3`, regardless of Conda's Python version.
-Do not add private ROS 1 Python paths to your ROS 2 shell.
+No build is needed on the user's computer. The package has not been published to
+a public channel. Source both setup files in each terminal that uses this package.
+Python entry points use `/usr/bin/python3` to match system Humble.
 
-The package has not been uploaded to a public channel. Maintainers can build and
-index a local channel using [PACKAGING.md](PACKAGING.md); publication is separate.
+## Connect and start — terminal 1
 
-## Connect to Sawyer
-
-In both terminals, set the robot's existing network addresses. The values below
-are this project's lab configuration; a new user must substitute their own robot
-and workstation addresses:
+Connect the PC to Sawyer's network. Set the master URI and **your PC's reachable
+IP address**. These values match the project's existing connection; change them
+only if your network differs:
 
 ```bash
 export ROS_MASTER_URI=http://169.254.121.3:11311
 export ROS_IP=169.254.121.2
 unset ROS_HOSTNAME
 export ROS_DOMAIN_ID=42
+ros2 launch sawyer_bridge bridge.launch.py
 ```
 
-Keep robot networking separate from Conda dependency configuration. The package
-never changes onboard software, network settings, motor enable state or homing.
+The launch command loads topic parameters through XML-RPC and starts the C++
+`parameter_bridge`. It runs in the foreground. Sawyer supplies the ROS 1 master;
+this package does not start one.
 
-## Terminal 1: telemetry bridge
-
-After sourcing Humble and the package overlay and setting networking:
-
-```bash
-ros2 run sawyer_ros2_control preflight
-ros2 launch sawyer_ros2_control bridge.launch.py
-```
-
-Only configured telemetry is forwarded. Run one operational bridge per robot and
-DDS domain; stop any previous bridge before switching implementations.
-
-For existing camera images:
-
-```bash
-# Stop the previous bridge with Ctrl-C before starting another.
-ros2 launch sawyer_ros2_control bridge.launch.py cameras:=true
-```
-
-Arm command transport is a separate, explicit opt-in: `commands:=true`.
-Head command transport uses `head_commands:=true`. These enable forwarding;
-they do not send a motion command or enable the robot.
-
-## Terminal 2: feedback and cameras
+## Read joint states — terminal 2
 
 ```bash
 source /opt/ros/humble/setup.bash
 source "$CONDA_PREFIX/local_setup.bash"
-# Apply the same ROS_MASTER_URI, ROS_IP and ROS_DOMAIN_ID as Terminal 1.
-ros2 topic echo /robot/joint_states sensor_msgs/msg/JointState --once --qos-reliability best_effort
-ros2 run sawyer_ros2_control command read
-ros2 run sawyer_ros2_control camera_viewer
+export ROS_DOMAIN_ID=42
+ros2 topic echo /robot/joint_states
+# Alternatively, measure the receive rate:
+ros2 topic hz /robot/joint_states
 ```
 
-The viewer opens a resizable desktop window with two rows. Use `--layout columns`
-for side-by-side views, `--camera head` or `--camera hand` to select a stream,
-`--start-both` to request both, and `--stop-stream all` to stop acquisition.
-Default viewing is read-only. Close with Q, Esc, window close or Ctrl-C; use
-`--stop-on-exit` with a start/selection command to also stop that stream.
-See [camera guide](docs/CAMERAS.md) for details and measured specifications.
+The default configuration forwards joint states, robot state, joint limits,
+endpoint state, collision state and head state. Command topics are disabled.
 
-## Prepare joint-position control
+## Connect your application
 
-Before physical motion, run a readiness check and review its errors:
+To forward commands from your own ROS 2 application, restart the bridge with:
 
 ```bash
-mkdir -p "${SAWYER_STATE_DIR:-$HOME/.local/state/sawyer_ros2}"
-ros2 run sawyer_ros2_control preflight --require-ready \
-  --output "${SAWYER_STATE_DIR:-$HOME/.local/state/sawyer_ros2}/preflight.json"
-ros2 run sawyer_ros2_control move_joint --joint right_j5 --position 0.0 --time 5 --dry-run
+ros2 launch sawyer_bridge bridge.launch.py commands:=true
+# Add head_commands:=true if your application needs head-pan commands.
 ```
 
-`move_joint` publishes if `--dry-run` is omitted. Its checks concern the selected
-joint; it does not run the full-arm preflight or require an approval flag.
-Physical execution remains an operator decision. The separate guarded application
-requires explicit `--execute --operator-approved`, successful local transport
-validation, a preflight less than 30 seconds old and live safety checks.
-
-Do not proceed on `ready: false` or a limit/collision rejection. The head's last
-physical test remained passive despite receiving commands; packaging does not
-resolve that controller-side issue. No movement is part of package installation,
-checks or build tests.
-
-Press Ctrl-C to stop an application and then the bridge. Stopping publishing does
-not itself disable motors or issue an emergency stop.
-
-## Maintainer build and validation
-
-See [PACKAGING.md](PACKAGING.md) for build dependencies, pinned source downloads,
-Conda artifact creation, relocation checks and recorded test results.
+This enables transport only; the bridge sends no movement commands by itself.
+Your application must enforce readiness, limits, command freshness and safe stopping.
+Inspect the interface and subscription without publishing:
 
 ```bash
-/usr/bin/python3 packaging/build_package.py --prefix .runtime/pkg-prefix
-# Development wrapper uses system Humble + the staged package, never old Conda ROS environments.
-./scripts/env.sh ros2 ros2 run sawyer_ros2_control sawyer_runtime --check
+ros2 interface show intera_core_msgs/msg/JointCommand
+ros2 topic info /robot/limb/right/joint_command --verbose
 ```
 
-## Files
+For other topics/services, copy the installed configuration, edit it and pass it
+as `config:=/absolute/path/to/bridge.yaml`:
+
+```bash
+cp "$CONDA_PREFIX/share/sawyer_bridge/config/sawyer_bridge.yaml" ./bridge.yaml
+ros2 launch sawyer_bridge bridge.launch.py config:="$PWD/bridge.yaml"
+```
+
+Services are disabled by default. Built-in core and Intera mappings are compiled
+into the bridge; adding a YAML entry cannot add an unsupported message mapping.
+ROS actions are not forwarded by ros1_bridge.
+
+## Stop and troubleshoot
+
+Stop your application safely first, then press **Ctrl+C** in the bridge terminal.
+Stopping the bridge disconnects transport; it does not disable the robot.
+
+- **Master connection failed:** check `ROS_MASTER_URI`, network and robot availability.
+- **No joint states:** check `ROS_IP` is reachable from Sawyer, and matching `ROS_DOMAIN_ID` values.
+- **Command subscriber absent:** start with `commands:=true` and confirm your application's QoS is compatible.
+- **Missing library/type support:** source both setup files and run `ros2 run sawyer_bridge check`. Keep Conda ROS/Python libraries out of the system Humble library paths.
+
+## Repository
 
 | Path | Purpose |
 |---|---|
-| `packaging/` | Pinned private ROS 1 sources, native builder, relocation and Conda recipe |
-| `bridge_ws/ros1_bridge/` | Existing bridge source with Sawyer interface selection |
-| `intera_common/` | Original ROS 1 Intera definitions |
-| `ros2_ws/src/intera_*_msgs/` | Compatible ROS 2 interfaces |
-| `ros2_ws/src/sawyer_ros2_control/` | ROS 2 applications, launch and installed-file discovery |
-| `scripts/move_joint.py` | Canonical joint-motion source, linked into the ROS 2 package |
-| `scripts/{preflight,camera_control,configure_bridge}.py` | Helpers installed with isolated private ROS 1 dependencies |
-| `scripts/env.sh` | Developer/test convenience only; not shipped or needed by users |
-| `tests/` | Unit, native conversion and localhost integration tests |
+| `src/ros1_bridge/` | C++ bridge and build-time conversion generator |
+| `src/intera_*_msgs/` | ROS 2 Intera interfaces |
+| `src/sawyer_bridge/` | Launch, configuration and package check |
+| `interfaces/ros1/` | Matching ROS 1 Intera definitions, used during compilation |
+| `packaging/` | Native builder, pinned sources, relocation and Conda recipe |
+| `tests/` | Maintainer conversion/transport tests; excluded from the artifact |
 
-[Package architecture](docs/CONDA_BRIDGE_EXPLAINED.md) ·
-[Joint command path](docs/MOVE_JOINT_COMMAND_PATH.md)
+Build and validation instructions: [PACKAGING.md](PACKAGING.md).
+Previous implementations remain on their original branches.
