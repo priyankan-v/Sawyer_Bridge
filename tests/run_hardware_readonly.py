@@ -27,8 +27,7 @@ try:
     for t in config['topics']:
         t['enabled']=True
         assert t['direction']=='1to2'
-    config['topics'] += [dict(topic='/io/end_effector/config',type='intera_core_msgs/msg/IONodeConfiguration',direction='1to2',queue_size=1,qos=dict(history='keep_last',depth=1,durability='transient_local')),
-                         dict(topic='/io/end_effector/right_gripper/state',type='intera_core_msgs/msg/IODeviceStatus',direction='1to2',queue_size=1)]
+    config['topics'] += [dict(topic='/io/end_effector/config',type='intera_core_msgs/msg/IONodeConfiguration',direction='1to2',queue_size=1,qos=dict(history='keep_last',depth=1,durability='transient_local'))]
     config['services_2_to_1']=[dict(service='/ExternalTools/right/PositionKinematicsNode/'+suffix,type='intera_core_msgs/'+typ,package='')
                               for suffix,typ in [('FKService','SolvePositionFK'),('IKService','SolvePositionIK')]]
     cfg=ROOT/'.runtime/hardware_readonly.json'

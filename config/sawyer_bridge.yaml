@@ -12,6 +12,9 @@ topics:
   - {topic: /robot/head/head_state, type: intera_core_msgs/msg/HeadState, queue_size: 1, direction: 1to2, enabled: true}
   - {topic: /robot/head/command_head_pan, type: intera_core_msgs/msg/HeadPanCommand, queue_size: 1, direction: 2to1, enabled: false, qos: {history: keep_last, depth: 1, reliability: reliable, durability: volatile, lifespan: {secs: 0, nsecs: 200000000}}}
   - {topic: /robot/set_super_enable, type: std_msgs/msg/Bool, queue_size: 1, direction: 2to1, enabled: false}
+  # Sawyer latches this state and publishes only on change; retain it for late ROS 2 clients.
+  - {topic: /io/end_effector/right_gripper/state, type: intera_core_msgs/msg/IODeviceStatus, queue_size: 1, direction: 1to2, enabled: true, qos: {history: keep_last, depth: 1, reliability: reliable, durability: transient_local}}
+  - {topic: /io/end_effector/right_gripper/command, type: intera_core_msgs/msg/IOComponentCommand, queue_size: 1, direction: 2to1, enabled: false, qos: {history: keep_last, depth: 1, reliability: reliable, durability: volatile, lifespan: {secs: 0, nsecs: 200000000}}}
   # Camera forwarding is opt-in. This does not start or reconfigure either camera.
   - {topic: /io/internal_camera/head_camera/image_rect_color, type: sensor_msgs/msg/Image, queue_size: 1, direction: 1to2, enabled: false, qos: {history: keep_last, depth: 1, reliability: best_effort}}
   - {topic: /io/internal_camera/right_hand_camera/image_rect, type: sensor_msgs/msg/Image, queue_size: 1, direction: 1to2, enabled: false, qos: {history: keep_last, depth: 1, reliability: best_effort}}

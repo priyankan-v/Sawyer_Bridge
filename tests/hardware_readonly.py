@@ -30,7 +30,7 @@ for key,topic,typ,qos in (
     ('limits','/robot/joint_limits',JointLimits,QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)),
     ('head','/robot/head/head_state',HeadState,1),
     ('gripper_config','/io/end_effector/config',IONodeConfiguration,QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)),
-    ('gripper_state','/io/end_effector/right_gripper/state',IODeviceStatus,1)):
+    ('gripper_state','/io/end_effector/right_gripper/state',IODeviceStatus,QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL))):
     node.create_subscription(typ,topic,lambda m,k=key:latest.update({k:m}),qos)
 deadline=time.monotonic()+10
 while time.monotonic()<deadline:

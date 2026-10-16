@@ -5,7 +5,7 @@ Two Conda environments provide Noetic and Humble with Python 3.12.15.
 
 `Sawyer (ROS 1) ↔ parameter_bridge ↔ ROS 2 joint-control application`
 
-[Daily use](#daily-use) · [Camera video](#camera-video) · [Position control](#position-control) ·
+[Daily use](#daily-use) · [Camera video](#camera-video) · [Gripper](#gripper) · [Position control](#position-control) ·
 [First-time setup](#first-time-setup) · [Build](#build) ·
 [Tests](#tests) · [Troubleshooting](#troubleshooting)
 
@@ -104,6 +104,53 @@ ros2 run sawyer_ros2_control camera_viewer --stream-info
 For terminal-only validation, use `--start-both --headless --duration 6 --require-both
 --stop-on-exit`. The viewer uses existing Humble NumPy and Tk; no OpenCV/cv_bridge
 installation is needed. A graphical desktop is required unless using `--headless`.
+
+## Gripper
+
+The ROS 2 `gripper` node controls the standard electric `right_gripper` on the
+end effector using Intera I/O signals. Rebuild `sawyer_ros2_control` using the
+application build command above after updating. The default bridge forwards
+gripper feedback; restart it after updating the configuration.
+
+In the ROS 2 shell, inspect the attached gripper or preview an opening command:
+
+```bash
+ros2 run sawyer_ros2_control gripper status
+ros2 run sawyer_ros2_control gripper open --dry-run
+```
+
+To allow gripper actuation, start Terminal 1's bridge with:
+
+```bash
+./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py gripper_commands:=true
+```
+
+Then choose an operation in Terminal 2's ROS 2 shell:
+
+```bash
+ros2 run sawyer_ros2_control gripper calibrate  # Explicitly calibrate if needed; moves the fingers
+ros2 run sawyer_ros2_control gripper open
+ros2 run sawyer_ros2_control gripper close
+ros2 run sawyer_ros2_control gripper position --position 0.02
+ros2 run sawyer_ros2_control gripper stop
+```
+
+Position is in metres, from `0` (closed) to `0.041667` (open), matching the bundled
+Intera electric gripper interface. Other end-effector hardware needs its own
+device interface. `status` is the default operation and publishes no commands;
+`--dry-run` checks feedback and prints the requested command without publishing.
+The bridge retains the latest gripper state because Sawyer publishes it only
+when it changes. Motion requires an available state publisher, a calibrated
+gripper and no reported error.
+Calibration is explicit and never runs automatically. The node retries the same
+timestamped command until acknowledged and then waits for completion; a close
+that reports an object grasp also succeeds. Timeouts and faults exit nonzero.
+Position completion uses the device's reported `dead_zone_m` (currently `0.002`,
+or 2 mm), with a 1 mm fallback if that signal is absent. Add `--tolerance 0.001`
+to require a stricter 1 mm check; a device that stops outside that tolerance
+will time out. Position results include the target, tolerance and measured error.
+Use `--timeout 15` for a longer wait. `Ctrl-C` exits the client; an accepted
+operation may continue on the device, so use `gripper stop` to halt it.
 
 ## Position control
 
@@ -284,6 +331,7 @@ From the repository root, run interface/unit checks and isolated simulated contr
 ./scripts/env.sh ros1 python tests/camera_control_checks.py
 env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_local.py
 env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_camera_local.py
+env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_gripper_local.py
 ```
 
 The local suite enforces a private localhost master and DDS domain; it cannot
@@ -321,6 +369,8 @@ This suite publishes no robot commands; extra head/gripper interfaces must exist
 | No joint states | Check wired routing, `ROS_MASTER_URI`, `ROS_IP`, DDS domain and best-effort QoS. |
 | Camera pane waiting | Check `cameras:=true` and `--stream-info`; select a camera or use `--start-both`. An advertised image topic may have no frames. |
 | Camera display unavailable | Run from a graphical desktop or use `--headless --duration 6`. |
+| Gripper state timeout | Restart the bridge with the updated config: gripper state must use `durability: transient_local` to retain Sawyer's latched feedback. Add `gripper_commands:=true` for actuation and match `ROS_DOMAIN_ID` in both terminals. |
+| Gripper not calibrated | Run `gripper status`, then explicitly run `gripper calibrate` before open/close. Calibration moves the fingers. |
 | Python/NumPy import errors | Use `env.sh`; keep system ROS Python 3.10 paths out of Conda Python 3.12. |
 | Conda/OpenSSL deactivation error | Run `unset PYTHONPATH` before `conda deactivate`. |
 | Missing mappings | Build ROS 1, ROS 2, then the bridge; run `check_pairs.py`. |
