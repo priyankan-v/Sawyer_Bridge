@@ -14,9 +14,20 @@ def main():
     parser.add_argument('--head-commands', action='store_true')
     parser.add_argument('--gripper-commands', action='store_true')
     parser.add_argument('--cameras', action='store_true')
+    parser.add_argument('--kinematics', action='store_true')
     args = parser.parse_args()
     with args.config.open() as stream:
         config = yaml.safe_load(stream)
+    if args.kinematics:
+        services = config.setdefault('services_2_to_1', [])
+        existing = {entry['service']: entry for entry in services}
+        for entry in config.get('kinematics_services', []):
+            previous = existing.get(entry['service'])
+            if previous is not None and previous != entry:
+                raise ValueError(f'Conflicting kinematics service configuration: {entry["service"]}')
+            if previous is None:
+                services.append(entry)
+                existing[entry['service']] = entry
     for entry in config['topics']:
         if args.gripper_commands and entry['topic'] == '/io/end_effector/right_gripper/command':
             entry['enabled'] = True

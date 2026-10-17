@@ -1,0 +1,15 @@
+{
+  "source": "https://github.com/RethinkRobotics/sawyer_moveit/blob/master/sawyer_moveit_config/srdf/sawyer_base.srdf.xacro",
+  "gripper_source": "https://github.com/RethinkRobotics/sawyer_moveit/blob/master/sawyer_moveit_config/srdf/rethink_electric_gripper.srdf.xacro",
+  "scope": "Four documented shoulder proxy pairs and opposing-finger contacts at closure; no locally sampled exclusions",
+  "pairs": [
+    {"link1": "head", "link2": "right_l1", "reason": "UpstreamDefault"},
+    {"link1": "head", "link2": "right_l1_2", "reason": "UpstreamDefault"},
+    {"link1": "right_l0", "link2": "right_l1_2", "reason": "UpstreamAdjacent"},
+    {"link1": "right_l1_2", "link2": "right_l2", "reason": "UpstreamAdjacent"},
+    {"link1": "right_gripper_l_finger", "link2": "right_gripper_r_finger", "reason": "UpstreamOpposingFingers"},
+    {"link1": "right_gripper_l_finger", "link2": "right_gripper_r_finger_tip", "reason": "UpstreamOpposingFingers"},
+    {"link1": "right_gripper_l_finger_tip", "link2": "right_gripper_r_finger", "reason": "UpstreamOpposingFingers"},
+    {"link1": "right_gripper_l_finger_tip", "link2": "right_gripper_r_finger_tip", "reason": "UpstreamOpposingFingers"}
+  ]
+}

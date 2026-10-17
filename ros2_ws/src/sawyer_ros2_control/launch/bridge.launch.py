@@ -14,7 +14,7 @@ def start(context):
     config = LaunchConfiguration('config').perform(context)
     command = [str(root / 'scripts/env.sh'), 'ros1', 'python',
                str(root / 'scripts/configure_bridge.py'), config]
-    for name in ('commands', 'head_commands', 'cameras', 'gripper_commands'):
+    for name in ('commands', 'head_commands', 'cameras', 'gripper_commands', 'kinematics'):
         value = LaunchConfiguration(name).perform(context).lower()
         if value not in ('true', 'false'):
             raise ValueError(f'{name} must be true or false')
@@ -49,6 +49,8 @@ def generate_launch_description():
         DeclareLaunchArgument('head_commands', default_value='false'),
         DeclareLaunchArgument('gripper_commands', default_value='false',
                               description='Allow end-effector gripper commands'),
+        DeclareLaunchArgument('kinematics', default_value='false',
+                              description='Expose read-only Sawyer FK/IK services to ROS 2'),
         DeclareLaunchArgument('cameras', default_value='false',
                               description='Forward existing head/hand images without controlling cameras'),
         OpaqueFunction(function=start),

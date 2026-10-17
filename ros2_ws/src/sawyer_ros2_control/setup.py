@@ -11,4 +11,6 @@ setup(name='sawyer_ros2_control', version='0.1.0', packages=['sawyer_ros2_contro
       entry_points={'console_scripts': ['command = sawyer_ros2_control.command:main',
                                         'move_joint = sawyer_ros2_control.move_joint:main',
                                         'camera_viewer = sawyer_ros2_control.camera_viewer:main',
-                                        'gripper = sawyer_ros2_control.gripper:main']})
+                                        'gripper = sawyer_ros2_control.gripper:main',
+                                        'cartesian = sawyer_ros2_control.cartesian:main',
+                                        'pick_place = sawyer_ros2_control.pick_place:main']})

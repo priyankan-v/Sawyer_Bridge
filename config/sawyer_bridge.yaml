@@ -21,6 +21,7 @@ topics:
 services_1_to_2: []
 # Upstream convention: services_2_to_1 exposes an existing ROS 1 server to ROS 2.
 services_2_to_1: []
-# Discover actual service servers before enabling, e.g.:
-# - {service: /ExternalTools/right/PositionKinematicsNode/IKService, type: intera_core_msgs/SolvePositionIK, package: ''}
-# - {service: /ExternalTools/right/PositionKinematicsNode/FKService, type: intera_core_msgs/SolvePositionFK, package: ''}
+# Read-only robot services, verified on the physical controller. Opt in with kinematics:=true.
+kinematics_services:
+  - {service: /ExternalTools/right/PositionKinematicsNode/IKService, type: intera_core_msgs/SolvePositionIK, package: ''}
+  - {service: /ExternalTools/right/PositionKinematicsNode/FKService, type: intera_core_msgs/SolvePositionFK, package: ''}

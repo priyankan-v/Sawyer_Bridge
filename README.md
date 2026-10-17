@@ -5,7 +5,7 @@ Two Conda environments provide Noetic and Humble with Python 3.12.15.
 
 `Sawyer (ROS 1) ↔ parameter_bridge ↔ ROS 2 joint-control application`
 
-[Daily use](#daily-use) · [Camera video](#camera-video) · [Gripper](#gripper) · [Position control](#position-control) ·
+[Daily use](#daily-use) · [Camera video](#camera-video) · [Gripper](#gripper) · [Cartesian pick and place](#cartesian-pick-and-place) · [Position control](#position-control) ·
 [First-time setup](#first-time-setup) · [Build](#build) ·
 [Tests](#tests) · [Troubleshooting](#troubleshooting)
 
@@ -23,7 +23,7 @@ conda activate "$PWD/.conda/envs/humble"
 source config/network.env
 ./scripts/env.sh ros1 python scripts/preflight.py && \
 ./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py
-#./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py commands:=true cameras:=true head_commands:=true
+#./scripts/env.sh ros2 ros2 launch sawyer_ros2_control bridge.launch.py commands:=true cameras:=true head_commands:=true gripper_commands:=true kinematics:=true
 
 ```
 
@@ -151,6 +151,41 @@ to require a stricter 1 mm check; a device that stops outside that tolerance
 will time out. Position results include the target, tolerance and measured error.
 Use `--timeout 15` for a longer wait. `Ctrl-C` exits the client; an accepted
 operation may continue on the device, so use `gripper stop` to halt it.
+
+## Cartesian pick and place
+
+Pose capture, IK/FK goal checks, a MoveIt planning model and guarded pick/place
+execution are implemented and tested with a simulated controller. See the
+[work plan and workflow](docs/PICK_AND_PLACE_PLAN.md) for model preparation,
+planning, preview and explicit execution commands. Object/obstacle dimensions
+are deferred for the initial demonstration, so table/fixture/carried-object
+avoidance is not provided. The physical task has not been executed.
+
+After rebuilding `sawyer_ros2_control`, restart the bridge with `kinematics:=true`
+(alongside any existing options). In the ROS 2 application shell:
+
+```bash
+ros2 run sawyer_ros2_control cartesian read
+# Teach each pose using the robot's normal operator procedure, then capture while stationary:
+ros2 run sawyer_ros2_control cartesian capture --output "$SAWYER_ROOT/config/poses/pick.json"
+ros2 run sawyer_ros2_control cartesian capture --output "$SAWYER_ROOT/config/poses/place.json"
+ros2 run sawyer_ros2_control cartesian ik --pose "$SAWYER_ROOT/config/poses/pick.json"
+```
+
+The tool defaults to `right_gripper_tip`, positions use metres in `base`, and
+orientation is a quaternion in `[x, y, z, w]` order. Captures preserve the tool
+name and joint configuration and never overwrite an existing file. These
+commands do not move the robot. `ik_valid` does not certify an obstacle-free path.
+
+The captured wrist configuration currently lies about 0.00226 rad below its
+lower limit. The planning tools report and reject that start; follow the robot
+operator's normal procedure to resolve it before planning physical movements.
+
+With a valid live plan, `ros2 run sawyer_ros2_control pick_place` previews the
+stages; adding `--execute` runs them. The task checks readiness, collision and
+tracking feedback, validates each retimed path with the current gripper opening,
+and requires a detected grasp before transport. Failure handling does not open
+the gripper automatically. See the workflow above before physical execution.
 
 ## Position control
 
@@ -332,6 +367,7 @@ From the repository root, run interface/unit checks and isolated simulated contr
 env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_local.py
 env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_camera_local.py
 env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_gripper_local.py
+env -u PYTHONPATH -u PYTHONHOME PYTHONNOUSERSITE=1 /usr/bin/python3 tests/run_cartesian_local.py
 ```
 
 The local suite enforces a private localhost master and DDS domain; it cannot
